@@ -24,6 +24,10 @@ Tuple point(double x, double y, double z) {
     return {x, y, z, 1.0};
 }
 
+Tuple vector(double x, double y, double z) {
+    return {x, y, z, 0.0};
+}
+
 TEST_CASE("A tuple with w=1 is a point", "[tuple]" ) {
     Tuple tuple{4.3, -4.2, 3.1, 1.0};
 
@@ -46,8 +50,14 @@ TEST_CASE("A tuple with w=0 is a vector", "[tuple]" ) {
     REQUIRE(tuple.is_vector() == true);
 }
 
-TEST_CASE("point() creates tuples with w=1", "[tuple]" ) {
+TEST_CASE("point() creates tuple with w=1", "[tuple]" ) {
     Tuple tuple = point(4, -4, 3);
 
     REQUIRE(tuple == Tuple{4, -4, 3, 1.0});
+}
+
+TEST_CASE("vector() creates vector with w=0", "[tuple]" ) {
+    Tuple tuple = vector(4, -4, 3);
+
+    REQUIRE(tuple == Tuple{4, -4, 3, 0.0});
 }
