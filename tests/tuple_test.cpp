@@ -1,14 +1,16 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include <cstdint>
+struct Tuple {
+    double x;
+    double y;
+    double z;
+    double w;
+};
 
-uint32_t factorial( uint32_t number ) {
-    return number <= 1 ? number : factorial(number-1) * number;
-}
 
-TEST_CASE( "Factorials are computed", "[factorial]" ) {
-REQUIRE( factorial( 1) == 1 );
-REQUIRE( factorial( 2) == 2 );
-REQUIRE( factorial( 3) == 6 );
-REQUIRE( factorial(10) == 3'628'800 );
+TEST_CASE("A tuple with w=1.0 is a point", "[tuple]" ) {
+    Tuple tuple{4.3, -4.2, 3.1, 1.0};
+
+    REQUIRE(tuple.x == 4.3);
+    REQUIRE(tuple.y == 4.3);
 }
