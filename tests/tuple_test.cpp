@@ -17,7 +17,12 @@ struct Tuple {
 };
 
 bool operator==(const Tuple &lhs, const Tuple &rhs) {
+    // TODO: use epsilon for comparison?
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w;
+}
+
+Tuple operator+(const Tuple &lhs, const Tuple &rhs) {
+    return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
 }
 
 Tuple point(double x, double y, double z) {
@@ -28,7 +33,7 @@ Tuple vector(double x, double y, double z) {
     return {x, y, z, 0.0};
 }
 
-TEST_CASE("A tuple with w=1 is a point", "[tuple]" ) {
+TEST_CASE("a tuple with w=1 is a point", "[tuple]" ) {
     Tuple tuple{4.3, -4.2, 3.1, 1.0};
 
     REQUIRE(tuple.x == 4.3);
@@ -39,7 +44,7 @@ TEST_CASE("A tuple with w=1 is a point", "[tuple]" ) {
     REQUIRE(tuple.is_vector() == false);
 }
 
-TEST_CASE("A tuple with w=0 is a vector", "[tuple]" ) {
+TEST_CASE("a tuple with w=0 is a vector", "[tuple]" ) {
     Tuple tuple{4.3, -4.2, 3.1, 0.0};
 
     REQUIRE(tuple.x == 4.3);
@@ -60,4 +65,11 @@ TEST_CASE("vector() creates vector with w=0", "[tuple]" ) {
     Tuple tuple = vector(4, -4, 3);
 
     REQUIRE(tuple == Tuple{4, -4, 3, 0.0});
+}
+
+TEST_CASE("adding two tuples", "[tuple]" ) {
+    Tuple t1{3, -2, 5, 1};
+    Tuple t2{-2, 3, 1, 0};
+
+    REQUIRE(t1 + t2 == Tuple{1, 1, 6, 1.0});
 }
