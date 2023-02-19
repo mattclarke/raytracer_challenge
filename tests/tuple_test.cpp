@@ -25,6 +25,10 @@ Tuple operator+(const Tuple &lhs, const Tuple &rhs) {
     return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, lhs.w + rhs.w};
 }
 
+Tuple operator-(const Tuple &lhs, const Tuple &rhs) {
+    return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w};
+}
+
 Tuple point(double x, double y, double z) {
     return {x, y, z, 1.0};
 }
@@ -72,4 +76,11 @@ TEST_CASE("adding two tuples", "[tuple]" ) {
     Tuple t2{-2, 3, 1, 0};
 
     REQUIRE(t1 + t2 == Tuple{1, 1, 6, 1.0});
+}
+
+TEST_CASE("subtracting two points", "[tuple]" ) {
+    auto pt1 = point(3, 2, 1);
+    auto pt2 = point(5, 6, 7);
+
+    REQUIRE(pt1 - pt2 == vector(-2, -4, -6));
 }
