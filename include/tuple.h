@@ -41,6 +41,7 @@ Tuple operator/(const Tuple &tuple, double scalar) {
     return {tuple.x / scalar, tuple.y / scalar, tuple.z / scalar, tuple.w / scalar};
 }
 
+// Factory functions
 Tuple point(double x, double y, double z) {
     return {x, y, z, 1.0};
 }
@@ -49,7 +50,12 @@ Tuple vector(double x, double y, double z) {
     return {x, y, z, 0.0};
 }
 
+// Helper functions
 double magnitude(const Tuple &tuple) {
     return std::sqrt(tuple.x * tuple.x + tuple.y * tuple.y + tuple.z * tuple.z + tuple.w * tuple.w);
 }
 
+Tuple normalise(const Tuple &tuple) {
+    auto magn = magnitude(tuple); 
+    return {tuple.x / magn, tuple.y / magn, tuple.z / magn, tuple.w / magn};
+}

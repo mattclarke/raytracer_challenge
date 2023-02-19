@@ -1,4 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <cmath>
 #include "tuple.h"
@@ -118,4 +119,27 @@ TEST_CASE("computing the magnitude of vector (1, 2, 3)", "[tuple]" ) {
     auto vec = vector(1, 2, 3);
 
     REQUIRE(magnitude(vec) == std::sqrt(14));
+}
+
+TEST_CASE("normalising vector (4, 0, 0) gives (1, 0, 0)", "[tuple]" ) {
+    auto vec = vector(4, 0, 0);
+
+    REQUIRE(normalise(vec) == vector(1, 0, 0));
+}
+
+TEST_CASE("normalising vector (1, 2, 3)", "[tuple]" ) {
+    using Catch::Matchers::WithinRel;
+    auto vec = vector(1, 2, 3);
+
+    auto result = normalise(vec);
+
+    REQUIRE_THAT(result.x, WithinRel(0.26726, 0.00001));
+    REQUIRE_THAT(result.y, WithinRel(0.53452, 0.00001));
+    REQUIRE_THAT(result.z, WithinRel(0.80178, 0.00001));
+}
+
+TEST_CASE("the magnitude of a normalised vector", "[tuple]" ) {
+    auto vec = vector(1, 2, 3);
+
+    REQUIRE(magnitude(normalise(vec)) == 1);
 }
