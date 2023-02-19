@@ -29,6 +29,10 @@ Tuple operator-(const Tuple &lhs, const Tuple &rhs) {
     return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, lhs.w - rhs.w};
 }
 
+Tuple operator-(const Tuple &rhs) {
+    return {-rhs.x, -rhs.y, -rhs.z, -rhs.w};
+}
+
 Tuple point(double x, double y, double z) {
     return {x, y, z, 1.0};
 }
@@ -83,4 +87,31 @@ TEST_CASE("subtracting two points", "[tuple]" ) {
     auto pt2 = point(5, 6, 7);
 
     REQUIRE(pt1 - pt2 == vector(-2, -4, -6));
+}
+
+TEST_CASE("subtracting a vector from a point", "[tuple]" ) {
+    auto pt = point(3, 2, 1);
+    auto vec = vector(5, 6, 7);
+
+    REQUIRE(pt - vec == point(-2, -4, -6));
+}
+
+TEST_CASE("subtracting two vectors", "[tuple]" ) {
+    auto vec1 = vector(3, 2, 1);
+    auto vec2 = vector(5, 6, 7);
+
+    REQUIRE(vec1 - vec2 == vector(-2, -4, -6));
+}
+
+TEST_CASE("subtracting a vector from the zero vector", "[tuple]" ) {
+    auto zero = vector(0, 0, 0);
+    auto vec = vector(1, -2, 3);
+
+    REQUIRE(zero - vec == vector(-1, 2, -3));
+}
+
+TEST_CASE("negating a tuple", "[tuple]" ) {
+    Tuple tuple = Tuple{1, -2, 3, -4};
+
+    REQUIRE(-tuple == Tuple{-1, 2, -3, 4});
 }
