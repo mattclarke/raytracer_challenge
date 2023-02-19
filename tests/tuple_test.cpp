@@ -1,5 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 
+#include <cmath>
+
 struct Tuple {
     double x;
     double y;
@@ -47,6 +49,10 @@ Tuple point(double x, double y, double z) {
 
 Tuple vector(double x, double y, double z) {
     return {x, y, z, 0.0};
+}
+
+double magnitude(const Tuple &tuple) {
+    return std::sqrt(tuple.x * tuple.x + tuple.y * tuple.y + tuple.z * tuple.z + tuple.w * tuple.w);
 }
 
 TEST_CASE("a tuple with w=1 is a point", "[tuple]" ) {
@@ -140,4 +146,28 @@ TEST_CASE("dividing a tuple by a scalar", "[tuple]" ) {
     Tuple tuple = Tuple{1, -2, 3, -4};
 
     REQUIRE(tuple / 2 == Tuple{0.5, -1, 1.5, -2});
+}
+
+TEST_CASE("computing the magnitude of vector (1, 0, 0)", "[tuple]" ) {
+    auto vec = vector(1, 0, 0);
+
+    REQUIRE(magnitude(vec) == 1);
+}
+
+TEST_CASE("computing the magnitude of vector (0, 1, 0)", "[tuple]" ) {
+    auto vec = vector(0, 1, 0);
+
+    REQUIRE(magnitude(vec) == 1);
+}
+
+TEST_CASE("computing the magnitude of vector (0, 0, 1)", "[tuple]" ) {
+    auto vec = vector(0, 0, 1);
+
+    REQUIRE(magnitude(vec) == 1);
+}
+
+TEST_CASE("computing the magnitude of vector (1, 2, 3)", "[tuple]" ) {
+    auto vec = vector(1, 2, 3);
+
+    REQUIRE(magnitude(vec) == std::sqrt(14));
 }
