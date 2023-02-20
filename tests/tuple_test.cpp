@@ -74,25 +74,25 @@ TEST_CASE("subtracting a vector from the zero vector", "[tuple]" ) {
 }
 
 TEST_CASE("negating a tuple", "[tuple]" ) {
-    Tuple tuple = Tuple{1, -2, 3, -4};
+    auto tuple = Tuple{1, -2, 3, -4};
 
     REQUIRE(-tuple == Tuple{-1, 2, -3, 4});
 }
 
 TEST_CASE("multiplying a tuple by a scalar", "[tuple]" ) {
-    Tuple tuple = Tuple{1, -2, 3, -4};
+    auto tuple = Tuple{1, -2, 3, -4};
 
     REQUIRE(tuple * 3.5 == Tuple{3.5, -7, 10.5, -14});
 }
 
 TEST_CASE("multiplying a tuple by a fraction", "[tuple]" ) {
-    Tuple tuple = Tuple{1, -2, 3, -4};
+    auto tuple = Tuple{1, -2, 3, -4};
 
     REQUIRE(tuple * 0.5 == Tuple{0.5, -1, 1.5, -2});
 }
 
 TEST_CASE("dividing a tuple by a scalar", "[tuple]" ) {
-    Tuple tuple = Tuple{1, -2, 3, -4};
+    auto tuple = Tuple{1, -2, 3, -4};
 
     REQUIRE(tuple / 2 == Tuple{0.5, -1, 1.5, -2});
 }

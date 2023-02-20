@@ -6,11 +6,11 @@ struct Tuple {
     double z;
     double w;
 
-    bool is_point() {
+    [[nodiscard]] bool is_point() const {
         return w == 1.0;
     }
 
-    bool is_vector() {
+    [[nodiscard]] bool is_vector() const {
         return w == 0.0;
     }
 
