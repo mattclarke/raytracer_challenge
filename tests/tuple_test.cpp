@@ -143,3 +143,10 @@ TEST_CASE("the magnitude of a normalised vector", "[tuple]" ) {
 
     REQUIRE(magnitude(normalise(vec)) == 1);
 }
+
+TEST_CASE("the dot product of two tuples", "[tuple]" ) {
+    auto vec1 = vector(1, 2, 3);
+    auto vec2 = vector(2, 3, 4);
+
+    REQUIRE(dot(vec1, vec2) == 20);
+}

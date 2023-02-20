@@ -59,3 +59,8 @@ Tuple normalise(const Tuple &tuple) {
     auto magn = magnitude(tuple); 
     return {tuple.x / magn, tuple.y / magn, tuple.z / magn, tuple.w / magn};
 }
+
+double dot(const Tuple &tuple1, const Tuple &tuple2) {
+    return tuple1.x * tuple2.x + tuple1.y * tuple2.y + tuple1.z * tuple2.z + tuple1.w * tuple2.w;
+}
+
