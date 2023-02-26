@@ -2,6 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <cmath>
+#include <iostream>
 #include "tuple.h"
 
 TEST_CASE("a tuple with w=1 is a point", "[tuple]" ) {
@@ -157,4 +158,39 @@ TEST_CASE("the cross product of two vectors", "[tuple]" ) {
 
     REQUIRE(cross(vec1, vec2) == vector(-1, 2, -1));
     REQUIRE(cross(vec2, vec1) == vector(1, -2, 1));
+}
+
+TEST_CASE("colours are (red, green, blue) tuples", "[colour]" ) {
+    auto c = Colour{-0.5, 0.4, 1.7};
+
+    REQUIRE(c.red == -0.5);
+    REQUIRE(c.green == 0.4);
+    REQUIRE(c.blue == 1.7);
+}
+
+TEST_CASE("adding colours", "[colour]" ) {
+    auto c1 = Colour{0.9, 0.6, 0.75};
+    auto c2 = Colour{0.7, 0.1, 0.25};
+
+    REQUIRE(c1 + c2 == Colour{1.6, 0.7, 1.0});
+}
+
+TEST_CASE("subtracting colours", "[colour]" ) {
+    auto c1 = Colour{0.9, 0.6, 0.75};
+    auto c2 = Colour{0.7, 0.1, 0.25};
+
+    REQUIRE(c1 - c2 == Colour{0.2, 0.5, 0.5});
+}
+
+TEST_CASE("multiplying a colour by a scalar", "[colour]" ) {
+    auto c = Colour{0.2, 0.3, 0.4};
+
+    REQUIRE(c * 2 == Colour{0.4, 0.6, 0.8});
+}
+
+TEST_CASE("multiplying colours", "[colour]" ) {
+    auto c1 = Colour{1, 0.2, 0.4};
+    auto c2 = Colour{0.9, 1, 0.1};
+
+    REQUIRE(c1 * c2 == Colour{0.9, 0.2, 0.04});
 }

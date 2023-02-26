@@ -1,5 +1,12 @@
 #include <cmath>
 
+
+bool equal(const double a, const double b){
+    const static double epsilon = 0.00001; 
+    if (std::abs (a-b) < epsilon) return true;
+    return false;
+}
+
 struct Tuple {
     double x;
     double y;
@@ -17,8 +24,7 @@ struct Tuple {
 };
 
 bool operator==(const Tuple &lhs, const Tuple &rhs) {
-    // TODO: use epsilon for comparison?
-    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z && lhs.w == rhs.w;
+    return equal(lhs.x, rhs.x) && equal(lhs.y, rhs.y) && equal(lhs.z, rhs.z) && equal(lhs.w, rhs.w);
 }
 
 Tuple operator+(const Tuple &lhs, const Tuple &rhs) {
@@ -66,4 +72,30 @@ double dot(const Tuple &a, const Tuple &b) {
 
 Tuple cross(const Tuple &a, const Tuple &b) {
     return vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+
+struct Colour {
+    double red;
+    double green;
+    double blue;
+};
+
+bool operator==(const Colour &lhs, const Colour &rhs) {
+    return equal(lhs.red, rhs.red) && equal(lhs.green, rhs.green) && equal(lhs.blue, rhs.blue);
+}
+
+Colour operator+(const Colour &lhs, const Colour &rhs) {
+    return {lhs.red + rhs.red, lhs.green + rhs.green, lhs.blue + rhs.blue};
+}
+
+Colour operator-(const Colour &lhs, const Colour &rhs) {
+    return {lhs.red - rhs.red, lhs.green - rhs.green, lhs.blue - rhs.blue};
+}
+
+Colour operator*(const Colour &lhs, double scalar) {
+    return {lhs.red * scalar, lhs.green * scalar, lhs.blue * scalar};
+}
+
+Colour operator*(const Colour &lhs, const Colour &rhs) {
+    return {lhs.red * rhs.red, lhs.green * rhs.green, lhs.blue * rhs.blue};
 }
