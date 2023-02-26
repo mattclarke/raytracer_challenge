@@ -1,5 +1,7 @@
-#include <cmath>
+#ifndef RAYTRACER_CHALLENGE_TUPLE_H
+#define RAYTRACER_CHALLENGE_TUPLE_H
 
+#include <cmath>
 
 bool equal(const double a, const double b){
     const static double epsilon = 0.00001; 
@@ -99,3 +101,5 @@ Colour operator*(const Colour &lhs, double scalar) {
 Colour operator*(const Colour &lhs, const Colour &rhs) {
     return {lhs.red * rhs.red, lhs.green * rhs.green, lhs.blue * rhs.blue};
 }
+
+#endif // RAYTRACER_CHALLENGE_TUPLE_H
