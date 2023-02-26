@@ -150,3 +150,11 @@ TEST_CASE("the dot product of two tuples", "[tuple]" ) {
 
     REQUIRE(dot(vec1, vec2) == 20);
 }
+
+TEST_CASE("the cross product of two vectors", "[tuple]" ) {
+    auto vec1 = vector(1, 2, 3);
+    auto vec2 = vector(2, 3, 4);
+
+    REQUIRE(cross(vec1, vec2) == vector(-1, 2, -1));
+    REQUIRE(cross(vec2, vec1) == vector(1, -2, 1));
+}

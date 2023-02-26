@@ -60,7 +60,10 @@ Tuple normalise(const Tuple &tuple) {
     return {tuple.x / magn, tuple.y / magn, tuple.z / magn, tuple.w / magn};
 }
 
-double dot(const Tuple &tuple1, const Tuple &tuple2) {
-    return tuple1.x * tuple2.x + tuple1.y * tuple2.y + tuple1.z * tuple2.z + tuple1.w * tuple2.w;
+double dot(const Tuple &a, const Tuple &b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
+Tuple cross(const Tuple &a, const Tuple &b) {
+    return vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
