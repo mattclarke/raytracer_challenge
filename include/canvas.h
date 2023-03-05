@@ -28,15 +28,15 @@ Colour pixel_at(const Canvas &c, size_t x, size_t y) {
     return c.pixels[c.width * y + x];
 }
 
+int scale_pixel_colour(double colour) {
+    return std::clamp(static_cast<int>(std::ceil(colour * 255)), 0, 255);
+}
+
 std::string canvas_to_ppm(const Canvas &canvas) {
     std::string result = fmt::format("P3\n{} {}\n255\n", canvas.width, canvas.height);
     size_t i = 0;
     for (const auto &p : canvas.pixels) {
-        int red = std::clamp(static_cast<int>(std::ceil(p.red * 255)), 0, 255);
-        int green = std::clamp(static_cast<int>(std::ceil(p.green * 255)), 0, 255);
-        int blue = std::clamp(static_cast<int>(std::ceil(p.blue * 255)), 0, 255);
-
-        result += fmt::format("{} {} {}", red, green, blue);
+        result += fmt::format("{} {} {}", scale_pixel_colour(p.red), scale_pixel_colour(p.green), scale_pixel_colour(p.blue));
         ++i;
         if (i % canvas.width == 0) {
             result += '\n';
