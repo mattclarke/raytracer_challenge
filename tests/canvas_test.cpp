@@ -87,3 +87,11 @@ TEST_CASE("splitting long lines in PPM files", "[canvas]" ) {
     REQUIRE(lines[5] == "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
     REQUIRE(lines[6] == "153 255 204 153 255 204 153 255 204 153 255 204 153");
 }
+
+TEST_CASE("PPM files are terminated by a newline", "[canvas]" ) {
+    auto canvas = Canvas{5, 3};
+
+    auto ppm = canvas_to_ppm(canvas);
+
+    REQUIRE(ppm[ppm.size() - 1] == '\n');
+}
