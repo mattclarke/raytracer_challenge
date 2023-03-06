@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include <fmt/core.h>
@@ -32,9 +33,23 @@ int scale_pixel_colour(double colour) {
     return std::clamp(static_cast<int>(std::ceil(colour * 255)), 0, 255);
 }
 
+std::tuple<std::string, std::string> add_rgb_element(std::string overall, std::string current, const std::string& element) {
+    if (current.size() == 69) {
+        overall += current + '\n';
+        current = "";
+    }
+    if (current.size() + element.size() >= 69) {
+        overall += current + '\n';
+        current = element;
+    } else {
+        current += ' ' + element;
+    }
+    return {overall, current};
+}
+
 std::string canvas_to_ppm(const Canvas &canvas) {
     std::string result = fmt::format("P3\n{} {}\n255\n", canvas.width, canvas.height);
-    size_t line_length = 0;
+    std::string current = "";
     for (size_t y = 0; y < canvas.height; ++y) {
         for (size_t x = 0; x < canvas.width; ++x) {
             auto pixel = canvas.pixels[canvas.width * y + x];
@@ -43,14 +58,15 @@ std::string canvas_to_ppm(const Canvas &canvas) {
             auto s_blue = std::to_string(scale_pixel_colour(pixel.blue));
 
             if (x == 0) {
-                result += s_red + ' ' + s_green + ' ' + s_blue;
+                current = s_red + ' ' + s_green + ' ' + s_blue;
             } else {
-                result += ' ' + s_red + ' ' + s_green + ' ' + s_blue;
+                std::tie(result, current) = add_rgb_element(result, current, s_red);
+                std::tie(result, current) = add_rgb_element(result, current, s_green);
+                std::tie(result, current) = add_rgb_element(result, current, s_blue);
             }
-
         }
-        result += '\n';
-        line_length = 0;
+        current += '\n';
+        result += current;
     }
     return result;
 }
