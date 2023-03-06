@@ -68,3 +68,22 @@ TEST_CASE("constructing the PPM pixel data", "[canvas]" ) {
     REQUIRE(lines[4] == "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
     REQUIRE(lines[5] == "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
 }
+
+TEST_CASE("splitting long lines in PPM files", "[canvas]" ) {
+    auto canvas = Canvas{10, 2};
+    auto c1 = Colour{1, 0.8, 0.6};
+
+    for (size_t y = 0; y < 2; ++y) {
+        for (size_t x = 0; x < 10; ++x) {
+            write_pixel(canvas, x, y, c1);
+        }
+    }
+
+    auto ppm = canvas_to_ppm(canvas);
+    auto lines = str_to_vec(ppm);
+
+    REQUIRE(lines[3] == "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    REQUIRE(lines[4] == "153 255 204 153 255 204 153 255 204 153 255 204 153");
+    REQUIRE(lines[5] == "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
+    REQUIRE(lines[6] == "153 255 204 153 255 204 153 255 204 153 255 204 153");
+}

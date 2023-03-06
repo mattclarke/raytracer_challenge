@@ -34,18 +34,24 @@ int scale_pixel_colour(double colour) {
 
 std::string canvas_to_ppm(const Canvas &canvas) {
     std::string result = fmt::format("P3\n{} {}\n255\n", canvas.width, canvas.height);
-    size_t i = 0;
-    for (const auto &p : canvas.pixels) {
-        result += fmt::format("{} {} {}", scale_pixel_colour(p.red), scale_pixel_colour(p.green), scale_pixel_colour(p.blue));
-        ++i;
-        if (i % canvas.width == 0) {
-            result += '\n';
+    size_t line_length = 0;
+    for (size_t y = 0; y < canvas.height; ++y) {
+        for (size_t x = 0; x < canvas.width; ++x) {
+            auto pixel = canvas.pixels[canvas.width * y + x];
+            auto s_red = std::to_string(scale_pixel_colour(pixel.red));
+            auto s_green = std::to_string(scale_pixel_colour(pixel.green));
+            auto s_blue = std::to_string(scale_pixel_colour(pixel.blue));
+
+            if (x == 0) {
+                result += s_red + ' ' + s_green + ' ' + s_blue;
+            } else {
+                result += ' ' + s_red + ' ' + s_green + ' ' + s_blue;
+            }
+
         }
-        else {
-            result += ' ';
-        }
+        result += '\n';
+        line_length = 0;
     }
-    std::cout << result;
     return result;
 }
 
