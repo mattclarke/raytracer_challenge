@@ -33,7 +33,7 @@ int scale_pixel_colour(double colour) {
     return std::clamp(static_cast<int>(std::ceil(colour * 255)), 0, 255);
 }
 
-std::tuple<std::string, std::string> add_rgb_element(std::string overall, std::string current, const std::string& element) {
+void add_rgb_element(std::string &overall, std::string &current, const std::string& element) {
     if (current.size() == 69) {
         overall += current + '\n';
         current = "";
@@ -44,7 +44,6 @@ std::tuple<std::string, std::string> add_rgb_element(std::string overall, std::s
     } else {
         current += ' ' + element;
     }
-    return {overall, current};
 }
 
 std::string canvas_to_ppm(const Canvas &canvas) {
@@ -53,17 +52,17 @@ std::string canvas_to_ppm(const Canvas &canvas) {
     for (size_t y = 0; y < canvas.height; ++y) {
         for (size_t x = 0; x < canvas.width; ++x) {
             auto pixel = canvas.pixels[canvas.width * y + x];
-            auto s_red = std::to_string(scale_pixel_colour(pixel.red));
-            auto s_green = std::to_string(scale_pixel_colour(pixel.green));
-            auto s_blue = std::to_string(scale_pixel_colour(pixel.blue));
+            auto red = std::to_string(scale_pixel_colour(pixel.red));
+            auto green = std::to_string(scale_pixel_colour(pixel.green));
+            auto blue = std::to_string(scale_pixel_colour(pixel.blue));
 
             if (x == 0) {
-                current = s_red + ' ' + s_green + ' ' + s_blue;
-            } else {
-                std::tie(result, current) = add_rgb_element(result, current, s_red);
-                std::tie(result, current) = add_rgb_element(result, current, s_green);
-                std::tie(result, current) = add_rgb_element(result, current, s_blue);
+                current = red + ' ' + green + ' ' + blue;
+                continue;
             }
+            add_rgb_element(result, current, red);
+            add_rgb_element(result, current, green);
+            add_rgb_element(result, current, blue);
         }
         current += '\n';
         result += current;
