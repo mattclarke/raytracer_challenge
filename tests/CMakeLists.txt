@@ -9,3 +9,8 @@ add_executable(canvas_test canvas_test.cpp)
 target_link_libraries(canvas_test PUBLIC ${CONAN_LIBS})
 target_include_directories(canvas_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 add_test(NAME canvas_test COMMAND canvas_test)
+
+add_executable(matrix_test matrix_test.cpp)
+target_link_libraries(matrix_test PUBLIC ${CONAN_LIBS})
+target_include_directories(matrix_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+add_test(NAME matrix_test COMMAND matrix_test)
