@@ -4,6 +4,7 @@
 #include <string>
 
 #include "matrix.h"
+#include "tuple.h"
 
 
 TEST_CASE("constructing and inspecting a 4x4 matrix", "[matrix]" ) {
@@ -56,4 +57,11 @@ TEST_CASE("multiplying two matrices", "[matrix]" ) {
     auto expected = Matrix{4, 4, {20, 22, 50, 48, 44, 54, 114, 108, 40, 58, 110, 102, 16, 26, 46, 42}};
 
     REQUIRE(m1 * m2 == expected);
+}
+
+TEST_CASE("matrix multiplied by a tuple", "[matrix]" ) {
+    auto m = Matrix{4, 4, {1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1}};
+    auto t = Tuple{1, 2, 3, 1};
+
+    REQUIRE(m * t == Tuple{18, 24, 33, 1});
 }
