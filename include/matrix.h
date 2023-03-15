@@ -24,14 +24,7 @@ bool operator==(const Matrix &lhs, const Matrix &rhs) {
     if (lhs.width != rhs.width || lhs.height != rhs.height) {
         return false;
     }
-
-    for (size_t r = 0; r < lhs.height; ++r) {
-        for (size_t c = 0; c < lhs.width; ++c) {
-            if (lhs.at(r, c) != rhs.at(r,c)) {
-                return false;
-            }
-        }
-    }
-    return true;
+    
+    return lhs.values == rhs.values;
 }
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
