@@ -48,8 +48,8 @@ void add_rgb_element(std::string &overall, std::string &current, const std::stri
 
 std::string canvas_to_ppm(const Canvas &canvas) {
     std::string result = fmt::format("P3\n{} {}\n255\n", canvas.width, canvas.height);
-    std::string current = "";
     for (size_t y = 0; y < canvas.height; ++y) {
+        std::string current;
         for (size_t x = 0; x < canvas.width; ++x) {
             auto pixel = canvas.pixels[canvas.width * y + x];
             auto red = std::to_string(scale_pixel_colour(pixel.red));
@@ -57,7 +57,7 @@ std::string canvas_to_ppm(const Canvas &canvas) {
             auto blue = std::to_string(scale_pixel_colour(pixel.blue));
 
             if (x == 0) {
-                current = red + ' ' + green + ' ' + blue;
+                current += fmt::format("{} {} {}", red, green, blue);
                 continue;
             }
             add_rgb_element(result, current, red);
