@@ -27,4 +27,21 @@ bool operator==(const Matrix &lhs, const Matrix &rhs) {
     
     return lhs.values == rhs.values;
 }
+
+Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
+    // TODO: Assert sizes are the same and square
+    std::vector<float> calculated(lhs.width * lhs.height, 0);
+
+    for (size_t r = 0; r < lhs.width; ++r) {
+        for (size_t c = 0; c < lhs.height; ++c) {
+            float ans = 0;
+            for (size_t i = 0; i < lhs.width; ++i) {
+                ans += lhs.at(r, i) * rhs.at(i, c);
+            }
+            calculated[r * lhs.width + c] = ans;
+        }
+    }
+    return {lhs.width, lhs.height, calculated};
+}
+
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
