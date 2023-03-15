@@ -34,3 +34,17 @@ TEST_CASE("a 3x3 matrix ought to be representable", "[matrix]" ) {
     REQUIRE(m.at(1, 1) == -2);
     REQUIRE(m.at(2, 2) == 1);
 }
+
+TEST_CASE("matrix equality with identical matrices", "[matrix]" ) {
+    auto m1 = Matrix{4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2}};
+    auto m2 = Matrix{4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2}};
+
+    REQUIRE(m1 == m2);
+}
+
+TEST_CASE("matrix equality with different matrices", "[matrix]" ) {
+    auto m1 = Matrix{4, 4, {1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2}};
+    auto m2 = Matrix{4, 4, {2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1}};
+
+    REQUIRE(m1 != m2);
+}

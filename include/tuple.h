@@ -3,11 +3,7 @@
 
 #include <cmath>
 
-bool equal(const double a, const double b){
-    const static double epsilon = 0.00001; 
-    if (std::abs (a-b) < epsilon) return true;
-    return false;
-}
+#include "utils.h"
 
 struct Tuple {
     double x;
