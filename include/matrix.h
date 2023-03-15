@@ -1,6 +1,7 @@
 #ifndef RAYTRACER_CHALLENGE_MATRIX_H
 #define RAYTRACER_CHALLENGE_MATRIX_H
 
+#include <cassert>
 #include <vector>
 
 #include "tuple.h"
@@ -30,7 +31,9 @@ bool operator==(const Matrix &lhs, const Matrix &rhs) {
 }
 
 Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
-    // TODO: Assert sizes are the same and square
+    assert((void("matrices must be 4x4 when multiplying"), lhs.width == 4 && lhs.height == 4));
+    assert((void("matrices must be 4x4 when multiplying"), rhs.width == 4 && rhs.height == 4));
+
     std::vector<float> calculated(lhs.width * lhs.height, 0);
 
     for (size_t r = 0; r < lhs.width; ++r) {
@@ -46,7 +49,8 @@ Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
 }
 
 Tuple operator*(const Matrix &lhs, const Tuple &rhs) {
-    // TODO: Assert sizes are compatible
+    assert((void("matrix must be 4x4 when multiplying against a tuple"), lhs.width == 4 && lhs.height == 4));
+
     double x = 0;
     x += lhs.at(0, 0) * rhs.x;
     x += lhs.at(0, 1) * rhs.y;
