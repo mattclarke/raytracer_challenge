@@ -51,31 +51,12 @@ Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
 Tuple operator*(const Matrix &lhs, const Tuple &rhs) {
     assert((void("matrix must be 4x4 when multiplying against a tuple"), lhs.width == 4 && lhs.height == 4));
 
-    double x = 0;
-    x += lhs.at(0, 0) * rhs.x;
-    x += lhs.at(0, 1) * rhs.y;
-    x += lhs.at(0, 2) * rhs.z;
-    x += lhs.at(0, 3) * rhs.w;
-    
-    double y = 0;
-    y += lhs.at(1, 0) * rhs.x;
-    y += lhs.at(1, 1) * rhs.y;
-    y += lhs.at(1, 2) * rhs.z;
-    y += lhs.at(1, 3) * rhs.w;
-    
-    double z = 0;
-    z += lhs.at(2, 0) * rhs.x;
-    z += lhs.at(2, 1) * rhs.y;
-    z += lhs.at(2, 2) * rhs.z;
-    z += lhs.at(2, 3) * rhs.w;
-    
-    double w = 0;
-    w += lhs.at(3, 0) * rhs.x;
-    w += lhs.at(3, 1) * rhs.y;
-    w += lhs.at(3, 2) * rhs.z;
-    w += lhs.at(3, 3) * rhs.w;
-
-    return {x, y, z, w};
+    return {
+        lhs.at(0, 0) * rhs.x + lhs.at(0, 1) * rhs.y + lhs.at(0, 2) * rhs.z + lhs.at(0, 3) * rhs.w,
+        lhs.at(1, 0) * rhs.x + lhs.at(1, 1) * rhs.y + lhs.at(1, 2) * rhs.z + lhs.at(1, 3) * rhs.w,
+        lhs.at(2, 0) * rhs.x + lhs.at(2, 1) * rhs.y + lhs.at(2, 2) * rhs.z + lhs.at(2, 3) * rhs.w,
+        lhs.at(3, 0) * rhs.x + lhs.at(3, 1) * rhs.y + lhs.at(3, 2) * rhs.z + lhs.at(3, 3) * rhs.w
+    };
 }
 
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
