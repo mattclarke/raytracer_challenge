@@ -65,4 +65,17 @@ Tuple operator*(const Matrix &lhs, const Tuple &rhs) {
     };
 }
 
+Matrix transpose(const Matrix &m) {
+    assert((void("matrix must be 4x4 when transposing"), m.width == 4 && m.height == 4));
+
+    std::vector<float> values;
+
+    for (size_t c = 0; c < 4; ++c) {
+        for (size_t r = 0; r < 4; ++r) {
+            values.push_back(m.at(r, c));
+        }
+    }
+    return {4, 4, values};
+}
+
 #endif //RAYTRACER_CHALLENGE_MATRIX_H

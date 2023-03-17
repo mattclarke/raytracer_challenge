@@ -85,3 +85,26 @@ TEST_CASE("multiplying the identity matrix by a tuple", "[matrix]" ) {
 
     REQUIRE(idm * t == t);
 }
+
+TEST_CASE("transposing a matrix", "[matrix]" ) {
+    auto m = Matrix{4, 4, {0, 9, 3, 0,
+                           9, 8, 0, 8,
+                           1, 8, 5, 3,
+                           0, 0, 5, 8}};
+
+    auto expected = Matrix{4, 4, {0, 9, 1, 0,
+                                  9, 8, 8, 0,
+                                  3, 0, 5, 5,
+                                  0, 8, 3, 8}};
+    REQUIRE(transpose(m) == expected);
+}
+
+TEST_CASE("transposing the identity matrix", "[matrix]" ) {
+    auto idm = Matrix{4, 4, {1, 0, 0, 0,
+                             0, 1, 0, 0,
+                             0, 0, 1, 0,
+                             0, 0, 0, 1}};
+
+    REQUIRE(transpose(idm) == idm);
+}
+
