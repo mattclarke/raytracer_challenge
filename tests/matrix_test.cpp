@@ -114,3 +114,18 @@ TEST_CASE("calculating the determinant of a 2x2 matrix", "[matrix]" ) {
     REQUIRE(determinant(m) == 17);
 }
 
+TEST_CASE("a submatrix of a 3x3 matrix is a 2x2 matrix", "[matrix]" ) {
+    auto m = Matrix{3, 3, {1, 5, 0, 3, 2, 7, 0, 6, -3}};
+
+    auto expected = Matrix{2, 2, {3, 2, 0, 6}};
+
+    REQUIRE(submatrix(m, 0, 2) == expected);
+}
+
+TEST_CASE("a submatrix of a 4x4 matrix is a 3x3 matrix", "[matrix]" ) {
+    auto m = Matrix{4, 4, {-6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1}};
+
+    auto expected = Matrix{3, 3, {-6, 1, 6, -8, 8, 6, -7, -1, 1}};
+
+    REQUIRE(submatrix(m, 2, 1) == expected);
+}
