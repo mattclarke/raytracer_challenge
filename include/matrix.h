@@ -132,7 +132,6 @@ Matrix inverse(const Matrix &m) {
 
     for (size_t r = 0; r < m.width; ++r) {
         for (size_t c = 0; c < m.height; ++c) {
-            std::cout << cofactor(m, r, c) << ' ';
             // Note: c and r are swapped so it does a transpose for free!
             values[c * m.width + r] = cofactor(m, r, c) / determinant(m);
         }
