@@ -108,3 +108,9 @@ TEST_CASE("transposing the identity matrix", "[matrix]" ) {
     REQUIRE(transpose(idm) == idm);
 }
 
+TEST_CASE("calculating the determinant of a 2x2 matrix", "[matrix]" ) {
+    auto m = Matrix{2, 2, {1, 5, -3, 2}};
+
+    REQUIRE(determinant(m) == 17);
+}
+

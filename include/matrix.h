@@ -78,4 +78,8 @@ Matrix transpose(const Matrix &m) {
     return {4, 4, values};
 }
 
+float determinant(const Matrix &m) {
+    assert((void("matrix must be 2x2 when calculating the determinant"), m.width == 2 && m.height == 2));
+    return m.at(0, 0) * m.at(1, 1) - m.at(0, 1) * m.at(1, 0);
+}
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
