@@ -129,3 +129,19 @@ TEST_CASE("a submatrix of a 4x4 matrix is a 3x3 matrix", "[matrix]" ) {
 
     REQUIRE(submatrix(m, 2, 1) == expected);
 }
+
+TEST_CASE("calculating a minor of a 3x3 matrix", "[matrix]" ) {
+    auto m = Matrix{3, 3, {3, 5, 0, 2, -1, -7, 6, -1, 5}};
+
+    REQUIRE(minor(m, 1, 0) == 25);
+    REQUIRE(determinant(submatrix(m, 1, 0)) == minor(m, 1, 0));
+}
+
+TEST_CASE("calculating a cofactor of a 3x3 matrix", "[matrix]" ) {
+    auto m = Matrix{3, 3, {3, 5, 0, 2, -1, -7, 6, -1, 5}};
+
+    REQUIRE(minor(m, 0, 0) == -12);
+    REQUIRE(cofactor(m, 0, 0) == -12);
+    REQUIRE(minor(m, 1, 0) == 25);
+    REQUIRE(cofactor(m, 1, 0) == -25);
+}

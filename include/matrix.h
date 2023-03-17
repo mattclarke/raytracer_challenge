@@ -96,4 +96,13 @@ Matrix submatrix(const Matrix &m, size_t row, size_t column) {
     return {m.width - 1, m.height - 1, values};
 }
 
+float minor(const Matrix &m, size_t row, size_t column) {
+    return determinant(submatrix(m, row, column));
+}
+
+float cofactor(const Matrix &m, size_t row, size_t column) {
+    auto result = minor(m, row, column);
+
+    return (row + column % 2 == 0) ? result : -result;
+}
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
