@@ -2,7 +2,6 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <string>
-#include <iostream>
 
 #include "matrix.h"
 #include "tuple.h"

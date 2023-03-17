@@ -13,7 +13,7 @@ struct Matrix {
         // TODO: assert if values are the wrong size
     }
 
-    float at(size_t row, size_t column) const {
+    [[nodiscard]] float at(size_t row, size_t column) const {
         return values[row * width + column];
     }
 
