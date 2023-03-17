@@ -2,6 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <string>
+#include <iostream>
 
 #include "matrix.h"
 #include "tuple.h"
@@ -163,4 +164,45 @@ TEST_CASE("calculating the determinant of a 4x4 matrix", "[matrix]" ) {
     REQUIRE(cofactor(m, 0, 2) == 210);
     REQUIRE(cofactor(m, 0, 3) == 51);
     REQUIRE(determinant(m) == -4071);
+}
+
+TEST_CASE("testing an invertible matrix for invertibility", "[matrix]" ) {
+    auto m = Matrix{4, 4, {6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3, -7, 9, 1, 7, -6}};
+
+    REQUIRE(determinant(m) == -2120);
+    REQUIRE(invertible(m));
+}
+
+TEST_CASE("testing a noninvertible matrix for invertibility", "[matrix]" ) {
+    auto m = Matrix{4, 4, {-4, 2, -2, -3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0}};
+
+    REQUIRE(determinant(m) == 0);
+    REQUIRE(!invertible(m));
+}
+
+TEST_CASE("calculating the inverse of a matrix", "[matrix]" ) {
+    auto a = Matrix{4, 4, {-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4}};
+
+    auto b = inverse(a);
+
+    REQUIRE(determinant(a) == 532);
+    REQUIRE(cofactor(a, 2, 3) == -160);
+    REQUIRE(b.at(3, 2) == -160.0f/532.0f);
+    REQUIRE(cofactor(a, 3, 2) == 105);
+    REQUIRE(b.at(2, 3) == 105.0f/532.0f);
+    REQUIRE(b == Matrix{4, 4, {0.218045f, 0.451128f, 0.240602f, -0.0451128f, -0.808271f, -1.45677f, -0.443609f, 0.520677f, -0.0789474f, -0.223684f, -0.0526316f, 0.197368f, -0.522556f, -0.81391f, -0.300752f, 0.306391f}});
+}
+
+TEST_CASE("checking the cofactors of a matrix", "[matrix]" ) {
+    auto a = Matrix{4, 4, {-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4}};
+
+    REQUIRE(cofactor(a, 0, 0) == 116.0f);
+    REQUIRE(cofactor(a, 0, 1) == -430.0f);
+    REQUIRE(cofactor(a, 0, 2) == -42.0f);
+    REQUIRE(cofactor(a, 0, 3) == -278.0f);
+    
+    REQUIRE(cofactor(a, 1, 0) == 240.0f);
+    REQUIRE(cofactor(a, 1, 1) == -775.0f);
+    REQUIRE(cofactor(a, 1, 2) == -119.0f);
+    REQUIRE(cofactor(a, 1, 3) == -433.0f);
 }

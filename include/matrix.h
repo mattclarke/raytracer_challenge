@@ -13,8 +13,8 @@ struct Matrix {
         // TODO: assert if values are the wrong size
     }
 
-    float at(size_t y, size_t x) const {
-        return values[y * width + x];
+    float at(size_t row, size_t column) const {
+        return values[row * width + column];
     }
 
     size_t width;
@@ -26,8 +26,14 @@ bool operator==(const Matrix &lhs, const Matrix &rhs) {
     if (lhs.width != rhs.width || lhs.height != rhs.height) {
         return false;
     }
+
+    for (size_t i = 0; i < lhs.values.size(); ++i) {
+        if (!equal(lhs.values[i], rhs.values[i])){
+            return false;
+        }
+    }
     
-    return lhs.values == rhs.values;
+    return true;
 }
 
 Matrix operator*(const Matrix &lhs, const Matrix &rhs) {
@@ -112,6 +118,26 @@ float minor(const Matrix &m, size_t row, size_t column) {
 float cofactor(const Matrix &m, size_t row, size_t column) {
     auto result = minor(m, row, column);
 
-    return (row + column % 2 == 0) ? result : -result;
+    return ((row + column) % 2 == 0) ? result : -result;
 }
+
+bool invertible(const Matrix &m) {
+    return determinant(m) != 0;
+}
+
+Matrix inverse(const Matrix &m) {
+    assert((void("matrices must be invertible to be inversed"), invertible(m)));
+
+    std::vector values(m.width * m.height, 0.0f);
+
+    for (size_t r = 0; r < m.width; ++r) {
+        for (size_t c = 0; c < m.height; ++c) {
+            std::cout << cofactor(m, r, c) << ' ';
+            // Note: c and r are swapped so it does a transpose for free!
+            values[c * m.width + r] = cofactor(m, r, c) / determinant(m);
+        }
+    }
+    return {m.width, m.height, values};
+}
+
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
