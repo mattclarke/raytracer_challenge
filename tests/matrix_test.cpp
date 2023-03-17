@@ -145,3 +145,22 @@ TEST_CASE("calculating a cofactor of a 3x3 matrix", "[matrix]" ) {
     REQUIRE(minor(m, 1, 0) == 25);
     REQUIRE(cofactor(m, 1, 0) == -25);
 }
+
+TEST_CASE("calculating the determinant of a 3x3 matrix", "[matrix]" ) {
+    auto m = Matrix{3, 3, {1, 2, 6, -5, 8, -4, 2, 6, 4}};
+
+    REQUIRE(cofactor(m, 0, 0) == 56);
+    REQUIRE(cofactor(m, 0, 1) == 12);
+    REQUIRE(cofactor(m, 0, 2) == -46);
+    REQUIRE(determinant(m) == -196);
+}
+
+TEST_CASE("calculating the determinant of a 4x4 matrix", "[matrix]" ) {
+    auto m = Matrix{4, 4, {-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9}};
+
+    REQUIRE(cofactor(m, 0, 0) == 690);
+    REQUIRE(cofactor(m, 0, 1) == 447);
+    REQUIRE(cofactor(m, 0, 2) == 210);
+    REQUIRE(cofactor(m, 0, 3) == 51);
+    REQUIRE(determinant(m) == -4071);
+}

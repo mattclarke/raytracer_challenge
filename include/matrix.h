@@ -78,9 +78,18 @@ Matrix transpose(const Matrix &m) {
     return {4, 4, values};
 }
 
+float cofactor(const Matrix &m, size_t row, size_t column);
+
 float determinant(const Matrix &m) {
-    assert((void("matrix must be 2x2 when calculating the determinant"), m.width == 2 && m.height == 2));
-    return m.at(0, 0) * m.at(1, 1) - m.at(0, 1) * m.at(1, 0);
+    if (m.width == 2) {
+        return m.at(0, 0) * m.at(1, 1) - m.at(0, 1) * m.at(1, 0);
+    }
+    
+    auto result = 0.0f;
+    for (size_t c = 0; c < m.width; ++c) {
+        result = result + m.at(0, c) * cofactor(m, 0, c);
+    }
+    return result;
 }
 
 Matrix submatrix(const Matrix &m, size_t row, size_t column) {
