@@ -65,3 +65,23 @@ TEST_CASE("matrix multiplied by a tuple", "[matrix]" ) {
 
     REQUIRE(m * t == Tuple{18, 24, 33, 1});
 }
+
+TEST_CASE("muliplying a matrix by the identity matrix", "[matrix]" ) {
+    auto m = Matrix{4, 4, {0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32}};
+    auto idm = Matrix{4, 4, {1, 0, 0, 0,
+                             0, 1, 0, 0,
+                             0, 0, 1, 0,
+                             0, 0, 0, 1}};
+
+    REQUIRE(m * idm == m);
+}
+
+TEST_CASE("multiplying the identity matrix by a tuple", "[matrix]" ) {
+    auto idm = Matrix{4, 4, {1, 0, 0, 0,
+                             0, 1, 0, 0,
+                             0, 0, 1, 0,
+                             0, 0, 0, 1}};
+    auto t = Tuple{1, 2, 3, 4};
+
+    REQUIRE(idm * t == t);
+}
