@@ -1,6 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
+#include <cmath>
+#include <numbers>
 #include <string>
 
 #include "tuple.h"
@@ -56,4 +58,39 @@ TEST_CASE("reflection is scaling by a negative value", "[transformation]" ) {
     auto p = point(2, 3, 4);
 
     REQUIRE(t * p == point(-2, 3, 4));
+}
+
+TEST_CASE("rotating a point around the x axis", "[transformation]" ) {
+    auto p = point(0, 1, 0);
+    auto half_quarter = rotation_x(std::numbers::pi_v<float> / 4);
+    auto full_quarter = rotation_x(std::numbers::pi_v<float> / 2);
+
+    REQUIRE(half_quarter * p == point(0, std::sqrt(2) / 2, std::sqrt(2) / 2));
+    REQUIRE(full_quarter * p == point(0, 0, 1));
+}
+
+TEST_CASE("the inverse of an x-rotation rotates in the opposite direction", "[transformation]" ) {
+    auto p = point(0, 1, 0);
+    auto half_quarter = rotation_x(std::numbers::pi_v<float> / 4);
+    auto inv = inverse(half_quarter);
+
+    REQUIRE(inv * p == point(0, std::sqrt(2) / 2, -std::sqrt(2) / 2));
+}
+
+TEST_CASE("rotating a point about the y axis", "[transformation]" ) {
+    auto p = point(0, 0, 1);
+    auto half_quarter = rotation_y(std::numbers::pi_v<float> / 4);
+    auto full_quarter = rotation_y(std::numbers::pi_v<float> / 2);
+
+    REQUIRE(half_quarter * p == point(std::sqrt(2) / 2, 0, std::sqrt(2) / 2));
+    REQUIRE(full_quarter * p == point(1, 0, 0));
+}
+
+TEST_CASE("rotating a point about the z axis", "[transformation]" ) {
+    auto p = point(0, 1, 0);
+    auto half_quarter = rotation_z(std::numbers::pi_v<float> / 4);
+    auto full_quarter = rotation_z(std::numbers::pi_v<float> / 2);
+
+    REQUIRE(half_quarter * p == point(-std::sqrt(2) / 2, std::sqrt(2) / 2, 0));
+    REQUIRE(full_quarter * p == point(-1, 0, 0));
 }
