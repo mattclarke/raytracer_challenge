@@ -136,3 +136,33 @@ TEST_CASE("a shearing transformation moves z in proportion to y", "[transformati
 
     REQUIRE(t * p == point(2, 3, 7));
 }
+
+TEST_CASE("individual transformations are applied in sequence", "[transformation]" ) {
+    auto p = point(1, 0, 1);
+    auto a = rotation_x(std::numbers::pi_v<float> / 2 );
+    auto b = scaling(5, 5, 5);
+    auto c = translation(10, 5, 7);
+
+    auto p2 = a * p;
+    
+    REQUIRE(p2 == point(1, -1, 0));
+
+    auto p3 = b * p2;
+
+    REQUIRE(p3 == point(5, -5, 0));
+
+    auto p4 = c * p3;
+
+    REQUIRE(p4 == point(15, 0, 7));
+}
+
+TEST_CASE("chained transformations must be applied in reverse order", "[transformation]" ) {
+    auto p = point(1, 0, 1);
+    auto a = rotation_x(std::numbers::pi_v<float> / 2 );
+    auto b = scaling(5, 5, 5);
+    auto c = translation(10, 5, 7);
+
+    auto t = c * b * a;
+
+    REQUIRE(t * p == point(15, 0, 7));
+}
