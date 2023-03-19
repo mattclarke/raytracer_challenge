@@ -4,7 +4,7 @@
 #include <string>
 
 #include "tuple.h"
-#include "matrix.h"
+#include "transformations.h"
 
 
 TEST_CASE("multiplying by a translation matrix", "[transformation]" ) {
@@ -49,4 +49,11 @@ TEST_CASE("multiplying by the inverse of a scaling matrix", "[transformation]" )
     auto v = vector(-4, 6, 8);
 
     REQUIRE(inv * v == vector(-2, 2, 2));
+}
+
+TEST_CASE("reflection is scaling by a negative value", "[transformation]" ) {
+    auto t = scaling(-1, 1, 1);
+    auto p = point(2, 3, 4);
+
+    REQUIRE(t * p == point(-2, 3, 4));
 }
