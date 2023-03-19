@@ -19,3 +19,8 @@ add_executable(transformation_test transformation_test.cpp)
 target_link_libraries(transformation_test PUBLIC ${CONAN_LIBS})
 target_include_directories(transformation_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 add_test(NAME transformation_test COMMAND transformation_test)
+
+add_executable(rays_test rays_test.cpp)
+target_link_libraries(rays_test PUBLIC ${CONAN_LIBS})
+target_include_directories(rays_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+add_test(NAME rays_test COMMAND rays_test)
