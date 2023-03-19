@@ -139,4 +139,8 @@ Matrix inverse(const Matrix &m) {
     return {m.width, m.height, values};
 }
 
+Matrix translation(float x, float y, float z) {
+    return {4, 4, {1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z, 0, 0, 0, 1}};
+}
+
 #endif //RAYTRACER_CHALLENGE_MATRIX_H
