@@ -23,11 +23,16 @@ Tuple position(const Ray &ray, float t) {
     return ray.origin + ray.direction * t;
 }
 
-std::vector<Intersection> intersect(const Sphere &s, const Ray &r) {
-    auto sphere_to_ray = r.origin - point(0, 0, 0);
+Ray transform(const Ray &r, const Matrix &m) {
+    return {m * r.origin, m * r.direction};
+}
 
-    auto a = dot(r.direction, r.direction);
-    auto b = 2 * dot(r.direction, sphere_to_ray);
+std::vector<Intersection> intersect(const Sphere &s, const Ray &r) {
+    auto ray = transform(r, inverse(s.transform));
+    auto sphere_to_ray = ray.origin - point(0, 0, 0);
+
+    auto a = dot(ray.direction, ray.direction);
+    auto b = 2 * dot(ray.direction, sphere_to_ray);
     auto c = dot(sphere_to_ray, sphere_to_ray) - 1;
 
     auto discriminant = b * b - 4 * a * c;
@@ -42,7 +47,4 @@ std::vector<Intersection> intersect(const Sphere &s, const Ray &r) {
     return {Intersection{t1, s}, Intersection{t2, s}};
 }
 
-Ray transform(const Ray &r, const Matrix &m) {
-    return {m * r.origin, m * r.direction};
-}
 #endif // RAYTRACER_CHALLENGE_RAY_H

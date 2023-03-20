@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
+#include "transformations.h"
 #include "ray.h"
 #include "sphere.h"
 #include "tuple.h"
@@ -84,4 +85,35 @@ TEST_CASE("a sphere's default transformation", "[sphere]" ) {
     auto idm = Matrix{4, 4, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}};
 
     REQUIRE(s.transform == idm);
+}
+
+TEST_CASE("changing a sphere's transformation", "[sphere]" ) {
+    auto s = Sphere{1};
+    auto t = translation(2, 3, 4);
+
+    set_transform(s, t);
+    
+    REQUIRE(s.transform == t);
+}
+
+TEST_CASE("intersecting a scaled sphere with a ray", "[sphere]" ) {
+    auto r = Ray{point(0, 0, -5), vector(0, 0, 1)};
+    auto s = Sphere{1};
+
+    set_transform(s, scaling(2, 2, 2));
+    auto xs = intersect(s, r);
+    
+    REQUIRE(xs.size() == 2);
+    REQUIRE(xs[0].t == 3.0f);
+    REQUIRE(xs[1].t == 7.0f);
+}
+
+TEST_CASE("intersecting a translated sphere with a ray", "[sphere]" ) {
+    auto r = Ray{point(0, 0, -5), vector(0, 0, 1)};
+    auto s = Sphere{1};
+
+    set_transform(s, translation(5, 0, 0));
+    auto xs = intersect(s, r);
+    
+    REQUIRE(xs.empty());
 }

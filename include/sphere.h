@@ -22,4 +22,8 @@ bool operator==(const Sphere &lhs, const Sphere &rhs){
     return lhs.id == rhs.id;
 }
 
+void set_transform(Sphere &s, Matrix m) {
+    s.transform = m;
+}
+
 #endif // RAYTRACER_CHALLENGE_SPHERE_H
