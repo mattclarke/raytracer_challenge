@@ -42,7 +42,7 @@ TEST_CASE("a ray misses a sphere", "[sphere]" ) {
 
     auto xs = intersect(s, r);
 
-    REQUIRE(xs.size() == 0);
+    REQUIRE(xs.empty());
 }
 
 TEST_CASE("a ray originates inside a sphere", "[sphere]" ) {

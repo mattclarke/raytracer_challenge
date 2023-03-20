@@ -2,9 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include "intersection.h"
-#include "ray.h"
 #include "sphere.h"
-#include "tuple.h"
 
 TEST_CASE("an intersection encapsulates t and object", "[intersection]" ) {
     auto s = Sphere{1};
