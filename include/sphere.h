@@ -3,11 +3,16 @@
 
 #include <cmath>
 
+#include "matrix.h"
 #include "tuple.h"
 #include "utils.h"
 
 struct Sphere {
     int id;
+    Matrix transform = {4, 4, {1, 0, 0, 0,
+                               0, 1, 0, 0,
+                               0, 0, 1, 0,
+                               0, 0, 0, 1}};
 
     explicit Sphere(int id) : id(id) {
     }

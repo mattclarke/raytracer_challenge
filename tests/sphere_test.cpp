@@ -77,3 +77,11 @@ TEST_CASE("intersect sets the object on the intersection", "[sphere]" ) {
     REQUIRE(xs[0].object == s);
     REQUIRE(xs[1].object == s);
 }
+
+TEST_CASE("a sphere's default transformation", "[sphere]" ) {
+    auto s = Sphere{1};
+    
+    auto idm = Matrix{4, 4, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}};
+
+    REQUIRE(s.transform == idm);
+}
