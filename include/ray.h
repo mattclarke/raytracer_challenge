@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 
+#include "intersection.h"
 #include "sphere.h"
 #include "tuple.h"
 #include "utils.h"
@@ -21,7 +22,7 @@ Tuple position(const Ray &ray, float t) {
     return ray.origin + ray.direction * t;
 }
 
-std::vector<float> intersect(const Sphere &s, const Ray &r) {
+std::vector<Intersection> intersect(const Sphere &s, const Ray &r) {
     auto sphere_to_ray = r.origin - point(0, 0, 0);
 
     auto a = dot(r.direction, r.direction);
@@ -34,10 +35,10 @@ std::vector<float> intersect(const Sphere &s, const Ray &r) {
         return {};
     }
 
-    auto t1 = (-b - std::sqrt(discriminant)) / (2 * a);
-    auto t2 = (-b + std::sqrt(discriminant)) / (2 * a);
+    auto t1 = static_cast<float>((-b - std::sqrt(discriminant)) / (2 * a));
+    auto t2 = static_cast<float>((-b + std::sqrt(discriminant)) / (2 * a));
 
-    return {static_cast<float>(t1), static_cast<float>(t2)};
+    return {Intersection{t1, s}, Intersection{t2, s}};
 }
 
 #endif // RAYTRACER_CHALLENGE_RAY_H
