@@ -13,8 +13,8 @@ struct Intersection {
     float t;
     Sphere object;
 
-    Intersection(float t, const Sphere &object) :
-        t(t), object(object) 
+    Intersection(float t, Sphere object) :
+        t(t), object(std::move(object))
     {}
 };
 
