@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "intersection.h"
+#include "matrix.h"
 #include "sphere.h"
 #include "tuple.h"
 #include "utils.h"
@@ -41,4 +42,7 @@ std::vector<Intersection> intersect(const Sphere &s, const Ray &r) {
     return {Intersection{t1, s}, Intersection{t2, s}};
 }
 
+Ray transform(const Ray &r, const Matrix &m) {
+    return {m * r.origin, m * r.direction};
+}
 #endif // RAYTRACER_CHALLENGE_RAY_H
