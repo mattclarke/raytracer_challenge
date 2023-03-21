@@ -26,4 +26,8 @@ void set_transform(Sphere &s, Matrix m) {
     s.transform = std::move(m);
 }
 
+Tuple normal_at(const Sphere &s, const Tuple &p) {
+    return normalise(p - point(0, 0, 0));
+}
+
 #endif // RAYTRACER_CHALLENGE_SPHERE_H

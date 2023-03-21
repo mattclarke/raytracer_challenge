@@ -4,6 +4,7 @@
 #include "canvas.h"
 #include "ray.h"
 #include "tuple.h"
+#include "transformations.h"
 
 int main() {
     std::cout << "Generating..." << std::endl;
@@ -16,6 +17,7 @@ int main() {
     auto canvas = Canvas{canvas_size, canvas_size};
     auto clr = Colour{1.0, 0.0, 0.0};
     auto shape = Sphere{1};
+    set_transform(shape, scaling(0.5, 1, 1));
     auto ray_origin = point(0, 0, -5);
 
     for (size_t y = 0; y < canvas_size; ++y) {

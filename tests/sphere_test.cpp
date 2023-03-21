@@ -1,6 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
+#include <cmath>
+
 #include "transformations.h"
 #include "ray.h"
 #include "sphere.h"
@@ -116,4 +118,44 @@ TEST_CASE("intersecting a translated sphere with a ray", "[sphere]" ) {
     auto xs = intersect(s, r);
     
     REQUIRE(xs.empty());
+}
+
+TEST_CASE("the normal on a sphere at a point on the x axis", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    auto n = normal_at(s, point(1, 0, 0));
+    
+    REQUIRE(n == vector(1, 0, 0));
+}
+
+TEST_CASE("the normal on a sphere at a point on the y axis", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    auto n = normal_at(s, point(0, 1, 0));
+    
+    REQUIRE(n == vector(0, 1, 0));
+}
+
+TEST_CASE("the normal on a sphere at a point on the z axis", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    auto n = normal_at(s, point(0, 0, 1));
+    
+    REQUIRE(n == vector(0, 0, 1));
+}
+
+TEST_CASE("the normal on a sphere at a nonaxial point", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    auto n = normal_at(s, point(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
+    
+    REQUIRE(n == vector(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
+}
+
+TEST_CASE("the normal is a normalised vector", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    auto n = normal_at(s, point(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
+    
+    REQUIRE(n == normalise(n));
 }
