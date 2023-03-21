@@ -98,4 +98,8 @@ Colour operator*(const Colour &lhs, const Colour &rhs) {
     return {lhs.red * rhs.red, lhs.green * rhs.green, lhs.blue * rhs.blue};
 }
 
+Tuple reflect(const Tuple &in, const Tuple &normal){
+    return in - normal * 2 * dot(in, normal);
+}
+
 #endif // RAYTRACER_CHALLENGE_TUPLE_H

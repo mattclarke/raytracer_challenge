@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+
 #include "tuple.h"
 
 TEST_CASE("a tuple with w=1 is a point", "[tuple]" ) {
@@ -194,3 +195,22 @@ TEST_CASE("multiplying colours", "[colour]" ) {
 
     REQUIRE(c1 * c2 == Colour{0.9, 0.2, 0.04});
 }
+
+TEST_CASE("reflecting a vector approaching at 45 degrees", "[tuple]" ) {
+    auto v = vector(1, -1, 0);
+    auto n = vector(0, 1, 0);
+
+    auto r = reflect(v, n);
+
+    REQUIRE(r == vector(1, 1, 0));
+}
+
+TEST_CASE("reflecting a vector off a slanted surface", "[tuple]" ) {
+    auto v = vector(0, -1, 0);
+    auto n = vector(std::sqrt(2) / 2, std::sqrt(2) / 2, 0);
+
+    auto r = reflect(v, n);
+
+    REQUIRE(r == vector(1, 0, 0));
+}
+
