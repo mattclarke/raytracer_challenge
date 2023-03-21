@@ -181,3 +181,19 @@ TEST_CASE("computing the normal on a transformed sphere", "[sphere]" ) {
     
     REQUIRE(n == vector(0, 0.97014, -0.24254));
 }
+
+TEST_CASE("a sphere has a default material", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    REQUIRE(s.material == Material{});
+}
+
+TEST_CASE("a sphere may be assigned a material", "[sphere]" ) {
+    auto s = Sphere{1};
+    auto m = Material{};
+    m.ambient = 1.0f;
+
+    s.material = m;
+
+    REQUIRE(s.material == m);
+}

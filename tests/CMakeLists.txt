@@ -34,3 +34,13 @@ add_executable(intersection_test intersection_test.cpp)
 target_link_libraries(intersection_test PUBLIC ${CONAN_LIBS})
 target_include_directories(intersection_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 add_test(NAME intersection_test COMMAND intersection_test)
+
+add_executable(light_test light_test.cpp)
+target_link_libraries(light_test PUBLIC ${CONAN_LIBS})
+target_include_directories(light_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+add_test(NAME light_test COMMAND light_test)
+
+add_executable(material_test material_test.cpp)
+target_link_libraries(material_test PUBLIC ${CONAN_LIBS})
+target_include_directories(material_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+add_test(NAME material_test COMMAND material_test)

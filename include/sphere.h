@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+#include "material.h"
 #include "matrix.h"
 #include "tuple.h"
 #include "utils.h"
@@ -13,6 +14,7 @@ struct Sphere {
                                0, 1, 0, 0,
                                0, 0, 1, 0,
                                0, 0, 0, 1}};
+    Material material = {};
 
     explicit Sphere(int id) : id(id) {
     }
