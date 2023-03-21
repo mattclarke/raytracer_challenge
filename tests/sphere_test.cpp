@@ -2,6 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include <cmath>
+#include <numbers>
 
 #include "transformations.h"
 #include "ray.h"
@@ -158,4 +159,25 @@ TEST_CASE("the normal is a normalised vector", "[sphere]" ) {
     auto n = normal_at(s, point(std::sqrt(3) / 3, std::sqrt(3) / 3, std::sqrt(3) / 3));
     
     REQUIRE(n == normalise(n));
+}
+
+TEST_CASE("computing the normal on a translated sphere", "[sphere]" ) {
+    auto s = Sphere{1};
+
+    set_transform(s, translation(0, 1, 0));
+
+    auto n = normal_at(s, point(0, 1.70711, -0.70711));
+    
+    REQUIRE(n == vector(0, 0.70711, -0.70711));
+}
+
+TEST_CASE("computing the normal on a transformed sphere", "[sphere]" ) {
+    auto s = Sphere{1};
+    auto m = scaling(1, 0.5, 1) * rotation_z(std::numbers::pi_v<float> / 5);
+
+    set_transform(s, m);
+
+    auto n = normal_at(s, point(0, std::sqrt(2) / 2, -std::sqrt(2) / 2));
+    
+    REQUIRE(n == vector(0, 0.97014, -0.24254));
 }
