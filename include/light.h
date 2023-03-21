@@ -10,22 +10,22 @@
 
 struct PointLight {
     Tuple position;
-    Colour intensity;
+    Color intensity;
 
-    PointLight(Tuple position, Colour intensity) :
+    PointLight(Tuple position, Color intensity) :
         position(position), intensity(intensity) {
     }
 };
 
-Colour lighting(const Material &material, const PointLight &light, const Tuple &point, const Tuple &eyev, const Tuple &normalv) {
-    auto effective_colour = material.colour * light.intensity;auto lightv = normalise(light.position - point);
-    auto ambient = effective_colour * material.ambient;
+Color lighting(const Material &material, const PointLight &light, const Tuple &point, const Tuple &eyev, const Tuple &normalv) {
+    auto effective_color = material.color * light.intensity;auto lightv = normalise(light.position - point);
+    auto ambient = effective_color * material.ambient;
     auto light_dot_normal = dot(lightv, normalv);
-    auto diffuse = Colour{0, 0, 0};
-    auto specular = Colour{0, 0, 0};
+    auto diffuse = Color{0, 0, 0};
+    auto specular = Color{0, 0, 0};
 
     if (light_dot_normal >= 0) {
-        diffuse = effective_colour * material.diffuse * light_dot_normal;
+        diffuse = effective_color * material.diffuse * light_dot_normal;
 
         auto reflectv = reflect(-lightv, normalv);
         auto reflect_dot_eye = dot(reflectv, eyev);

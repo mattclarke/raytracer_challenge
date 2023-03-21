@@ -5,7 +5,7 @@
 #include "tuple.h"
 
 TEST_CASE("a point light has a position and intensity", "[light]" ) {
-    auto intensity = Colour{1, 1, 1};
+    auto intensity = Color{1, 1, 1};
     auto position = point(0, 0, 0);
 
     auto light = PointLight{position, intensity};

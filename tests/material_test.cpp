@@ -7,7 +7,7 @@
 
 TEST_CASE("the default material", "[material]" ) {
     auto m = Material{};
-    m.colour = Colour{1, 1, 1};
+    m.color = Color{1, 1, 1};
 
     REQUIRE(m.ambient == 0.1f);
     REQUIRE(m.diffuse == 0.9f);
@@ -21,11 +21,11 @@ TEST_CASE("lighting with the eye between the light and the surface", "[material]
 
     auto eyev = vector(0, 0, -1);
     auto normalv = vector(0, 0, -1);
-    auto light = PointLight{point(0, 0, -10), Colour{1, 1, 1}};
+    auto light = PointLight{point(0, 0, -10), Color{1, 1, 1}};
 
     auto result = lighting(m, light, position, eyev, normalv);
 
-    REQUIRE(result == Colour{1.9, 1.9, 1.9});
+    REQUIRE(result == Color{1.9, 1.9, 1.9});
 }
 
 TEST_CASE("lighting with the eye between the light and the surface, eye offset 45 degrees", "[material]" ) {
@@ -34,11 +34,11 @@ TEST_CASE("lighting with the eye between the light and the surface, eye offset 4
 
     auto eyev = vector(0, std::sqrt(2) / 2, -std::sqrt(2) / 2);
     auto normalv = vector(0, 0, -1);
-    auto light = PointLight{point(0, 0, -10), Colour{1, 1, 1}};
+    auto light = PointLight{point(0, 0, -10), Color{1, 1, 1}};
 
     auto result = lighting(m, light, position, eyev, normalv);
 
-    REQUIRE(result == Colour{1.0, 1.0, 1.0});
+    REQUIRE(result == Color{1.0, 1.0, 1.0});
 }
 
 TEST_CASE("lighting with eye opposite surface, light offset 45 degrees", "[material]" ) {
@@ -47,11 +47,11 @@ TEST_CASE("lighting with eye opposite surface, light offset 45 degrees", "[mater
 
     auto eyev = vector(0, 0, -1);
     auto normalv = vector(0, 0, -1);
-    auto light = PointLight{point(0, 10, -10), Colour{1, 1, 1}};
+    auto light = PointLight{point(0, 10, -10), Color{1, 1, 1}};
 
     auto result = lighting(m, light, position, eyev, normalv);
 
-    REQUIRE(result == Colour{0.7364, 0.7364, 0.7364});
+    REQUIRE(result == Color{0.7364, 0.7364, 0.7364});
 }
 
 TEST_CASE("lighting with the eye in the path of the reflection vector", "[material]" ) {
@@ -60,11 +60,11 @@ TEST_CASE("lighting with the eye in the path of the reflection vector", "[materi
 
     auto eyev = vector(0, -std::sqrt(2) / 2, -std::sqrt(2) / 2);
     auto normalv = vector(0, 0, -1);
-    auto light = PointLight{point(0, 10, -10), Colour{1, 1, 1}};
+    auto light = PointLight{point(0, 10, -10), Color{1, 1, 1}};
 
     auto result = lighting(m, light, position, eyev, normalv);
 
-    REQUIRE(result == Colour{1.6364, 1.6364, 1.6364});
+    REQUIRE(result == Color{1.6364, 1.6364, 1.6364});
 }
 
 TEST_CASE("lighting with the light behind the surface", "[material]" ) {
@@ -73,9 +73,9 @@ TEST_CASE("lighting with the light behind the surface", "[material]" ) {
 
     auto eyev = vector(0, 0, -1);
     auto normalv = vector(0, 0, -1);
-    auto light = PointLight{point(0, 0, 10), Colour{1, 1, 1}};
+    auto light = PointLight{point(0, 0, 10), Color{1, 1, 1}};
 
     auto result = lighting(m, light, position, eyev, normalv);
 
-    REQUIRE(result == Colour{0.1, 0.1, 0.1});
+    REQUIRE(result == Color{0.1, 0.1, 0.1});
 }

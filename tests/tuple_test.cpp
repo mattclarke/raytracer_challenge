@@ -161,39 +161,39 @@ TEST_CASE("the cross product of two vectors", "[tuple]" ) {
     REQUIRE(cross(vec2, vec1) == vector(1, -2, 1));
 }
 
-TEST_CASE("colours are (red, green, blue) tuples", "[colour]" ) {
-    auto c = Colour{-0.5, 0.4, 1.7};
+TEST_CASE("colors are (red, green, blue) tuples", "[color]" ) {
+    auto c = Color{-0.5, 0.4, 1.7};
 
     REQUIRE(c.red == -0.5);
     REQUIRE(c.green == 0.4);
     REQUIRE(c.blue == 1.7);
 }
 
-TEST_CASE("adding colours", "[colour]" ) {
-    auto c1 = Colour{0.9, 0.6, 0.75};
-    auto c2 = Colour{0.7, 0.1, 0.25};
+TEST_CASE("adding colors", "[color]" ) {
+    auto c1 = Color{0.9, 0.6, 0.75};
+    auto c2 = Color{0.7, 0.1, 0.25};
 
-    REQUIRE(c1 + c2 == Colour{1.6, 0.7, 1.0});
+    REQUIRE(c1 + c2 == Color{1.6, 0.7, 1.0});
 }
 
-TEST_CASE("subtracting colours", "[colour]" ) {
-    auto c1 = Colour{0.9, 0.6, 0.75};
-    auto c2 = Colour{0.7, 0.1, 0.25};
+TEST_CASE("subtracting colors", "[color]" ) {
+    auto c1 = Color{0.9, 0.6, 0.75};
+    auto c2 = Color{0.7, 0.1, 0.25};
 
-    REQUIRE(c1 - c2 == Colour{0.2, 0.5, 0.5});
+    REQUIRE(c1 - c2 == Color{0.2, 0.5, 0.5});
 }
 
-TEST_CASE("multiplying a colour by a scalar", "[colour]" ) {
-    auto c = Colour{0.2, 0.3, 0.4};
+TEST_CASE("multiplying a color by a scalar", "[color]" ) {
+    auto c = Color{0.2, 0.3, 0.4};
 
-    REQUIRE(c * 2 == Colour{0.4, 0.6, 0.8});
+    REQUIRE(c * 2 == Color{0.4, 0.6, 0.8});
 }
 
-TEST_CASE("multiplying colours", "[colour]" ) {
-    auto c1 = Colour{1, 0.2, 0.4};
-    auto c2 = Colour{0.9, 1, 0.1};
+TEST_CASE("multiplying colors", "[color]" ) {
+    auto c1 = Color{1, 0.2, 0.4};
+    auto c2 = Color{0.9, 1, 0.1};
 
-    REQUIRE(c1 * c2 == Colour{0.9, 0.2, 0.04});
+    REQUIRE(c1 * c2 == Color{0.9, 0.2, 0.04});
 }
 
 TEST_CASE("reflecting a vector approaching at 45 degrees", "[tuple]" ) {

@@ -12,11 +12,11 @@ struct Material {
     float diffuse = 0.9f;
     float specular = 0.9f;
     float shininess = 200.0f;
-    Colour colour = Colour{1, 1, 1};
+    Color color = Color{1, 1, 1};
 };
 
 bool operator==(const Material &lhs, const Material &rhs) {
-    return (lhs.ambient == rhs.ambient) && (lhs.diffuse == rhs.diffuse) && (lhs.specular == rhs.specular) && (lhs.shininess == rhs.shininess) && (lhs.colour == rhs.colour);
+    return (lhs.ambient == rhs.ambient) && (lhs.diffuse == rhs.diffuse) && (lhs.specular == rhs.specular) && (lhs.shininess == rhs.shininess) && (lhs.color == rhs.color);
 }
 
 #endif //RAYTRACER_CHALLENGE_MATERIAL_H

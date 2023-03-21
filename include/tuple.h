@@ -72,29 +72,29 @@ Tuple cross(const Tuple &a, const Tuple &b) {
     return vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
-struct Colour {
+struct Color {
     double red;
     double green;
     double blue;
 };
 
-bool operator==(const Colour &lhs, const Colour &rhs) {
+bool operator==(const Color &lhs, const Color &rhs) {
     return equal(lhs.red, rhs.red) && equal(lhs.green, rhs.green) && equal(lhs.blue, rhs.blue);
 }
 
-Colour operator+(const Colour &lhs, const Colour &rhs) {
+Color operator+(const Color &lhs, const Color &rhs) {
     return {lhs.red + rhs.red, lhs.green + rhs.green, lhs.blue + rhs.blue};
 }
 
-Colour operator-(const Colour &lhs, const Colour &rhs) {
+Color operator-(const Color &lhs, const Color &rhs) {
     return {lhs.red - rhs.red, lhs.green - rhs.green, lhs.blue - rhs.blue};
 }
 
-Colour operator*(const Colour &lhs, double scalar) {
+Color operator*(const Color &lhs, double scalar) {
     return {lhs.red * scalar, lhs.green * scalar, lhs.blue * scalar};
 }
 
-Colour operator*(const Colour &lhs, const Colour &rhs) {
+Color operator*(const Color &lhs, const Color &rhs) {
     return {lhs.red * rhs.red, lhs.green * rhs.green, lhs.blue * rhs.blue};
 }
 

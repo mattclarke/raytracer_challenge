@@ -26,13 +26,13 @@ TEST_CASE("creating a blank canvas", "[canvas]" ) {
     REQUIRE(c.width == 10);
     REQUIRE(c.height == 20);
     for (const auto &pixel : c.pixels) {
-        REQUIRE(pixel == Colour{0, 0, 0});
+        REQUIRE(pixel == Color{0, 0, 0});
     }
 }
 
 TEST_CASE("writing pixels to a canvas", "[canvas]" ) {
     auto c = Canvas{10, 20};
-    auto red = Colour{1, 0, 0};
+    auto red = Color{1, 0, 0};
 
     write_pixel(c, 2, 3, red);
 
@@ -53,9 +53,9 @@ TEST_CASE("constructing the PPM header", "[canvas]" ) {
 
 TEST_CASE("constructing the PPM pixel data", "[canvas]" ) {
     auto canvas = Canvas{5, 3};
-    auto c1 = Colour{1.5, 0, 0};
-    auto c2 = Colour{0, 0.5, 0};
-    auto c3 = Colour{-0.5, 0, 1};
+    auto c1 = Color{1.5, 0, 0};
+    auto c2 = Color{0, 0.5, 0};
+    auto c3 = Color{-0.5, 0, 1};
 
     write_pixel(canvas, 0, 0, c1);
     write_pixel(canvas, 2, 1, c2);
@@ -71,7 +71,7 @@ TEST_CASE("constructing the PPM pixel data", "[canvas]" ) {
 
 TEST_CASE("splitting long lines in PPM files", "[canvas]" ) {
     auto canvas = Canvas{10, 2};
-    auto c1 = Colour{1, 0.8, 0.6};
+    auto c1 = Color{1, 0.8, 0.6};
 
     for (size_t y = 0; y < 2; ++y) {
         for (size_t x = 0; x < 10; ++x) {
