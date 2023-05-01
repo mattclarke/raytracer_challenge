@@ -6,10 +6,12 @@
 #include <sstream>
 #include <string>
 
+#include "world.h"
+
 
 TEST_CASE("creating a world", "[world]" ) {
-    auto w = World{10, 20};
+    auto w = World{};
 
-    REQUIRE(w.objects.length() == 0);
+    REQUIRE(w.objects.size() == 0);
     REQUIRE(w.lightsource == NULL);
 }

@@ -11,7 +11,7 @@ target_include_directories(${PROJECT_NAME} INTERFACE include/)
 
 add_executable(main main.cpp)
 target_include_directories(main PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
-target_link_libraries(main PRIVATE fmt)
+target_link_libraries(main PRIVATE fmt::fmt)
 
 enable_testing()
 add_subdirectory(tests)
