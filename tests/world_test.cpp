@@ -43,5 +43,6 @@ TEST_CASE("the default world", "[world]" ) {
     REQUIRE(w.objects.size() == 2);
     REQUIRE(contains(sphere1, w.objects) == true);
     REQUIRE(contains(sphere2, w.objects) == true);
-    REQUIRE(w.lightsource == &light);
+    REQUIRE(w.lightsource->position == point(0, 0, 0));
+    REQUIRE(w.lightsource->intensity == Color{1, 1, 1});
 }
