@@ -44,3 +44,8 @@ add_executable(material_test material_test.cpp)
 target_link_libraries(material_test PUBLIC ${CONAN_LIBS})
 target_include_directories(material_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 add_test(NAME material_test COMMAND material_test)
+
+add_executable(world_test material_test.cpp)
+target_link_libraries(world_test PUBLIC ${CONAN_LIBS})
+target_include_directories(world_test PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
+add_test(NAME world_test COMMAND world_test)
