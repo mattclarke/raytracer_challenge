@@ -3,9 +3,12 @@
 
 #include <vector>
 
+#include "light.h"
+#include "sphere.h"
+
 struct World {
-    std::vector<int> objects;
-    int* lightsource{nullptr};
+    std::vector<Sphere> objects;
+    PointLight* lightsource{nullptr};
 };
 
 #endif //RAYTRACER_CHALLENGE_WORLD_H
