@@ -4,7 +4,9 @@
 #include <memory>
 #include <vector>
 
+#include "intersection.h"
 #include "light.h"
+#include "ray.h"
 #include "sphere.h"
 #include "transformations.h"
 
@@ -30,6 +32,17 @@ std::unique_ptr<World> create_default_world() {
     w->objects.push_back(sphere2);
 
     return w;
+}
+
+std::vector<Intersection> intersect_world(World const &world, Ray const &ray) {
+    std::vector<Intersection> intersections;
+    for (auto const &object : world.objects) {
+        auto local = intersect(object, ray);
+        for (auto const &i : local) {
+            intersections.push_back(i);
+        }
+    }
+    return intersections;
 }
 
 #endif //RAYTRACER_CHALLENGE_WORLD_H

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "world.h"
+#include "ray.h"
 #include "light.h"
 #include "tuple.h"
 #include "sphere.h"
@@ -43,4 +44,15 @@ TEST_CASE("the default world", "[world]" ) {
     REQUIRE(w->lightsource->intensity == Color{1, 1, 1});
 }
 
+TEST_CASE("intersect a world with a ray", "[world]") {
+    auto w = create_default_world();
+    auto ray = Ray{point(0, 0, -5), vector(0, 0, 1)};
 
+    auto xs = intersect_world(*w, ray);
+
+    REQUIRE(xs.size() == 4);
+    REQUIRE(xs[0].t == 4);
+    REQUIRE(xs[1].t == 4.5);
+    REQUIRE(xs[2].t == 5.5);
+    REQUIRE(xs[3].t == 6);
+}
