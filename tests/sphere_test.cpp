@@ -4,9 +4,10 @@
 #include <cmath>
 #include <numbers>
 
-#include "transformations.h"
+#include "intersection.h"
 #include "ray.h"
 #include "sphere.h"
+#include "transformations.h"
 #include "tuple.h"
 
 TEST_CASE("spheres are unique", "[sphere]" ) {

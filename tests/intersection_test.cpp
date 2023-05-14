@@ -2,6 +2,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
 #include "intersection.h"
+#include "ray.h"
 #include "sphere.h"
 
 TEST_CASE("an intersection encapsulates t and object", "[intersection]" ) {
@@ -68,4 +69,18 @@ TEST_CASE("the hit is always the lowest non-negative intersection", "[intersecti
     auto i = hit(xs);
 
     REQUIRE(i == i4);
+}
+
+TEST_CASE("precomputng the state of an intersection", "[intersection]" ) {
+    auto ray = Ray{point(0, 0, -5), vector(0, 0, 1)};
+    auto s = Sphere{1};
+    auto i = Intersection{4, s};
+
+    auto comps = prepare_computations(i, ray);
+
+    REQUIRE(comps.t == i.t);
+    REQUIRE(comps.object == i.object);
+    REQUIRE(comps.point == point(0, 0, -1));
+    REQUIRE(comps.eyev == vector(0, 0, -1));
+    REQUIRE(comps.normalv == vector(0, 0, -1));
 }

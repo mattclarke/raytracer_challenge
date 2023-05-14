@@ -2,9 +2,11 @@
 #include <iostream>
 
 #include "canvas.h"
+#include "intersection.h"
 #include "light.h"
 #include "material.h"
 #include "ray.h"
+#include "sphere.h"
 #include "tuple.h"
 #include "transformations.h"
 

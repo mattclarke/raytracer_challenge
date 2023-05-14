@@ -5,6 +5,7 @@
 #include <optional>
 #include <vector>
 
+#include "ray.h"
 #include "sphere.h"
 #include "tuple.h"
 #include "utils.h"
@@ -16,6 +17,14 @@ struct Intersection {
     Intersection(float t, Sphere object) :
         t(t), object(std::move(object))
     {}
+};
+
+struct Computations {
+    float t;
+    Sphere object;
+    Tuple point;
+    Tuple eyev;
+    Tuple normalv;
 };
 
 bool operator==(const Intersection &lhs, const Intersection &rhs) {
@@ -42,4 +51,12 @@ std::optional<Intersection> hit(const std::vector<Intersection> &intersections){
     return std::nullopt;
 }
 
+Computations prepare_computations(Intersection const &intersection, Ray const &ray) {
+    auto point = position(ray, intersection.t);
+    auto comps = Computations{intersection.t, intersection.object,
+                              point, -ray.direction,
+                              normal_at(intersection.object, point)};
+    return comps;
+
+}
 #endif // RAYTRACER_CHALLENGE_INTERSECTION_H
