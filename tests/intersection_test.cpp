@@ -84,3 +84,26 @@ TEST_CASE("precomputng the state of an intersection", "[intersection]" ) {
     REQUIRE(comps.eyev == vector(0, 0, -1));
     REQUIRE(comps.normalv == vector(0, 0, -1));
 }
+
+TEST_CASE("the hit, when an intersection occurs on the outside", "[intersection]" ) {
+    auto ray = Ray{point(0, 0, -5), vector(0, 0, 1)};
+    auto s = Sphere{1};
+    auto i = Intersection{4, s};
+
+    auto comps = prepare_computations(i, ray);
+
+    REQUIRE(comps.inside == false);
+}
+
+TEST_CASE("the hit, when an intersection occurs on the inside", "[intersection]" ) {
+    auto ray = Ray{point(0, 0, -5), vector(0, 0, 1)};
+    auto s = Sphere{1};
+    auto i = Intersection{4, s};
+
+    auto comps = prepare_computations(i, ray);
+
+    REQUIRE(comps.inside == true);
+    REQUIRE(comps.point == point(0, 0, 1));
+    REQUIRE(comps.eyev == vector(0, 0, -1));
+    REQUIRE(comps.normalv == vector(0, 0, -1));
+}

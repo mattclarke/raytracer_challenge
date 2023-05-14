@@ -25,6 +25,7 @@ struct Computations {
     Tuple point;
     Tuple eyev;
     Tuple normalv;
+    bool inside;
 };
 
 bool operator==(const Intersection &lhs, const Intersection &rhs) {
