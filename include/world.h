@@ -1,6 +1,7 @@
 #ifndef RAYTRACER_CHALLENGE_WORLD_H
 #define RAYTRACER_CHALLENGE_WORLD_H
 
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -38,10 +39,14 @@ std::vector<Intersection> intersect_world(World const &world, Ray const &ray) {
     std::vector<Intersection> intersections;
     for (auto const &object : world.objects) {
         auto local = intersect(object, ray);
-        for (auto const &i : local) {
-            intersections.push_back(i);
-        }
+        intersections.insert(intersections.end(), local.begin(), local.end());
     }
+
+    std::sort(intersections.begin(), intersections.end(), [](auto const &a, auto const &b)
+    {
+       return a.t < b.t;
+    });
+
     return intersections;
 }
 
