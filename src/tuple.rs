@@ -101,6 +101,10 @@ fn normalise(tuple: &Tuple) -> Tuple {
     }
 }
 
+fn dot(a: &Tuple, b: &Tuple) -> f32 {
+    a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+}
+
 #[cfg(test)]
 mod tests {
     use approx::assert_relative_eq;
@@ -342,5 +346,12 @@ mod tests {
     fn magnitude_of_normalised() {
         let v = vector(1.0, 2.0, 3.0);
         assert_relative_eq!(magnitude(&normalise(&v)), 1.0, epsilon = 0.00001);
+    }
+
+    #[test]
+    fn dot_product_of_two_tuples() {
+        let v1 = vector(1.0, 2.0, 3.0);
+        let v2 = vector(2.0, 3.0, 4.0);
+        assert_relative_eq!(dot(&v1, &v2), 20.0, epsilon = 0.00001);
     }
 }
