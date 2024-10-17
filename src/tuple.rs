@@ -25,7 +25,7 @@ impl Add for Tuple {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
             z: self.z + rhs.z,
-            w: self.w + rhs.w
+            w: self.w + rhs.w,
         }
     }
 }
@@ -37,7 +37,7 @@ impl Sub for Tuple {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
             z: self.z - rhs.z,
-            w: self.w - rhs.w
+            w: self.w - rhs.w,
         }
     }
 }
@@ -49,7 +49,7 @@ impl Neg for Tuple {
             x: -self.x,
             y: -self.y,
             z: -self.z,
-            w: -self.w
+            w: -self.w,
         }
     }
 }
@@ -61,7 +61,7 @@ impl Mul<f32> for Tuple {
             x: self.x * rhs,
             y: self.y * rhs,
             z: self.z * rhs,
-            w: self.w * rhs
+            w: self.w * rhs,
         }
     }
 }
@@ -73,27 +73,22 @@ impl Div<f32> for Tuple {
             x: self.x / rhs,
             y: self.y / rhs,
             z: self.z / rhs,
-            w: self.w / rhs
+            w: self.w / rhs,
         }
     }
 }
 
 fn point(x: f32, y: f32, z: f32) -> Tuple {
-    Tuple {
-        x,
-        y,
-        z,
-        w: 1.0,
-    }
+    Tuple { x, y, z, w: 1.0 }
 }
 
 fn vector(x: f32, y: f32, z: f32) -> Tuple {
-    Tuple {
-        x,
-        y,
-        z,
-        w: 0.0,
-    }
+    Tuple { x, y, z, w: 0.0 }
+}
+
+fn magnitude(tuple: Tuple) -> f32 {
+    let pows = tuple.x.powf(2.0) + tuple.y.powf(2.0) + tuple.z.powf(2.0);
+    pows.sqrt()
 }
 
 #[cfg(test)]
@@ -170,7 +165,15 @@ mod tests {
             z: 1.0,
             w: 0.0,
         };
-        assert_eq!(t1 + t2, Tuple{x: 1.0, y: 1.0, z: 6.0, w: 1.0});
+        assert_eq!(
+            t1 + t2,
+            Tuple {
+                x: 1.0,
+                y: 1.0,
+                z: 6.0,
+                w: 1.0
+            }
+        );
     }
 
     #[test]
@@ -203,25 +206,107 @@ mod tests {
 
     #[test]
     fn negating_a_tuple() {
-        let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
-        assert_eq!(-a, Tuple{x: -1.0, y: 2.0, z: -3.0, w: 4.0});
+        let a = Tuple {
+            x: 1.0,
+            y: -2.0,
+            z: 3.0,
+            w: -4.0,
+        };
+        assert_eq!(
+            -a,
+            Tuple {
+                x: -1.0,
+                y: 2.0,
+                z: -3.0,
+                w: 4.0
+            }
+        );
     }
 
     #[test]
     fn multiple_tuple_by_scalar() {
-        let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
-        assert_eq!(a * 3.5, Tuple{x: 3.5, y: -7.0, z: 10.5, w: -14.0});
+        let a = Tuple {
+            x: 1.0,
+            y: -2.0,
+            z: 3.0,
+            w: -4.0,
+        };
+        assert_eq!(
+            a * 3.5,
+            Tuple {
+                x: 3.5,
+                y: -7.0,
+                z: 10.5,
+                w: -14.0
+            }
+        );
     }
 
     #[test]
     fn multiple_tuple_by_fraction() {
-        let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
-        assert_eq!(a * 0.5, Tuple{x: 0.5, y: -1.0, z: 1.5, w: -2.0});
+        let a = Tuple {
+            x: 1.0,
+            y: -2.0,
+            z: 3.0,
+            w: -4.0,
+        };
+        assert_eq!(
+            a * 0.5,
+            Tuple {
+                x: 0.5,
+                y: -1.0,
+                z: 1.5,
+                w: -2.0
+            }
+        );
     }
 
     #[test]
     fn divide_tuple_by_scalar() {
-        let a = Tuple{x: 1.0, y: -2.0, z: 3.0, w: -4.0};
-        assert_eq!(a / 2.0, Tuple{x: 0.5, y: -1.0, z: 1.5, w: -2.0});
+        let a = Tuple {
+            x: 1.0,
+            y: -2.0,
+            z: 3.0,
+            w: -4.0,
+        };
+        assert_eq!(
+            a / 2.0,
+            Tuple {
+                x: 0.5,
+                y: -1.0,
+                z: 1.5,
+                w: -2.0
+            }
+        );
+    }
+
+    #[test]
+    fn compute_the_magnitude_of_vector_1_0_0() {
+        let v = vector(1.0, 0.0, 0.0);
+        assert_eq!(magnitude(v), 1.0);
+    }
+
+    #[test]
+    fn compute_the_magnitude_of_vector_0_1_0() {
+        let v = vector(0.0, 1.0, 0.0);
+        assert_eq!(magnitude(v), 1.0);
+    }
+
+    #[test]
+    fn compute_the_magnitude_of_vector_0_0_1() {
+        let v = vector(0.0, 1.0, 0.0);
+        assert_eq!(magnitude(v), 1.0);
+    }
+
+    #[test]
+    fn compute_the_magnitude_of_vector_1_2_3() {
+        let v = vector(1.0, 2.0, 3.0);
+        assert_eq!(magnitude(v), 14.0_f32.sqrt());
+    }
+
+    #[test]
+    fn compute_the_magnitude_of_vector_negative_1_2_3() {
+        let v = vector(-1.0, -2.0, -3.0);
+        assert_eq!(magnitude(v), 14.0_f32.sqrt());
     }
 }
