@@ -105,6 +105,15 @@ fn dot(a: &Tuple, b: &Tuple) -> f32 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
+fn cross(a: &Tuple, b: &Tuple) -> Tuple {
+    // Note: w is unused - this is only used for vectors
+    vector(
+        a.y * b.z - a.z * b.y,
+        a.z * b.x - a.x * b.z,
+        a.x * b.y - a.y * b.x,
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use approx::assert_relative_eq;
@@ -353,5 +362,13 @@ mod tests {
         let v1 = vector(1.0, 2.0, 3.0);
         let v2 = vector(2.0, 3.0, 4.0);
         assert_relative_eq!(dot(&v1, &v2), 20.0, epsilon = 0.00001);
+    }
+
+    #[test]
+    fn cross_product_of_two_vectors() {
+        let v1 = vector(1.0, 2.0, 3.0);
+        let v2 = vector(2.0, 3.0, 4.0);
+        assert_eq!(cross(&v1, &v2), vector(-1.0, 2.0, -1.0));
+        assert_eq!(cross(&v2, &v1), vector(1.0, -2.0, 1.0));
     }
 }
