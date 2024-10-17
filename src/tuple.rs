@@ -86,13 +86,25 @@ fn vector(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 0.0 }
 }
 
-fn magnitude(tuple: Tuple) -> f32 {
+fn magnitude(tuple: &Tuple) -> f32 {
     let pows = tuple.x.powf(2.0) + tuple.y.powf(2.0) + tuple.z.powf(2.0);
     pows.sqrt()
 }
 
+fn normalise(tuple: &Tuple) -> Tuple {
+    let magn = magnitude(&tuple);
+    Tuple {
+        x: tuple.x / magn,
+        y: tuple.y / magn,
+        z: tuple.z / magn,
+        w: tuple.w / magn,
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use approx::assert_relative_eq;
+
     use super::*;
 
     #[test]
@@ -283,30 +295,52 @@ mod tests {
     #[test]
     fn compute_the_magnitude_of_vector_1_0_0() {
         let v = vector(1.0, 0.0, 0.0);
-        assert_eq!(magnitude(v), 1.0);
+        assert_eq!(magnitude(&v), 1.0);
     }
 
     #[test]
     fn compute_the_magnitude_of_vector_0_1_0() {
         let v = vector(0.0, 1.0, 0.0);
-        assert_eq!(magnitude(v), 1.0);
+        assert_eq!(magnitude(&v), 1.0);
     }
 
     #[test]
     fn compute_the_magnitude_of_vector_0_0_1() {
         let v = vector(0.0, 1.0, 0.0);
-        assert_eq!(magnitude(v), 1.0);
+        assert_eq!(magnitude(&v), 1.0);
     }
 
     #[test]
     fn compute_the_magnitude_of_vector_1_2_3() {
         let v = vector(1.0, 2.0, 3.0);
-        assert_eq!(magnitude(v), 14.0_f32.sqrt());
+        assert_eq!(magnitude(&v), 14.0_f32.sqrt());
     }
 
     #[test]
     fn compute_the_magnitude_of_vector_negative_1_2_3() {
         let v = vector(-1.0, -2.0, -3.0);
-        assert_eq!(magnitude(v), 14.0_f32.sqrt());
+        assert_eq!(magnitude(&v), 14.0_f32.sqrt());
+    }
+
+    #[test]
+    fn normalise_4_0_0() {
+        let v = vector(4.0, 0.0, 0.0);
+        assert_eq!(normalise(&v), vector(1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn normalise_1_2_3() {
+        let v = vector(1.0, 2.0, 3.0);
+        let result = normalise(&v);
+        assert_relative_eq!(result.x, 0.26726, epsilon = 0.00001);
+        assert_relative_eq!(result.y, 0.53452, epsilon = 0.00001);
+        assert_relative_eq!(result.z, 0.80178, epsilon = 0.00001);
+        assert_relative_eq!(result.w, 0.0, epsilon = 0.00001);
+    }
+
+    #[test]
+    fn magnitude_of_normalised() {
+        let v = vector(1.0, 2.0, 3.0);
+        assert_relative_eq!(magnitude(&normalise(&v)), 1.0, epsilon = 0.00001);
     }
 }
