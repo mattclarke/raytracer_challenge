@@ -116,9 +116,8 @@ fn cross(a: &Tuple, b: &Tuple) -> Tuple {
 
 #[cfg(test)]
 mod tests {
-    use approx::assert_relative_eq;
-
     use super::*;
+    use approx::assert_relative_eq;
 
     #[test]
     fn tuple_with_w_equals_one_is_a_point() {
