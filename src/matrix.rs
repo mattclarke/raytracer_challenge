@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 struct Matrix {
     width: usize,
     height: usize,
@@ -60,5 +61,47 @@ mod tests {
         assert_eq!(matrix.at(0, 0), -3.0);
         assert_eq!(matrix.at(1, 1), -2.0);
         assert_eq!(matrix.at(2, 2), 1.0);
+    }
+
+    #[test]
+    fn matrix_equality_with_identical_matrices() {
+        let m1 = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 5.5, 6.5, 7.5, 8.5, 9.0, 10.0, 11.0, 12.0, 13.5, 14.5, 15.5,
+                16.5,
+            ],
+        );
+        let m2 = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 5.5, 6.5, 7.5, 8.5, 9.0, 10.0, 11.0, 12.0, 13.5, 14.5, 15.5,
+                16.5,
+            ],
+        );
+        assert_eq!(m1, m2);
+    }
+
+    #[test]
+    fn matrix_equality_with_different_matrices() {
+        let m1 = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 5.5, 6.5, 7.5, 8.5, 9.0, 10.0, 11.0, 12.0, 13.5, 14.5, 15.5,
+                16.5,
+            ],
+        );
+        let m2 = Matrix::new(
+            4,
+            4,
+            vec![
+                2.0, 3.0, 4.0, 5.5, 6.5, 7.5, 8.5, 9.0, 10.0, 11.0, 12.0, 13.5, 14.5, 15.5, 16.5,
+                1.0,
+            ],
+        );
+        assert_ne!(m1, m2);
     }
 }
