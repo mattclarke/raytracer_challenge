@@ -44,7 +44,7 @@ impl Canvas {
         // PPM line limit is 70 chars including the newline, so needs to be wrapped
         let mut result = format!("P3\n{} {}\n255\n", self.width, self.height);
         for y in 0..self.height {
-            let mut line = String::new();
+            let mut line = String::with_capacity(70);
             let mut length = 0;
             for x in 0..self.width {
                 let index = y * self.width + x;
