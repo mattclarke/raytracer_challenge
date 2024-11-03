@@ -44,25 +44,31 @@ impl Canvas {
         // PPM line limit is 70 chars including the newline, so needs to be wrapped
         let mut result = format!("P3\n{} {}\n255\n", self.width, self.height);
         for y in 0..self.height {
-            let mut line = String::new();
-            let mut length = 0;
+            let mut line = String::with_capacity(70);
             for x in 0..self.width {
                 let index = y * self.width + x;
                 let pixel = &self.pixels[index];
                 let values = normalise_color_value(pixel);
+
                 if line.len() == 0 {
                     line.push_str(&format!("{} {} {}", values[0], values[1], values[2]));
-                    length = line.len();
-                } else {
-                    for v in values.iter() {
-                        let sv = format!(" {}", v);
-                        if length + sv.len() >= 69 {
-                            line.push_str("\n");
-                            length = 0;
-                        }
-                        line.push_str(&sv);
-                        length += sv.len();
+                    continue;
+                }
+                // Room for all values
+                let full = &format!(" {} {} {}", values[0], values[1], values[2]);
+                if line.len() + full.len() <= 69 {
+                    line.push_str(full);
+                    continue;
+                }
+                // Line filling up, so add one at a time
+                for v in values.iter() {
+                    let sv = format!(" {}", v);
+                    if line.len() + sv.len() >= 69 {
+                        result.push_str(&line);
+                        result.push_str("\n");
+                        line = String::with_capacity(70);
                     }
+                    line.push_str(&sv);
                 }
             }
             result.push_str(&line);
