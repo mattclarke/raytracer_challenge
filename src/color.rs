@@ -2,9 +2,9 @@ use std::ops::{Add, Mul, Sub};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Color {
-    red: f32,
-    blue: f32,
-    green: f32,
+    pub red: f32,
+    pub blue: f32,
+    pub green: f32,
 }
 
 impl Color {
