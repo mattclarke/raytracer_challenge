@@ -1,3 +1,6 @@
+use crate::tuple::Tuple;
+use std::ops::Mul;
+
 #[derive(Debug, PartialEq)]
 struct Matrix {
     width: usize,
@@ -20,6 +23,40 @@ impl Matrix {
 
     pub fn at(&self, y: usize, x: usize) -> f32 {
         self.elements[y * self.width + x]
+    }
+}
+
+impl Mul for Matrix {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        assert!(
+            self.width == rhs.width && self.height == rhs.height,
+            "Cannot multiply different shaped matrices"
+        );
+        let mut result = Matrix::new(self.width, self.height, vec![0.0; self.height * self.width]);
+
+        for row in 0..self.height {
+            for col in 0..self.width {
+                result.elements[row * self.width + col] = self.at(row, 0) * rhs.at(0, col)
+                    + self.at(row, 1) * rhs.at(1, col)
+                    + self.at(row, 2) * rhs.at(2, col)
+                    + self.at(row, 3) * rhs.at(3, col);
+            }
+        }
+
+        result
+    }
+}
+
+impl Mul<Tuple> for Matrix {
+    type Output = Tuple;
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        Tuple {
+            x: 1.0,
+            y: 2.0,
+            z: 3.0,
+            w: 1.0,
+        }
     }
 }
 
@@ -103,5 +140,58 @@ mod tests {
             ],
         );
         assert_ne!(m1, m2);
+    }
+
+    #[test]
+    fn multiply_two_matrices() {
+        let m1 = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0,
+            ],
+        );
+        let m2 = Matrix::new(
+            4,
+            4,
+            vec![
+                -2.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, -1.0, 4.0, 3.0, 6.0, 5.0, 1.0, 2.0, 7.0, 8.0,
+            ],
+        );
+        let expected = Matrix::new(
+            4,
+            4,
+            vec![
+                20.0, 22.0, 50.0, 48.0, 44.0, 54.0, 114.0, 108.0, 40.0, 58.0, 110.0, 102.0, 16.0,
+                26.0, 46.0, 42.0,
+            ],
+        );
+        assert_eq!(m1 * m2, expected);
+    }
+
+    #[test]
+    fn multiply_matrix_by_tuple() {
+        let matrix = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 2.0, 4.0, 4.0, 2.0, 8.0, 6.0, 4.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+            ],
+        );
+        let tuple = Tuple {
+            x: 1.0,
+            y: 2.0,
+            z: 3.0,
+            w: 1.0,
+        };
+        assert_eq!(
+            matrix * tuple,
+            Tuple {
+                x: 18.0,
+                y: 24.0,
+                z: 33.0,
+                w: 1.0
+            }
+        );
     }
 }

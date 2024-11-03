@@ -1,11 +1,11 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Debug, PartialEq)]
-struct Tuple {
-    x: f32,
-    y: f32,
-    z: f32,
-    w: f32,
+pub struct Tuple {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub w: f32,
 }
 
 impl Tuple {
