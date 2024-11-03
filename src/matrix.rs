@@ -44,4 +44,21 @@ mod tests {
         assert_eq!(matrix.at(3, 0), 13.5);
         assert_eq!(matrix.at(3, 2), 15.5);
     }
+
+    #[test]
+    fn can_represent_2x2_matrix() {
+        let matrix = Matrix::new(2, 2, vec![-3.0, 5.0, 1.0, -2.0]);
+        assert_eq!(matrix.at(0, 0), -3.0);
+        assert_eq!(matrix.at(0, 1), 5.0);
+        assert_eq!(matrix.at(1, 0), 1.0);
+        assert_eq!(matrix.at(1, 1), -2.0);
+    }
+
+    #[test]
+    fn can_represent_3x3_matrix() {
+        let matrix = Matrix::new(3, 3, vec![-3.0, 5.0, 0.0, 1.0, -2.0, -7.0, 0.0, 1.0, 1.0]);
+        assert_eq!(matrix.at(0, 0), -3.0);
+        assert_eq!(matrix.at(1, 1), -2.0);
+        assert_eq!(matrix.at(2, 2), 1.0);
+    }
 }
