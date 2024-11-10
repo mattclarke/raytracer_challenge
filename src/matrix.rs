@@ -34,6 +34,16 @@ impl Matrix {
             ],
         )
     }
+
+    pub fn transpose(&self) -> Matrix {
+        let mut result = Matrix::new(self.width, self.height, vec![0.0; self.height * self.width]);
+        for row in 0..self.height {
+            for col in 0..self.width {
+                result.elements[row * self.width + col] = self.at(col, row);
+            }
+        }
+        result
+    }
 }
 
 impl Mul for &Matrix {
@@ -240,5 +250,30 @@ mod tests {
             w: 4.0,
         };
         assert_eq!(&identity * &t, t);
+    }
+
+    #[test]
+    fn transposing_a_matrix() {
+        let matrix = Matrix::new(
+            4,
+            4,
+            vec![
+                0.0, 9.0, 3.0, 0.0, 9.0, 8.0, 0.0, 8.0, 1.0, 8.0, 5.0, 3.0, 0.0, 0.0, 5.0, 8.0,
+            ],
+        );
+        let expected = Matrix::new(
+            4,
+            4,
+            vec![
+                0.0, 9.0, 1.0, 0.0, 9.0, 8.0, 8.0, 0.0, 3.0, 0.0, 5.0, 5.0, 0.0, 8.0, 3.0, 8.0,
+            ],
+        );
+        assert_eq!(matrix.transpose(), expected);
+    }
+
+    #[test]
+    fn transpose_identity() {
+        let identity = Matrix::identity_4x4();
+        assert_eq!(identity.transpose(), identity);
     }
 }
