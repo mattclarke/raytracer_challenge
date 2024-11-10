@@ -24,10 +24,20 @@ impl Matrix {
     pub fn at(&self, y: usize, x: usize) -> f32 {
         self.elements[y * self.width + x]
     }
+
+    pub fn identity_4x4() -> Matrix {
+        Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+            ],
+        )
+    }
 }
 
-impl Mul for Matrix {
-    type Output = Self;
+impl Mul for &Matrix {
+    type Output = Matrix;
     fn mul(self, rhs: Self) -> Self::Output {
         assert!(
             self.width == rhs.width && self.height == rhs.height,
@@ -48,14 +58,26 @@ impl Mul for Matrix {
     }
 }
 
-impl Mul<Tuple> for Matrix {
+impl Mul<&Tuple> for &Matrix {
     type Output = Tuple;
-    fn mul(self, rhs: Tuple) -> Self::Output {
+    fn mul(self, rhs: &Tuple) -> Self::Output {
         Tuple {
-            x: 1.0,
-            y: 2.0,
-            z: 3.0,
-            w: 1.0,
+            x: self.at(0, 0) * rhs.x
+                + self.at(0, 1) * rhs.y
+                + self.at(0, 2) * rhs.z
+                + self.at(0, 3) * rhs.w,
+            y: self.at(1, 0) * rhs.x
+                + self.at(1, 1) * rhs.y
+                + self.at(1, 2) * rhs.z
+                + self.at(1, 3) * rhs.w,
+            z: self.at(2, 0) * rhs.x
+                + self.at(2, 1) * rhs.y
+                + self.at(2, 2) * rhs.z
+                + self.at(2, 3) * rhs.w,
+            w: self.at(3, 0) * rhs.x
+                + self.at(3, 1) * rhs.y
+                + self.at(3, 2) * rhs.z
+                + self.at(3, 3) * rhs.w,
         }
     }
 }
@@ -166,7 +188,7 @@ mod tests {
                 26.0, 46.0, 42.0,
             ],
         );
-        assert_eq!(m1 * m2, expected);
+        assert_eq!(&m1 * &m2, expected);
     }
 
     #[test]
@@ -185,7 +207,7 @@ mod tests {
             w: 1.0,
         };
         assert_eq!(
-            matrix * tuple,
+            &matrix * &tuple,
             Tuple {
                 x: 18.0,
                 y: 24.0,
@@ -193,5 +215,30 @@ mod tests {
                 w: 1.0
             }
         );
+    }
+
+    #[test]
+    fn multiply_matrix_by_identity() {
+        let identity = Matrix::identity_4x4();
+        let matrix = Matrix::new(
+            4,
+            4,
+            vec![
+                1.0, 2.0, 3.0, 4.0, 2.0, 4.0, 4.0, 2.0, 8.0, 6.0, 4.0, 1.0, 0.0, 0.0, 0.0, 1.0,
+            ],
+        );
+        assert_eq!(&matrix * &identity, matrix);
+    }
+
+    #[test]
+    fn multiply_identity_by_tuple() {
+        let identity = Matrix::identity_4x4();
+        let t = Tuple {
+            x: 1.0,
+            y: 2.0,
+            z: 3.0,
+            w: 4.0,
+        };
+        assert_eq!(&identity * &t, t);
     }
 }

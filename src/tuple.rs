@@ -101,7 +101,7 @@ fn normalise(tuple: &Tuple) -> Tuple {
     }
 }
 
-fn dot(a: &Tuple, b: &Tuple) -> f32 {
+pub fn dot(a: &Tuple, b: &Tuple) -> f32 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
