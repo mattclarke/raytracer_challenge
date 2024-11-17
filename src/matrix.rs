@@ -8,6 +8,36 @@ struct Matrix {
     elements: Vec<f32>,
 }
 
+fn determinant(matrix: &Matrix) -> f32 {
+    assert!(
+        matrix.width == 2 && matrix.height == 2,
+        "can only calculate determinant for 2 x 2 matrices"
+    );
+    matrix.elements[0] * matrix.elements[3] - matrix.elements[1] * matrix.elements[2]
+}
+
+fn submatrix(matrix: &Matrix, row: usize, column: usize) -> Matrix {
+    let mut result = Matrix::new(
+        matrix.width - 1,
+        matrix.height - 1,
+        vec![0.0; (matrix.width - 1) * (matrix.height - 1)],
+    );
+    let mut index: usize = 0;
+    for y in 0..matrix.height {
+        if y == row {
+            continue;
+        }
+        for x in 0..matrix.width {
+            if x == column {
+                continue;
+            }
+            result.elements[index] = matrix.at(y, x);
+            index += 1;
+        }
+    }
+    result
+}
+
 impl Matrix {
     pub fn new(width: usize, height: usize, values: Vec<f32>) -> Matrix {
         assert!(
@@ -275,5 +305,31 @@ mod tests {
     fn transpose_identity() {
         let identity = Matrix::identity_4x4();
         assert_eq!(identity.transpose(), identity);
+    }
+
+    #[test]
+    fn calculate_determinant_of_2x2_matrix() {
+        let matrix = Matrix::new(2, 2, vec![1.0, 5.0, -3.0, 2.0]);
+        assert_eq!(determinant(&matrix), 17.0);
+    }
+
+    #[test]
+    fn submatrix_of_3x3_is_2x2() {
+        let matrix = Matrix::new(3, 3, vec![1.0, 5.0, 0.0, -3.0, 2.0, 7.0, 0.0, 6.0, -3.0]);
+        let expected = Matrix::new(2, 2, vec![-3.0, 2.0, 0.0, 6.0]);
+        assert_eq!(submatrix(&matrix, 0, 2), expected);
+    }
+
+    #[test]
+    fn submatrix_of_4x4_is_2x2() {
+        let matrix = Matrix::new(
+            4,
+            4,
+            vec![
+                -6.0, 1.0, 1.0, 6.0, -8.0, 5.0, 8.0, 6.0, -1.0, 0.0, 8.0, 2.0, -7.0, 1.0, -1.0, 1.0,
+            ],
+        );
+        let expected = Matrix::new(3, 3, vec![-6.0, 1.0, 6.0, -8.0, 8.0, 6.0, -7.0, -1.0, 1.0]);
+        assert_eq!(submatrix(&matrix, 2, 1), expected);
     }
 }
