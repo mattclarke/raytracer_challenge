@@ -82,7 +82,7 @@ pub fn point(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 1.0 }
 }
 
-fn vector(x: f32, y: f32, z: f32) -> Tuple {
+pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 0.0 }
 }
 

@@ -1,5 +1,5 @@
 use crate::matrix::{inverse, Matrix};
-use crate::tuple::point;
+use crate::tuple::{point, vector};
 
 fn translation(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::new(
@@ -27,5 +27,12 @@ mod tests {
         let transform = translation(5.0, -3.0, 2.0);
         let p = point(-3.0, 4.0, 5.0);
         assert_eq!(&inverse(&transform) * &p, point(-8.0, 7.0, 3.0));
+    }
+
+    #[test]
+    fn translation_does_not_affect_vectors() {
+        let transform = translation(5.0, -3.0, 2.0);
+        let v = vector(-3.0, 4.0, 5.0);
+        assert_eq!(&transform * &v, v);
     }
 }
