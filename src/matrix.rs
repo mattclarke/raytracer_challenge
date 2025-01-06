@@ -42,6 +42,14 @@ fn minor(matrix: &Matrix, row: usize, column: usize) -> f32 {
     determinant(&submatrix(&matrix, row, column))
 }
 
+fn cofactor(matrix: &Matrix, row: usize, column: usize) -> f32 {
+    let mnr = minor(&matrix, row, column);
+    if (row + column) % 2 == 1 {
+        return -mnr;
+    }
+    mnr
+}
+
 impl Matrix {
     pub fn new(width: usize, height: usize, values: Vec<f32>) -> Matrix {
         assert!(
@@ -325,7 +333,7 @@ mod tests {
     }
 
     #[test]
-    fn submatrix_of_4x4_is_2x2() {
+    fn submatrix_of_4x4_is_3x3() {
         let matrix = Matrix::new(
             4,
             4,
@@ -343,5 +351,12 @@ mod tests {
         let b = submatrix(&a, 1, 0);
         assert_eq!(determinant(&b), 25.0);
         assert_eq!(minor(&a, 1, 0), 25.0);
+    }
+
+    #[test]
+    fn calculate_cofactor_of_3x3() {
+        let a = Matrix::new(3, 3, vec![3.0, 5.0, 0.0, 2.0, -1.0, -7.0, 6.0, -1.0, 5.0]);
+        assert_eq!(cofactor(&a, 0, 0), -12.0);
+        assert_eq!(cofactor(&a, 1, 0), -25.0);
     }
 }
