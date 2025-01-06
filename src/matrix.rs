@@ -449,7 +449,7 @@ mod tests {
     }
 
     #[test]
-    fn calculate_matrix_inverse() {
+    fn calculate_matrix_inverse_1() {
         let a = Matrix::new(
             4,
             4,
@@ -473,5 +473,69 @@ mod tests {
         assert_eq!(b.at(3, 2), -160.0 / 532.0);
         assert_eq!(b.at(2, 3), 105.0 / 532.0);
         assert_eq!(b, expected);
+    }
+
+    #[test]
+    fn calculate_matrix_inverse_2() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                8.0, -5.0, 9.0, 2.0, 7.0, 5.0, 6.0, 1.0, -6.0, 0.0, 9.0, 6.0, -3.0, 0.0, -9.0, -4.0,
+            ],
+        );
+        let b = inverse(&a);
+        let expected = Matrix::new(
+            4,
+            4,
+            vec![
+                -0.15385, -0.15385, -0.28205, -0.53846, -0.07692, 0.12308, 0.02564, 0.03077,
+                0.35897, 0.35897, 0.43590, 0.92308, -0.69231, -0.69231, -0.76923, -1.92308,
+            ],
+        );
+        assert_eq!(b, expected);
+    }
+
+    #[test]
+    fn calculate_matrix_inverse_3() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                9.0, 3.0, 0.0, 9.0, -5.0, -2.0, -6.0, -3.0, -4.0, 9.0, 6.0, 4.0, -7.0, 6.0, 6.0,
+                2.0,
+            ],
+        );
+        let b = inverse(&a);
+        let expected = Matrix::new(
+            4,
+            4,
+            vec![
+                -0.04074, -0.07778, 0.14444, -0.22222, -0.07778, 0.03333, 0.36667, -0.33333,
+                -0.02901, -0.14630, -0.10926, 0.12963, 0.17778, 0.06667, -0.26667, 0.33333,
+            ],
+        );
+        assert_eq!(b, expected);
+    }
+
+    #[test]
+    fn multiply_product_by_inverse() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                3.0, -9.0, 7.0, 3.0, 3.0, -8.0, 2.0, -9.0, -4.0, 4.0, 4.0, 1.0, -6.0, 5.0, -1.0,
+                1.0,
+            ],
+        );
+        let b = Matrix::new(
+            4,
+            4,
+            vec![
+                8.0, 2.0, 2.0, 2.0, 3.0, -1.0, 7.0, 0.0, 7.0, 0.0, 5.0, 4.0, 6.0, -2.0, 0.0, 5.0,
+            ],
+        );
+        let c = &a * &b;
+        assert_eq!(&c * &inverse(&b), a);
     }
 }
