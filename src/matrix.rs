@@ -1,4 +1,5 @@
 use crate::tuple::Tuple;
+use std::iter::zip;
 use std::ops::Mul;
 
 #[derive(Debug)]
@@ -119,7 +120,7 @@ impl PartialEq for Matrix {
         }
 
         let epsilon = 0.00001;
-        for (a, b) in self.elements.iter().zip(other.elements.iter()) {
+        for (a, b) in zip(self.elements.iter(), other.elements.iter()) {
             if (a - b).abs() > epsilon {
                 return false;
             }
