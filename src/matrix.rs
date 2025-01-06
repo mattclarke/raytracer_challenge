@@ -1,7 +1,7 @@
 use crate::tuple::Tuple;
 use std::ops::Mul;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 struct Matrix {
     width: usize,
     height: usize,
@@ -9,11 +9,35 @@ struct Matrix {
 }
 
 fn determinant(matrix: &Matrix) -> f32 {
-    assert!(
-        matrix.width == 2 && matrix.height == 2,
-        "can only calculate determinant for 2 x 2 matrices"
+    let mut result = 0.0;
+    if matrix.width == 2 && matrix.height == 2 {
+        result = matrix.elements[0] * matrix.elements[3] - matrix.elements[1] * matrix.elements[2];
+    } else {
+        for c in 0..matrix.width {
+            result += matrix.at(0, c) * cofactor(&matrix, 0, c);
+        }
+    }
+    result
+}
+
+fn invertible(matrix: &Matrix) -> bool {
+    determinant(&matrix) != 0.0
+}
+
+fn inverse(matrix: &Matrix) -> Matrix {
+    assert!(invertible(&matrix), "Not invertible");
+    let det = determinant(&matrix);
+    let mut result = Matrix::new(
+        matrix.width,
+        matrix.height,
+        vec![0.0; matrix.width * matrix.height],
     );
-    matrix.elements[0] * matrix.elements[3] - matrix.elements[1] * matrix.elements[2]
+    for r in 0..matrix.height {
+        for c in 0..matrix.width {
+            result.elements[c * result.width + r] = cofactor(&matrix, r, c) / det;
+        }
+    }
+    result
 }
 
 fn submatrix(matrix: &Matrix, row: usize, column: usize) -> Matrix {
@@ -87,6 +111,24 @@ impl Matrix {
         result
     }
 }
+
+impl PartialEq for Matrix {
+    fn eq(&self, other: &Self) -> bool {
+        if self.width != other.width || self.height != other.height {
+            return false;
+        }
+
+        let epsilon = 0.00001;
+        for (a, b) in self.elements.iter().zip(other.elements.iter()) {
+            if (a - b).abs() > epsilon {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+impl Eq for Matrix {}
 
 impl Mul for &Matrix {
     type Output = Matrix;
@@ -358,5 +400,77 @@ mod tests {
         let a = Matrix::new(3, 3, vec![3.0, 5.0, 0.0, 2.0, -1.0, -7.0, 6.0, -1.0, 5.0]);
         assert_eq!(cofactor(&a, 0, 0), -12.0);
         assert_eq!(cofactor(&a, 1, 0), -25.0);
+    }
+
+    #[test]
+    fn calculate_determinant_of_3x3() {
+        let a = Matrix::new(3, 3, vec![1.0, 2.0, 6.0, -5.0, 8.0, -4.0, 2.0, 6.0, 4.0]);
+        assert_eq!(determinant(&a), -196.0);
+    }
+
+    #[test]
+    fn calculate_determinant_of_4x4() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                -2.0, -8.0, 3.0, 5.0, -3.0, 1.0, 7.0, 3.0, 1.0, 2.0, -9.0, 6.0, -6.0, 7.0, 7.0,
+                -9.0,
+            ],
+        );
+        assert_eq!(determinant(&a), -4071.0);
+    }
+
+    #[test]
+    fn is_invertible() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                6.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 6.0, 4.0, -9.0, 3.0, -7.0, 9.0, 1.0, 7.0, -6.0,
+            ],
+        );
+        assert_eq!(determinant(&a), -2120.0);
+        assert_eq!(invertible(&a), true);
+    }
+
+    #[test]
+    fn is_not_invertible() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                -4.0, 2.0, -2.0, -3.0, 9.0, 6.0, 2.0, 6.0, 0.0, -5.0, 1.0, -5.0, 0.0, 0.0, 0.0, 0.0,
+            ],
+        );
+        assert_eq!(determinant(&a), 0.0);
+        assert_eq!(invertible(&a), false);
+    }
+
+    #[test]
+    fn calculate_matrix_inverse() {
+        let a = Matrix::new(
+            4,
+            4,
+            vec![
+                -5.0, 2.0, 6.0, -8.0, 1.0, -5.0, 1.0, 8.0, 7.0, 7.0, -6.0, -7.0, 1.0, -3.0, 7.0,
+                4.0,
+            ],
+        );
+        let b = inverse(&a);
+        let expected = Matrix::new(
+            4,
+            4,
+            vec![
+                0.21805, 0.45113, 0.24060, -0.04511, -0.80827, -1.45677, -0.44361, 0.52068,
+                -0.07895, -0.22368, -0.05263, 0.19737, -0.52256, -0.81391, -0.30075, 0.30639,
+            ],
+        );
+        assert_eq!(determinant(&a), 532.0);
+        assert_eq!(cofactor(&a, 2, 3), -160.0);
+        assert_eq!(cofactor(&a, 3, 2), 105.0);
+        assert_eq!(b.at(3, 2), -160.0 / 532.0);
+        assert_eq!(b.at(2, 3), 105.0 / 532.0);
+        assert_eq!(b, expected);
     }
 }
