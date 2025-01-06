@@ -3,7 +3,7 @@ use std::iter::zip;
 use std::ops::Mul;
 
 #[derive(Debug)]
-struct Matrix {
+pub struct Matrix {
     width: usize,
     height: usize,
     elements: Vec<f32>,
@@ -25,7 +25,7 @@ fn invertible(matrix: &Matrix) -> bool {
     determinant(&matrix) != 0.0
 }
 
-fn inverse(matrix: &Matrix) -> Matrix {
+pub fn inverse(matrix: &Matrix) -> Matrix {
     assert!(invertible(&matrix), "Not invertible");
     let det = determinant(&matrix);
     let mut result = Matrix::new(

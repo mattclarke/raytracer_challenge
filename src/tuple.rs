@@ -78,7 +78,7 @@ impl Div<f32> for Tuple {
     }
 }
 
-fn point(x: f32, y: f32, z: f32) -> Tuple {
+pub fn point(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 1.0 }
 }
 
