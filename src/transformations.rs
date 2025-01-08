@@ -11,6 +11,16 @@ fn translation(x: f32, y: f32, z: f32) -> Matrix {
     )
 }
 
+fn scaling(x: f32, y: f32, z: f32) -> Matrix {
+    Matrix::new(
+        4,
+        4,
+        vec![
+            x, 0.0, 0.0, 0.0, 0.0, y, 0.0, 0.0, 0.0, 0.0, z, 0.0, 0.0, 0.0, 0.0, 1.0,
+        ],
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -34,5 +44,27 @@ mod tests {
         let transform = translation(5.0, -3.0, 2.0);
         let v = vector(-3.0, 4.0, 5.0);
         assert_eq!(&transform * &v, v);
+    }
+
+    #[test]
+    fn scaling_matrix_applied_to_point() {
+        let transform = scaling(2.0, 3.0, 4.0);
+        let p = point(-4.0, 6.0, 8.0);
+        assert_eq!(&transform * &p, point(-8.0, 18.0, 32.0));
+    }
+
+    #[test]
+    fn scaling_matrix_applied_to_vector() {
+        let transform = scaling(2.0, 3.0, 4.0);
+        let v = vector(-4.0, 6.0, 8.0);
+        assert_eq!(&transform * &v, vector(-8.0, 18.0, 32.0));
+    }
+
+    #[test]
+    fn multiple_by_inverse_of_scaling_matrix() {
+        let transform = scaling(2.0, 3.0, 4.0);
+        let inv = inverse(&transform);
+        let v = vector(-4.0, 6.0, 8.0);
+        assert_eq!(&inv * &v, vector(-2.0, 2.0, 2.0));
     }
 }
