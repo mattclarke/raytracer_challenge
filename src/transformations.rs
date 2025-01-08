@@ -1,5 +1,6 @@
 use crate::matrix::{inverse, Matrix};
 use crate::tuple::{point, vector};
+use std::f32::consts::PI;
 
 fn translation(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::new(
@@ -17,6 +18,31 @@ fn scaling(x: f32, y: f32, z: f32) -> Matrix {
         4,
         vec![
             x, 0.0, 0.0, 0.0, 0.0, y, 0.0, 0.0, 0.0, 0.0, z, 0.0, 0.0, 0.0, 0.0, 1.0,
+        ],
+    )
+}
+
+fn rotation_x(r: f32) -> Matrix {
+    Matrix::new(
+        4,
+        4,
+        vec![
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            r.cos(),
+            -r.sin(),
+            0.0,
+            0.0,
+            r.sin(),
+            r.cos(),
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
         ],
     )
 }
@@ -66,5 +92,24 @@ mod tests {
         let inv = inverse(&transform);
         let v = vector(-4.0, 6.0, 8.0);
         assert_eq!(&inv * &v, vector(-2.0, 2.0, 2.0));
+    }
+
+    #[test]
+    fn reflection_is_scaling_by_negative() {
+        let transform = scaling(-1.0, 1.0, 1.0);
+        let p = point(2.0, 3.0, 4.0);
+        assert_eq!(&transform * &p, point(-2.0, 3.0, 4.0));
+    }
+
+    #[test]
+    fn rotating_point_around_x() {
+        let p = point(0.0, 1.0, 0.0);
+        let half_quarter = rotation_x(PI / 4.0);
+        let full_quarter = rotation_x(PI / 2.0);
+        assert_eq!(
+            &half_quarter * &p,
+            point(0.0, f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0)
+        );
+        assert_eq!(&full_quarter * &p, point(0.0, 0.0, 1.0));
     }
 }

@@ -1,6 +1,6 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub struct Tuple {
     pub x: f32,
     pub y: f32,
@@ -77,6 +77,27 @@ impl Div<f32> for Tuple {
         }
     }
 }
+
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Self) -> bool {
+        let epsilon = 0.00001;
+        if (self.x - other.x).abs() > epsilon {
+            return false;
+        }
+        if (self.y - other.y).abs() > epsilon {
+            return false;
+        }
+        if (self.z - other.z).abs() > epsilon {
+            return false;
+        }
+        if (self.w - other.w).abs() > epsilon {
+            return false;
+        }
+        return true;
+    }
+}
+
+impl Eq for Tuple {}
 
 pub fn point(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 1.0 }
