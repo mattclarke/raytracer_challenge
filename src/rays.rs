@@ -1,16 +1,15 @@
-use std::mem::discriminant;
-
 use crate::{
+    intersections::{intersection, Intersection},
     sphere::Sphere,
     tuple::{dot, point, Tuple},
 };
 
-struct Ray {
+pub struct Ray {
     origin: Tuple,
     direction: Tuple,
 }
 
-fn ray(origin: Tuple, direction: Tuple) -> Ray {
+pub fn ray(origin: Tuple, direction: Tuple) -> Ray {
     Ray { origin, direction }
 }
 
@@ -23,20 +22,20 @@ fn position(ray: &Ray, t: f32) -> Tuple {
     }
 }
 
-fn intersect(s: &Sphere, r: &Ray) -> Option<(f32, f32)> {
+pub fn intersect<'a>(s: &'a Sphere, r: &'a Ray) -> Vec<Intersection<'a>> {
     let sphere_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
     let a = dot(&r.direction, &r.direction);
     let b = 2.0 * dot(&r.direction, &sphere_to_ray);
     let c = dot(&sphere_to_ray, &sphere_to_ray) - 1.0;
     let discriminant = b * b - 4.0 * a * c;
     if discriminant < 0.0 {
-        return None;
+        return vec![];
     }
 
     let t1 = (-b - f32::sqrt(discriminant)) / (2.0 * a);
     let t2 = (-b + f32::sqrt(discriminant)) / (2.0 * a);
 
-    Some((t1, t2))
+    vec![intersection(t1, &s), intersection(t2, &s)]
 }
 
 #[cfg(test)]
@@ -70,42 +69,47 @@ mod tests {
     fn ray_intersects_sphere_at_two_points() {
         let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
         let s = sphere();
-        let xs = intersect(&s, &r).unwrap();
-        assert_eq!(xs.0, 4.0);
-        assert_eq!(xs.1, 6.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, 4.0);
+        assert_eq!(xs[1].t, 6.0);
     }
 
     #[test]
     fn ray_intersects_sphere_at_a_tangent() {
         let r = ray(point(0.0, 1.0, -5.0), vector(0.0, 0.0, 1.0));
         let s = sphere();
-        let xs = intersect(&s, &r).unwrap();
-        assert_eq!(xs.0, 5.0);
-        assert_eq!(xs.1, 5.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, 5.0);
+        assert_eq!(xs[1].t, 5.0);
     }
 
     #[test]
     fn ray_misses_sphere() {
         let r = ray(point(0.0, 2.0, -5.0), vector(0.0, 0.0, 1.0));
         let s = sphere();
-        assert_eq!(intersect(&s, &r), None);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 0);
     }
 
     #[test]
     fn ray_originates_inside_a_sphere() {
         let r = ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
         let s = sphere();
-        let xs = intersect(&s, &r).unwrap();
-        assert_eq!(xs.0, -1.0);
-        assert_eq!(xs.1, 1.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, -1.0);
+        assert_eq!(xs[1].t, 1.0);
     }
 
     #[test]
     fn sphere_is_behind_a_ray() {
         let r = ray(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
         let s = sphere();
-        let xs = intersect(&s, &r).unwrap();
-        assert_eq!(xs.0, -6.0);
-        assert_eq!(xs.1, -4.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, -6.0);
+        assert_eq!(xs[1].t, -4.0);
     }
 }
