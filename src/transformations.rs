@@ -97,6 +97,16 @@ fn rotation_z(r: f32) -> Matrix {
     )
 }
 
+fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+    Matrix::new(
+        4,
+        4,
+        vec![
+            1.0, xy, xz, 0.0, yx, 1.0, yz, 0.0, zx, zy, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0,
+        ],
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -185,5 +195,47 @@ mod tests {
             point(-f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0, 0.0)
         );
         assert_eq!(&full_quarter * &p, point(-1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn shearing_moves_x_in_proportion_to_y() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        assert_eq!(&t * &p, point(5.0, 3.0, 4.0));
+    }
+
+    #[test]
+    fn shearing_moves_x_in_proportion_to_z() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
+        assert_eq!(&t * &p, point(6.0, 3.0, 4.0));
+    }
+
+    #[test]
+    fn shearing_moves_y_in_proportion_to_x() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+        assert_eq!(&t * &p, point(2.0, 5.0, 4.0));
+    }
+
+    #[test]
+    fn shearing_moves_y_in_proportion_to_z() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
+        assert_eq!(&t * &p, point(2.0, 7.0, 4.0));
+    }
+
+    #[test]
+    fn shearing_moves_z_in_proportion_to_x() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+        assert_eq!(&t * &p, point(2.0, 3.0, 6.0));
+    }
+
+    #[test]
+    fn shearing_moves_z_in_proportion_to_y() {
+        let p = point(2.0, 3.0, 4.0);
+        let t = shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+        assert_eq!(&t * &p, point(2.0, 3.0, 7.0));
     }
 }
