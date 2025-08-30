@@ -47,6 +47,56 @@ fn rotation_x(r: f32) -> Matrix {
     )
 }
 
+fn rotation_y(r: f32) -> Matrix {
+    Matrix::new(
+        4,
+        4,
+        vec![
+            r.cos(),
+            0.0,
+            r.sin(),
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            -r.sin(),
+            0.0,
+            r.cos(),
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+        ],
+    )
+}
+
+fn rotation_z(r: f32) -> Matrix {
+    Matrix::new(
+        4,
+        4,
+        vec![
+            r.cos(),
+            -r.sin(),
+            0.0,
+            0.0,
+            r.sin(),
+            r.cos(),
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+        ],
+    )
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -111,5 +161,29 @@ mod tests {
             point(0.0, f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0)
         );
         assert_eq!(&full_quarter * &p, point(0.0, 0.0, 1.0));
+    }
+
+    #[test]
+    fn rotating_point_around_y() {
+        let p = point(0.0, 0.0, 1.0);
+        let half_quarter = rotation_y(PI / 4.0);
+        let full_quarter = rotation_y(PI / 2.0);
+        assert_eq!(
+            &half_quarter * &p,
+            point(f32::sqrt(2.0) / 2.0, 0.0, f32::sqrt(2.0) / 2.0)
+        );
+        assert_eq!(&full_quarter * &p, point(1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn rotating_point_around_z() {
+        let p = point(0.0, 1.0, 0.0);
+        let half_quarter = rotation_z(PI / 4.0);
+        let full_quarter = rotation_z(PI / 2.0);
+        assert_eq!(
+            &half_quarter * &p,
+            point(-f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0, 0.0)
+        );
+        assert_eq!(&full_quarter * &p, point(-1.0, 0.0, 0.0));
     }
 }
