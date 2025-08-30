@@ -1,6 +1,6 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Tuple {
     pub x: f32,
     pub y: f32,
