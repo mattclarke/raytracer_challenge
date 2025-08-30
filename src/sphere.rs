@@ -1,10 +1,14 @@
 #[derive(Debug)]
-struct Sphere {}
+pub struct Sphere {}
 
 impl PartialEq for Sphere {
     fn eq(&self, other: &Self) -> bool {
         self as *const _ == other as *const _
     }
+}
+
+pub fn sphere() -> Sphere {
+    Sphere {}
 }
 
 #[cfg(test)]
