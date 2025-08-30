@@ -153,6 +153,30 @@ impl Mul for &Matrix {
     }
 }
 
+impl Mul for Matrix {
+    type Output = Matrix;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        &self * &rhs
+    }
+}
+
+impl Mul<&Matrix> for Matrix {
+    type Output = Matrix;
+
+    fn mul(self, rhs: &Matrix) -> Self::Output {
+        &self * rhs
+    }
+}
+
+impl Mul<Matrix> for &Matrix {
+    type Output = Matrix;
+
+    fn mul(self, rhs: Matrix) -> Self::Output {
+        self * &rhs
+    }
+}
+
 impl Mul<&Tuple> for &Matrix {
     type Output = Tuple;
     fn mul(self, rhs: &Tuple) -> Self::Output {
@@ -174,6 +198,28 @@ impl Mul<&Tuple> for &Matrix {
                 + self.at(3, 2) * rhs.z
                 + self.at(3, 3) * rhs.w,
         }
+    }
+}
+
+impl Mul<Tuple> for Matrix {
+    type Output = Tuple;
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        &self * &rhs
+    }
+}
+
+impl Mul<&Tuple> for Matrix {
+    type Output = Tuple;
+    fn mul(self, rhs: &Tuple) -> Self::Output {
+        &self * rhs
+    }
+}
+
+impl Mul<Tuple> for &Matrix {
+    type Output = Tuple;
+
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        self * &rhs
     }
 }
 
@@ -283,7 +329,7 @@ mod tests {
                 26.0, 46.0, 42.0,
             ],
         );
-        assert_eq!(&m1 * &m2, expected);
+        assert_eq!(m1 * m2, expected);
     }
 
     #[test]
@@ -302,7 +348,7 @@ mod tests {
             w: 1.0,
         };
         assert_eq!(
-            &matrix * &tuple,
+            matrix * tuple,
             Tuple {
                 x: 18.0,
                 y: 24.0,
@@ -322,7 +368,7 @@ mod tests {
                 1.0, 2.0, 3.0, 4.0, 2.0, 4.0, 4.0, 2.0, 8.0, 6.0, 4.0, 1.0, 0.0, 0.0, 0.0, 1.0,
             ],
         );
-        assert_eq!(&matrix * &identity, matrix);
+        assert_eq!(&matrix * identity, matrix);
     }
 
     #[test]
@@ -334,7 +380,7 @@ mod tests {
             z: 3.0,
             w: 4.0,
         };
-        assert_eq!(&identity * &t, t);
+        assert_eq!(identity * &t, t);
     }
 
     #[test]
@@ -536,6 +582,6 @@ mod tests {
             ],
         );
         let c = &a * &b;
-        assert_eq!(&c * &inverse(&b), a);
+        assert_eq!(c * inverse(&b), a);
     }
 }

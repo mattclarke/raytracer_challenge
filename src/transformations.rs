@@ -115,35 +115,35 @@ mod tests {
     fn multiple_by_translation_matrix() {
         let transform = translation(5.0, -3.0, 2.0);
         let p = point(-3.0, 4.0, 5.0);
-        assert_eq!(&transform * &p, point(2.0, 1.0, 7.0));
+        assert_eq!(transform * p, point(2.0, 1.0, 7.0));
     }
 
     #[test]
     fn multiple_by_inverse_translation_matrix() {
         let transform = translation(5.0, -3.0, 2.0);
         let p = point(-3.0, 4.0, 5.0);
-        assert_eq!(&inverse(&transform) * &p, point(-8.0, 7.0, 3.0));
+        assert_eq!(inverse(&transform) * p, point(-8.0, 7.0, 3.0));
     }
 
     #[test]
     fn translation_does_not_affect_vectors() {
         let transform = translation(5.0, -3.0, 2.0);
         let v = vector(-3.0, 4.0, 5.0);
-        assert_eq!(&transform * &v, v);
+        assert_eq!(transform * &v, v);
     }
 
     #[test]
     fn scaling_matrix_applied_to_point() {
         let transform = scaling(2.0, 3.0, 4.0);
         let p = point(-4.0, 6.0, 8.0);
-        assert_eq!(&transform * &p, point(-8.0, 18.0, 32.0));
+        assert_eq!(transform * p, point(-8.0, 18.0, 32.0));
     }
 
     #[test]
     fn scaling_matrix_applied_to_vector() {
         let transform = scaling(2.0, 3.0, 4.0);
         let v = vector(-4.0, 6.0, 8.0);
-        assert_eq!(&transform * &v, vector(-8.0, 18.0, 32.0));
+        assert_eq!(transform * v, vector(-8.0, 18.0, 32.0));
     }
 
     #[test]
@@ -151,14 +151,14 @@ mod tests {
         let transform = scaling(2.0, 3.0, 4.0);
         let inv = inverse(&transform);
         let v = vector(-4.0, 6.0, 8.0);
-        assert_eq!(&inv * &v, vector(-2.0, 2.0, 2.0));
+        assert_eq!(inv * v, vector(-2.0, 2.0, 2.0));
     }
 
     #[test]
     fn reflection_is_scaling_by_negative() {
         let transform = scaling(-1.0, 1.0, 1.0);
         let p = point(2.0, 3.0, 4.0);
-        assert_eq!(&transform * &p, point(-2.0, 3.0, 4.0));
+        assert_eq!(transform * p, point(-2.0, 3.0, 4.0));
     }
 
     #[test]
@@ -167,10 +167,10 @@ mod tests {
         let half_quarter = rotation_x(PI / 4.0);
         let full_quarter = rotation_x(PI / 2.0);
         assert_eq!(
-            &half_quarter * &p,
+            half_quarter * &p,
             point(0.0, f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0)
         );
-        assert_eq!(&full_quarter * &p, point(0.0, 0.0, 1.0));
+        assert_eq!(full_quarter * p, point(0.0, 0.0, 1.0));
     }
 
     #[test]
@@ -179,10 +179,10 @@ mod tests {
         let half_quarter = rotation_y(PI / 4.0);
         let full_quarter = rotation_y(PI / 2.0);
         assert_eq!(
-            &half_quarter * &p,
+            half_quarter * &p,
             point(f32::sqrt(2.0) / 2.0, 0.0, f32::sqrt(2.0) / 2.0)
         );
-        assert_eq!(&full_quarter * &p, point(1.0, 0.0, 0.0));
+        assert_eq!(full_quarter * p, point(1.0, 0.0, 0.0));
     }
 
     #[test]
@@ -191,52 +191,52 @@ mod tests {
         let half_quarter = rotation_z(PI / 4.0);
         let full_quarter = rotation_z(PI / 2.0);
         assert_eq!(
-            &half_quarter * &p,
+            half_quarter * &p,
             point(-f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0, 0.0)
         );
-        assert_eq!(&full_quarter * &p, point(-1.0, 0.0, 0.0));
+        assert_eq!(full_quarter * p, point(-1.0, 0.0, 0.0));
     }
 
     #[test]
     fn shearing_moves_x_in_proportion_to_y() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-        assert_eq!(&t * &p, point(5.0, 3.0, 4.0));
+        assert_eq!(t * p, point(5.0, 3.0, 4.0));
     }
 
     #[test]
     fn shearing_moves_x_in_proportion_to_z() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
-        assert_eq!(&t * &p, point(6.0, 3.0, 4.0));
+        assert_eq!(t * p, point(6.0, 3.0, 4.0));
     }
 
     #[test]
     fn shearing_moves_y_in_proportion_to_x() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
-        assert_eq!(&t * &p, point(2.0, 5.0, 4.0));
+        assert_eq!(t * p, point(2.0, 5.0, 4.0));
     }
 
     #[test]
     fn shearing_moves_y_in_proportion_to_z() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
-        assert_eq!(&t * &p, point(2.0, 7.0, 4.0));
+        assert_eq!(t * p, point(2.0, 7.0, 4.0));
     }
 
     #[test]
     fn shearing_moves_z_in_proportion_to_x() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-        assert_eq!(&t * &p, point(2.0, 3.0, 6.0));
+        assert_eq!(t * p, point(2.0, 3.0, 6.0));
     }
 
     #[test]
     fn shearing_moves_z_in_proportion_to_y() {
         let p = point(2.0, 3.0, 4.0);
         let t = shearing(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-        assert_eq!(&t * &p, point(2.0, 3.0, 7.0));
+        assert_eq!(t * p, point(2.0, 3.0, 7.0));
     }
 
     #[test]
@@ -246,13 +246,13 @@ mod tests {
         let b = scaling(5.0, 5.0, 5.0);
         let c = translation(10.0, 5.0, 7.0);
 
-        let p2 = &a * &p;
+        let p2 = a * p;
         assert_eq!(p2, point(1.0, -1.0, 0.0));
 
-        let p3 = &b * &p2;
+        let p3 = b * p2;
         assert_eq!(p3, point(5.0, -5.0, 0.0));
 
-        let p4 = &c * &p3;
+        let p4 = c * p3;
         assert_eq!(p4, point(15.0, 0.0, 7.0));
     }
 
@@ -262,7 +262,7 @@ mod tests {
         let a = rotation_x(PI / 2.0);
         let b = scaling(5.0, 5.0, 5.0);
         let c = translation(10.0, 5.0, 7.0);
-        let t = &(&c * &b) * &a;
-        assert_eq!(&t * &p, point(15.0, 0.0, 7.0));
+        let t = c * b * a;
+        assert_eq!(t * p, point(15.0, 0.0, 7.0));
     }
 }
