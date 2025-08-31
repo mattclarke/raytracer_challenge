@@ -14,7 +14,7 @@ fn intersections(is: Vec<Intersection>) -> Vec<Intersection> {
     is
 }
 
-fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
+pub fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
     let mut result = None;
 
     for i in xs {

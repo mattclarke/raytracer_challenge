@@ -112,7 +112,7 @@ fn magnitude(tuple: &Tuple) -> f32 {
     pows.sqrt()
 }
 
-fn normalise(tuple: &Tuple) -> Tuple {
+pub fn normalise(tuple: &Tuple) -> Tuple {
     let magn = magnitude(&tuple);
     Tuple {
         x: tuple.x / magn,

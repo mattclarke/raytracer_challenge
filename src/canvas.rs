@@ -2,7 +2,7 @@ use std::usize;
 
 use crate::color::Color;
 
-struct Canvas {
+pub struct Canvas {
     width: usize,
     height: usize,
     pixels: Vec<Color>,
