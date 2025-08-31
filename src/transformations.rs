@@ -2,7 +2,7 @@ use crate::matrix::{inverse, Matrix};
 use crate::tuple::{point, vector};
 use std::f32::consts::PI;
 
-fn translation(x: f32, y: f32, z: f32) -> Matrix {
+pub fn translation(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -12,7 +12,7 @@ fn translation(x: f32, y: f32, z: f32) -> Matrix {
     )
 }
 
-fn scaling(x: f32, y: f32, z: f32) -> Matrix {
+pub fn scaling(x: f32, y: f32, z: f32) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -22,7 +22,7 @@ fn scaling(x: f32, y: f32, z: f32) -> Matrix {
     )
 }
 
-fn rotation_x(r: f32) -> Matrix {
+pub fn rotation_x(r: f32) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -47,7 +47,7 @@ fn rotation_x(r: f32) -> Matrix {
     )
 }
 
-fn rotation_y(r: f32) -> Matrix {
+pub fn rotation_y(r: f32) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -72,7 +72,7 @@ fn rotation_y(r: f32) -> Matrix {
     )
 }
 
-fn rotation_z(r: f32) -> Matrix {
+pub fn rotation_z(r: f32) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -97,7 +97,7 @@ fn rotation_z(r: f32) -> Matrix {
     )
 }
 
-fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+pub fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
     Matrix::new(
         4,
         4,
