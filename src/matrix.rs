@@ -2,7 +2,7 @@ use crate::tuple::Tuple;
 use std::iter::zip;
 use std::ops::Mul;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Matrix {
     width: usize,
     height: usize,
