@@ -22,7 +22,7 @@ mod tests {
     use crate::{
         matrix::Matrix,
         rays::{intersect, ray},
-        transformations::translation,
+        transformations::{scaling, translation},
         tuple::{point, vector},
     };
 
@@ -63,5 +63,25 @@ mod tests {
         let t = translation(2.0, 3.0, 4.0);
         s.transform = t.clone();
         assert_eq!(s.transform, t);
+    }
+
+    #[test]
+    fn intersecting_scaled_sphere_with_a_ray() {
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let mut s = sphere();
+        s.transform = scaling(2.0, 2.0, 2.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, 3.0);
+        assert_eq!(xs[1].t, 7.0);
+    }
+
+    #[test]
+    fn intersecting_translated_sphere_with_a_ray() {
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let mut s = sphere();
+        s.transform = translation(5.0, 0.0, 0.0);
+        let xs = intersect(&s, &r);
+        assert_eq!(xs.len(), 0);
     }
 }

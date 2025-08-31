@@ -1,6 +1,6 @@
 use crate::{
     intersections::{intersection, Intersection},
-    matrix::Matrix,
+    matrix::{inverse, Matrix},
     sphere::Sphere,
     tuple::{dot, point, Tuple},
 };
@@ -31,6 +31,8 @@ fn transform(ray: &Ray, m: &Matrix) -> Ray {
 }
 
 pub fn intersect<'a>(s: &'a Sphere, r: &'a Ray) -> Vec<Intersection<'a>> {
+    let r = transform(&r, &inverse(&s.transform));
+
     let sphere_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
     let a = dot(&r.direction, &r.direction);
     let b = 2.0 * dot(&r.direction, &sphere_to_ray);
