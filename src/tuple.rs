@@ -30,15 +30,23 @@ impl Add for Tuple {
     }
 }
 
-impl Sub for Tuple {
-    type Output = Self;
+impl Sub for &Tuple {
+    type Output = Tuple;
+
     fn sub(self, rhs: Self) -> Self::Output {
-        Self {
+        Tuple {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
             z: self.z - rhs.z,
             w: self.w - rhs.w,
         }
+    }
+}
+
+impl Sub for Tuple {
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self::Output {
+        &self - &rhs
     }
 }
 

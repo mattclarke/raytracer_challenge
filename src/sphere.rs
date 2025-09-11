@@ -1,4 +1,7 @@
-use crate::matrix::Matrix;
+use crate::{
+    matrix::Matrix,
+    tuple::{normalise, point, Tuple},
+};
 
 #[derive(Debug)]
 pub struct Sphere {
@@ -17,13 +20,17 @@ pub fn sphere() -> Sphere {
     }
 }
 
+fn normal_at(s: &Sphere, p: &Tuple) -> Tuple {
+    normalise(&(p - &point(0.0, 0.0, 0.0)))
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{
         matrix::Matrix,
         rays::{intersect, ray},
         transformations::{scaling, translation},
-        tuple::{point, vector},
+        tuple::{normalise, point, vector},
     };
 
     use super::*;
@@ -83,5 +90,42 @@ mod tests {
         s.transform = translation(5.0, 0.0, 0.0);
         let xs = intersect(&s, &r);
         assert_eq!(xs.len(), 0);
+    }
+
+    #[test]
+    fn normal_on_sphere_on_x_axis() {
+        let s = sphere();
+        let n = normal_at(&s, &point(1.0, 0.0, 0.0));
+        assert_eq!(n, vector(1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn normal_on_sphere_on_y_axis() {
+        let s = sphere();
+        let n = normal_at(&s, &point(0.0, 1.0, 0.0));
+        assert_eq!(n, vector(0.0, 1.0, 0.0));
+    }
+
+    #[test]
+    fn normal_on_sphere_on_z_axis() {
+        let s = sphere();
+        let n = normal_at(&s, &point(0.0, 0.0, 1.0));
+        assert_eq!(n, vector(0.0, 0.0, 1.0));
+    }
+
+    #[test]
+    fn normal_on_sphere_on_nonaxial_point() {
+        let s = sphere();
+        let v = 3.0_f32.sqrt() / 3.0;
+        let n = normal_at(&s, &point(v, v, v));
+        assert_eq!(n, vector(v, v, v));
+    }
+
+    #[test]
+    fn normal_is_a_normalised_vector() {
+        let s = sphere();
+        let v = 3.0_f32.sqrt() / 3.0;
+        let n = normal_at(&s, &point(v, v, v));
+        assert_eq!(n, normalise(&n));
     }
 }
