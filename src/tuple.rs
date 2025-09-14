@@ -50,6 +50,18 @@ impl Sub for Tuple {
     }
 }
 
+impl Sub<Tuple> for &Tuple {
+    type Output = Tuple;
+    fn sub(self, rhs: Tuple) -> Self::Output {
+        Tuple {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z,
+            w: self.w - rhs.w,
+        }
+    }
+}
+
 impl Neg for Tuple {
     type Output = Self;
     fn neg(self) -> Self::Output {
@@ -70,6 +82,30 @@ impl Mul<f32> for Tuple {
             y: self.y * rhs,
             z: self.z * rhs,
             w: self.w * rhs,
+        }
+    }
+}
+
+impl Mul<f32> for &Tuple {
+    type Output = Tuple;
+    fn mul(self, rhs: f32) -> Self::Output {
+        Tuple {
+            x: self.x * rhs,
+            y: self.y * rhs,
+            z: self.z * rhs,
+            w: self.w * rhs,
+        }
+    }
+}
+
+impl Mul<Tuple> for f32 {
+    type Output = Tuple;
+    fn mul(self, rhs: Tuple) -> Self::Output {
+        Tuple {
+            x: self * rhs.x,
+            y: self * rhs.y,
+            z: self * rhs.z,
+            w: self * rhs.w,
         }
     }
 }
@@ -141,6 +177,11 @@ fn cross(a: &Tuple, b: &Tuple) -> Tuple {
         a.z * b.x - a.x * b.z,
         a.x * b.y - a.y * b.x,
     )
+}
+
+fn reflect(v: &Tuple, normal: &Tuple) -> Tuple {
+    let temp = normal * 2.0 * dot(&v, &normal);
+    v - &temp
 }
 
 #[cfg(test)]
@@ -398,5 +439,21 @@ mod tests {
         let v2 = vector(2.0, 3.0, 4.0);
         assert_eq!(cross(&v1, &v2), vector(-1.0, 2.0, -1.0));
         assert_eq!(cross(&v2, &v1), vector(1.0, -2.0, 1.0));
+    }
+
+    #[test]
+    fn reflecting_vector_approaching_at_45_degrees() {
+        let v = vector(1.0, -1.0, 0.0);
+        let n = vector(0.0, 1.0, 0.0);
+        let r = reflect(&v, &n);
+        assert_eq!(r, vector(1.0, 1.0, 0.0));
+    }
+
+    #[test]
+    fn reflecting_vector_off_slanted_surface() {
+        let v = vector(0.0, -1.0, 0.0);
+        let n = vector(2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
+        let r = reflect(&v, &n);
+        assert_eq!(r, vector(1.0, 0.0, 0.0));
     }
 }
