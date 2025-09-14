@@ -179,7 +179,7 @@ fn cross(a: &Tuple, b: &Tuple) -> Tuple {
     )
 }
 
-fn reflect(v: &Tuple, normal: &Tuple) -> Tuple {
+pub fn reflect(v: &Tuple, normal: &Tuple) -> Tuple {
     let temp = normal * 2.0 * dot(&v, &normal);
     v - &temp
 }

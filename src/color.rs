@@ -1,6 +1,6 @@
 use std::ops::{Add, Mul, Sub};
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct Color {
     pub red: f32,
     pub blue: f32,
@@ -10,6 +10,14 @@ pub struct Color {
 impl Color {
     pub fn new(red: f32, green: f32, blue: f32) -> Color {
         Color { red, green, blue }
+    }
+
+    pub fn black() -> Color {
+        Color {
+            red: 0.0,
+            green: 0.0,
+            blue: 0.0,
+        }
     }
 }
 
@@ -46,16 +54,52 @@ impl Mul for Color {
     }
 }
 
+impl Mul for &Color {
+    type Output = Color;
+    fn mul(self, rhs: &Color) -> Self::Output {
+        Color {
+            red: self.red * rhs.red,
+            green: self.green * rhs.green,
+            blue: self.blue * rhs.blue,
+        }
+    }
+}
+
 impl Mul<f32> for Color {
     type Output = Self;
     fn mul(self, rhs: f32) -> Self::Output {
-        Self {
+        &self * rhs
+    }
+}
+
+impl Mul<f32> for &Color {
+    type Output = Color;
+    fn mul(self, rhs: f32) -> Self::Output {
+        Color {
             red: self.red * rhs,
             green: self.green * rhs,
             blue: self.blue * rhs,
         }
     }
 }
+
+impl PartialEq for Color {
+    fn eq(&self, other: &Self) -> bool {
+        let epsilon = 0.0001;
+        if (self.red - other.red).abs() > epsilon {
+            return false;
+        }
+        if (self.green - other.green).abs() > epsilon {
+            return false;
+        }
+        if (self.blue - other.blue).abs() > epsilon {
+            return false;
+        }
+        return true;
+    }
+}
+
+impl Eq for Color {}
 
 #[cfg(test)]
 mod tests {

@@ -1,4 +1,4 @@
-use crate::{color::Color, light::PointLight, tuple::Tuple};
+use crate::color::Color;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Material {
@@ -21,21 +21,11 @@ impl Material {
     }
 }
 
-fn lighting(
-    material: &Material,
-    light: &PointLight,
-    point: &Tuple,
-    eye_vec: &Tuple,
-    normal_vec: &Tuple,
-) -> Color {
-    Color::new(0.0, 0.0, 0.0)
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{
-        color::{self, Color},
-        light::PointLight,
+        color::Color,
+        light::{lighting, PointLight},
         tuple::{point, vector},
     };
 
@@ -94,7 +84,7 @@ mod tests {
     fn lighting_with_eye_in_the_path_of_the_reflection() {
         let m = Material::default();
         let position = point(0.0, 0.0, 0.0);
-        let eye_vec = vector(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
+        let eye_vec = vector(0.0, -2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let result = lighting(&m, &light, &position, &eye_vec, &normal_vec);
@@ -109,7 +99,7 @@ mod tests {
         let position = point(0.0, 0.0, 0.0);
         let eye_vec = vector(0.0, 0.0, -1.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
-        let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let light = PointLight::new(point(0.0, 0.0, 10.0), Color::new(1.0, 1.0, 1.0));
         let result = lighting(&m, &light, &position, &eye_vec, &normal_vec);
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.0 + 0.0;
