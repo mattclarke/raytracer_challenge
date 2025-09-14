@@ -1,6 +1,8 @@
 mod canvas;
 mod color;
 mod intersections;
+mod light;
+mod materials;
 mod matrix;
 mod rays;
 mod sphere;
