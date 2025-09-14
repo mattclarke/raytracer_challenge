@@ -23,7 +23,7 @@ pub fn sphere() -> Sphere {
     }
 }
 
-fn normal_at(s: &Sphere, p: &Tuple) -> Tuple {
+pub fn normal_at(s: &Sphere, p: &Tuple) -> Tuple {
     let obj_point = inverse(&s.transform) * p;
     let obj_normal = obj_point - point(0.0, 0.0, 0.0);
     let mut world_normal = inverse(&s.transform).transpose() * obj_normal;

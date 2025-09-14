@@ -14,7 +14,7 @@ pub fn ray(origin: Tuple, direction: Tuple) -> Ray {
     Ray { origin, direction }
 }
 
-fn position(ray: &Ray, t: f32) -> Tuple {
+pub fn position(ray: &Ray, t: f32) -> Tuple {
     Tuple {
         x: ray.origin.x + ray.direction.x * t,
         y: ray.origin.y + ray.direction.y * t,
