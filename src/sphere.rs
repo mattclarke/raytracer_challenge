@@ -1,4 +1,5 @@
 use crate::{
+    materials::Material,
     matrix::{inverse, Matrix},
     tuple::{normalise, point, Tuple},
 };
@@ -6,6 +7,7 @@ use crate::{
 #[derive(Debug)]
 pub struct Sphere {
     pub transform: Matrix,
+    pub material: Material,
 }
 
 impl PartialEq for Sphere {
@@ -17,6 +19,7 @@ impl PartialEq for Sphere {
 pub fn sphere() -> Sphere {
     Sphere {
         transform: Matrix::identity_4x4(),
+        material: Material::default(),
     }
 }
 
@@ -33,6 +36,7 @@ mod tests {
     use std::f32::consts::PI;
 
     use crate::{
+        materials::Material,
         matrix::Matrix,
         rays::{intersect, ray},
         transformations::{rotation_z, scaling, translation},
@@ -150,5 +154,20 @@ mod tests {
         s.transform = m;
         let n = normal_at(&s, &point(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0));
         assert_eq!(n, vector(0.0, 0.97014, -0.24254));
+    }
+
+    #[test]
+    fn sphere_has_default_material() {
+        let s = sphere();
+        assert_eq!(s.material, Material::default());
+    }
+
+    #[test]
+    fn sphere_material_may_be_assigned() {
+        let mut s = sphere();
+        let mut m = Material::default();
+        m.ambient = 1.0;
+        s.material = m.clone();
+        assert_eq!(s.material, m);
     }
 }

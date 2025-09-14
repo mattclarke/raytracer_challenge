@@ -1,8 +1,8 @@
 use crate::{color::Color, tuple::Tuple};
 
-struct PointLight {
-    position: Tuple,
-    intensity: Color,
+pub struct PointLight {
+    pub position: Tuple,
+    pub intensity: Color,
 }
 
 impl PointLight {
