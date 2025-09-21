@@ -1,7 +1,7 @@
 use crate::{
     rays::{position, Ray},
     sphere::{normal_at, Sphere},
-    tuple::Tuple,
+    tuple::{dot, Tuple},
 };
 
 #[derive(Clone, Debug, PartialEq)]
@@ -41,16 +41,27 @@ pub struct Computations<'a> {
     point: Tuple,
     eyev: Tuple,
     normalv: Tuple,
+    inside: bool,
 }
 
 pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) -> Computations<'a> {
     let point = position(&ray, intersection.t);
+    let eyev = -ray.direction.clone();
+    let mut normalv = normal_at(intersection.object, &point);
+    let inside = if dot(&normalv, &eyev) < 0.0 {
+        normalv = -normalv;
+        true
+    } else {
+        false
+    };
+
     Computations {
         t: intersection.t,
         object: intersection.object,
         point: position(&ray, intersection.t),
-        eyev: -ray.direction.clone(),
-        normalv: normal_at(intersection.object, &point),
+        eyev,
+        normalv,
+        inside,
     }
 }
 
@@ -126,5 +137,20 @@ mod tests {
         assert_eq!(comps.point, point(0.0, 0.0, -1.0));
         assert_eq!(comps.eyev, vector(0.0, 0.0, -1.0));
         assert_eq!(comps.normalv, vector(0.0, 0.0, -1.0));
+        assert_eq!(comps.inside, false);
+    }
+
+    #[test]
+    fn hit_when_intersection_occurs_on_inside() {
+        let r = ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
+        let s = sphere();
+        let i = intersection(1.0, &s);
+        let comps = prepare_computations(&i, &r);
+        assert_eq!(comps.t, i.t);
+        assert_eq!(comps.object, i.object);
+        assert_eq!(comps.point, point(0.0, 0.0, 1.0));
+        assert_eq!(comps.eyev, vector(0.0, 0.0, -1.0));
+        assert_eq!(comps.normalv, vector(0.0, 0.0, -1.0));
+        assert_eq!(comps.inside, true);
     }
 }

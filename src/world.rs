@@ -1,6 +1,6 @@
 use crate::{
     color::Color,
-    intersections::Intersection,
+    intersections::{Computations, Intersection},
     light::PointLight,
     materials::Material,
     rays::{intersect, Ray},
@@ -40,10 +40,16 @@ pub fn intersect_world<'a>(w: &'a World, r: &'a Ray) -> Vec<Intersection<'a>> {
     result
 }
 
+pub fn shade_hit(w: &World, comps: &Computations) -> Color {}
+
 #[cfg(test)]
 mod tests {
 
-    use crate::{rays::ray, tuple::vector};
+    use crate::{
+        intersections::{intersection, prepare_computations},
+        rays::ray,
+        tuple::vector,
+    };
 
     use super::*;
 
@@ -75,5 +81,28 @@ mod tests {
         assert_eq!(xs[1].t, 4.5);
         assert_eq!(xs[2].t, 5.5);
         assert_eq!(xs[3].t, 6.0);
+    }
+
+    #[test]
+    fn shading_an_intersection() {
+        let w = World::default();
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let s = &w.objects[0];
+        let i = intersection(4.0, s);
+        let comps = prepare_computations(&i, &r);
+        let c = shade_hit(&w, &comps);
+        assert_eq!(c, Color::new(0.38066, 0.47583, 0.2855));
+    }
+
+    #[test]
+    fn shading_an_intersection_from_the_inside() {
+        let mut w = World::default();
+        w.light = PointLight::new(point(0.0, 0.25, 0.0), Color::new(1.0, 1.0, 1.0));
+        let r = ray(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
+        let s = &w.objects[1];
+        let i = intersection(0.5, s);
+        let comps = prepare_computations(&i, &r);
+        let c = shade_hit(&w, &comps);
+        assert_eq!(c, Color::new(0.90498, 0.90498, 0.90498));
     }
 }
