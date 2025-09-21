@@ -1,7 +1,9 @@
 use crate::{
     color::Color,
+    intersections::Intersection,
     light::PointLight,
     materials::Material,
+    rays::{intersect, Ray},
     sphere::{sphere, Sphere},
     transformations::scaling,
     tuple::point,
@@ -28,8 +30,20 @@ impl World {
     }
 }
 
+pub fn intersect_world<'a>(w: &'a World, r: &'a Ray) -> Vec<Intersection<'a>> {
+    let mut result = vec![];
+    for o in &w.objects {
+        let temp = intersect(&o, &r);
+        result.extend_from_slice(&temp);
+    }
+    result.sort_by(|a, b| a.t.total_cmp(&b.t));
+    result
+}
+
 #[cfg(test)]
 mod tests {
+
+    use crate::{rays::ray, tuple::vector};
 
     use super::*;
 
@@ -49,5 +63,17 @@ mod tests {
         assert_eq!(w.objects[0].transform, s1.transform);
         assert_eq!(w.objects[1].material, s2.material);
         assert_eq!(w.objects[1].transform, s2.transform);
+    }
+
+    #[test]
+    fn intersect_world_with_ray() {
+        let w = World::default();
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let xs = intersect_world(&w, &r);
+        assert_eq!(xs.len(), 4);
+        assert_eq!(xs[0].t, 4.0);
+        assert_eq!(xs[1].t, 4.5);
+        assert_eq!(xs[2].t, 5.5);
+        assert_eq!(xs[3].t, 6.0);
     }
 }
