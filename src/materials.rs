@@ -19,6 +19,31 @@ impl Material {
             shininess: 200.0,
         }
     }
+
+    pub fn color(mut self, c: Color) -> Material {
+        self.color = c;
+        self
+    }
+
+    pub fn ambient(mut self, a: f32) -> Material {
+        self.ambient = a;
+        self
+    }
+
+    pub fn diffuse(mut self, d: f32) -> Material {
+        self.diffuse = d;
+        self
+    }
+
+    pub fn specular(mut self, s: f32) -> Material {
+        self.specular = s;
+        self
+    }
+
+    pub fn shininess(mut self, s: f32) -> Material {
+        self.shininess = s;
+        self
+    }
 }
 
 #[cfg(test)]

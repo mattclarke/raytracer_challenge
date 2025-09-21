@@ -16,6 +16,18 @@ impl PartialEq for Sphere {
     }
 }
 
+impl Sphere {
+    pub fn transform(mut self, t: Matrix) -> Sphere {
+        self.transform = t;
+        self
+    }
+
+    pub fn material(mut self, m: Material) -> Sphere {
+        self.material = m;
+        self
+    }
+}
+
 pub fn sphere() -> Sphere {
     Sphere {
         transform: Matrix::identity_4x4(),

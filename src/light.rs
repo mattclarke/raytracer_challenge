@@ -4,6 +4,7 @@ use crate::{
     tuple::{dot, normalise, reflect, Tuple},
 };
 
+#[derive(Debug, PartialEq)]
 pub struct PointLight {
     pub position: Tuple,
     pub intensity: Color,

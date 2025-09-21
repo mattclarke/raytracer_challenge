@@ -8,6 +8,7 @@ mod rays;
 mod sphere;
 mod transformations;
 mod tuple;
+mod world;
 
 use std::{fs::File, io::Write};
 
