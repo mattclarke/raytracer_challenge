@@ -1,6 +1,6 @@
 use crate::{
     color::Color,
-    intersections::{Computations, Intersection},
+    intersections::{hit, prepare_computations, Computations, Intersection},
     light::{lighting, PointLight},
     materials::Material,
     rays::{intersect, Ray},
@@ -50,10 +50,23 @@ pub fn shade_hit(w: &World, comps: &Computations) -> Color {
     )
 }
 
+fn color_at(w: &World, r: &Ray) -> Color {
+    let xs = intersect_world(&w, &r);
+    let i = hit(&xs);
+    match i {
+        Some(i) => {
+            let comps = prepare_computations(&i, &r);
+            shade_hit(&w, &comps)
+        }
+        None => Color::new(0.0, 0.0, 0.0),
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
     use crate::{
+        color::Color,
         intersections::{intersection, prepare_computations},
         rays::ray,
         tuple::vector,
@@ -112,5 +125,34 @@ mod tests {
         let comps = prepare_computations(&i, &r);
         let c = shade_hit(&w, &comps);
         assert_eq!(c, Color::new(0.90498, 0.90498, 0.90498));
+    }
+
+    #[test]
+    fn color_when_ray_misses() {
+        let w = World::default();
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 1.0, 0.0));
+        let c = color_at(&w, &r);
+        assert_eq!(c, Color::new(0.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn color_when_ray_hits() {
+        let w = World::default();
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let c = color_at(&w, &r);
+        assert_eq!(c, Color::new(0.38066, 0.47583, 0.2855));
+    }
+
+    #[test]
+    fn color_with_an_intersection_behind_the_ray() {
+        let mut w = World::default();
+        let outer = &mut w.objects[0];
+        outer.material.ambient = 1.0;
+        let inner = &mut w.objects[1];
+        inner.material.ambient = 1.0;
+        let r = ray(point(0.0, 0.0, 0.75), vector(0.0, 0.0, -1.0));
+        let c = color_at(&w, &r);
+        let inner = &w.objects[1];
+        assert_eq!(c, inner.material.color);
     }
 }
