@@ -1,7 +1,7 @@
 use crate::{
     color::Color,
     intersections::{Computations, Intersection},
-    light::PointLight,
+    light::{lighting, PointLight},
     materials::Material,
     rays::{intersect, Ray},
     sphere::{sphere, Sphere},
@@ -9,7 +9,7 @@ use crate::{
     tuple::point,
 };
 
-struct World {
+pub struct World {
     pub light: PointLight,
     pub objects: Vec<Sphere>,
 }
@@ -40,7 +40,15 @@ pub fn intersect_world<'a>(w: &'a World, r: &'a Ray) -> Vec<Intersection<'a>> {
     result
 }
 
-pub fn shade_hit(w: &World, comps: &Computations) -> Color {}
+pub fn shade_hit(w: &World, comps: &Computations) -> Color {
+    lighting(
+        &comps.object.material,
+        &w.light,
+        &comps.point,
+        &comps.eyev,
+        &comps.normalv,
+    )
+}
 
 #[cfg(test)]
 mod tests {

@@ -37,11 +37,11 @@ pub fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
 
 pub struct Computations<'a> {
     t: f32,
-    object: &'a Sphere,
-    point: Tuple,
-    eyev: Tuple,
-    normalv: Tuple,
-    inside: bool,
+    pub object: &'a Sphere,
+    pub point: Tuple,
+    pub eyev: Tuple,
+    pub normalv: Tuple,
+    pub inside: bool,
 }
 
 pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) -> Computations<'a> {
