@@ -50,7 +50,7 @@ pub fn shade_hit(w: &World, comps: &Computations) -> Color {
     )
 }
 
-fn color_at(w: &World, r: &Ray) -> Color {
+pub fn color_at(w: &World, r: &Ray) -> Color {
     let xs = intersect_world(&w, &r);
     let i = hit(&xs);
     match i {

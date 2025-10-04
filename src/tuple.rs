@@ -30,6 +30,19 @@ impl Add for Tuple {
     }
 }
 
+impl Add<f32> for Tuple {
+    type Output = Tuple;
+
+    fn add(self, rhs: f32) -> Self::Output {
+        Tuple {
+            x: self.x + rhs,
+            y: self.y + rhs,
+            z: self.z + rhs,
+            w: self.w + rhs,
+        }
+    }
+}
+
 impl Sub for &Tuple {
     type Output = Tuple;
 
@@ -58,6 +71,19 @@ impl Sub<Tuple> for &Tuple {
             y: self.y - rhs.y,
             z: self.z - rhs.z,
             w: self.w - rhs.w,
+        }
+    }
+}
+
+impl Sub<f32> for Tuple {
+    type Output = Self;
+
+    fn sub(self, rhs: f32) -> Self::Output {
+        Tuple {
+            x: self.x - rhs,
+            y: self.y - rhs,
+            z: self.z - rhs,
+            w: self.w - rhs,
         }
     }
 }
