@@ -7,13 +7,13 @@ use crate::{
 };
 
 pub struct Camera {
-    hsize: u32,
-    vsize: u32,
-    field_of_view: f32,
-    transform: Matrix,
-    half_width: f32,
-    half_height: f32,
-    pixel_size: f32,
+    pub hsize: u32,
+    pub vsize: u32,
+    pub field_of_view: f32,
+    pub transform: Matrix,
+    pub half_width: f32,
+    pub half_height: f32,
+    pub pixel_size: f32,
 }
 
 impl Camera {
