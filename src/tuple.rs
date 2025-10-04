@@ -170,7 +170,7 @@ pub fn dot(a: &Tuple, b: &Tuple) -> f32 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
-fn cross(a: &Tuple, b: &Tuple) -> Tuple {
+pub fn cross(a: &Tuple, b: &Tuple) -> Tuple {
     // Note: w is unused - this is only used for vectors
     vector(
         a.y * b.z - a.z * b.y,
