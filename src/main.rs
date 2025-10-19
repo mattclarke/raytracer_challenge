@@ -21,10 +21,12 @@ use light::{lighting, PointLight};
 use materials::Material;
 use rays::{intersect, position, ray};
 use sphere::{normal_at, sphere};
-use world::World;
 use std::f32::consts::PI;
-use transformations::{rotation_x, rotation_y, rotation_z, scaling, shearing, translation, view_transform};
+use transformations::{
+    rotation_x, rotation_y, rotation_z, scaling, shearing, translation, view_transform,
+};
 use tuple::{normalise, point, vector};
+use world::World;
 
 fn main() {
     println!("Generating...");
@@ -84,7 +86,11 @@ fn main() {
     world.objects.push(left);
 
     let mut camera = Camera::new(300, 150, PI / 3.0);
-    camera.transform = view_transform(&point(0.0, 1.5, -5.0), &point(0.0, 1.0, 0.0), &vector(0.0, 1.0, 0.0));
+    camera.transform = view_transform(
+        &point(0.0, 1.5, -5.0),
+        &point(0.0, 1.0, 0.0),
+        &vector(0.0, 1.0, 0.0),
+    );
 
     let canvas = render(&camera, &world);
     let ppm = canvas.to_ppm();

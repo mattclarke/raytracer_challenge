@@ -25,6 +25,7 @@ pub fn lighting(
     point: &Tuple,
     eye_vec: &Tuple,
     normal_vec: &Tuple,
+    in_shadow: bool,
 ) -> Color {
     // Combine surface color with the light's color/intensity.
     let effective_color = &material.color * &light.intensity;
@@ -57,7 +58,11 @@ pub fn lighting(
         }
     }
 
-    ambient + diffuse + specular
+    if in_shadow {
+        ambient
+    } else {
+        ambient + diffuse + specular
+    }
 }
 
 #[cfg(test)]

@@ -1,12 +1,12 @@
 use crate::{
     color::Color,
-    intersections::{hit, prepare_computations, Computations, Intersection},
+    intersections::{self, hit, prepare_computations, Computations, Intersection},
     light::{lighting, PointLight},
     materials::Material,
-    rays::{intersect, Ray},
+    rays::{intersect, ray, Ray},
     sphere::{sphere, Sphere},
     transformations::scaling,
-    tuple::point,
+    tuple::{magnitude, normalise, point, Tuple},
 };
 
 pub struct World {
@@ -16,7 +16,7 @@ pub struct World {
 
 impl World {
     pub fn default() -> World {
-        let light = PointLight::new(point(-10.0, -10.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let light = PointLight::new(point(-10.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let m = Material::default()
             .color(Color::new(0.8, 1.0, 0.6))
             .diffuse(0.7)
@@ -41,12 +41,14 @@ pub fn intersect_world<'a>(w: &'a World, r: &'a Ray) -> Vec<Intersection<'a>> {
 }
 
 pub fn shade_hit(w: &World, comps: &Computations) -> Color {
+    let shadowed = is_shadowed(&w, &comps.over_point);
     lighting(
         &comps.object.material,
         &w.light,
-        &comps.point,
+        &comps.over_point,
         &comps.eyev,
         &comps.normalv,
+        shadowed,
     )
 }
 
@@ -62,6 +64,20 @@ pub fn color_at(w: &World, r: &Ray) -> Color {
     }
 }
 
+pub fn is_shadowed(world: &World, point: &Tuple) -> bool {
+    let v = &world.light.position - point;
+    let distance = magnitude(&v);
+    let direction = normalise(&v);
+    let r = ray(point.clone(), direction);
+    let intersections = intersect_world(&world, &r);
+    let h = hit(&intersections);
+    let Some(h) = h else {
+        return false;
+    };
+
+    h.t < distance
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -69,6 +85,7 @@ mod tests {
         color::Color,
         intersections::{intersection, prepare_computations},
         rays::ray,
+        transformations::translation,
         tuple::vector,
     };
 
@@ -76,7 +93,7 @@ mod tests {
 
     #[test]
     fn default_world() {
-        let light = PointLight::new(point(-10.0, -10.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let light = PointLight::new(point(-10.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let m = Material::default()
             .color(Color::new(0.8, 1.0, 0.6))
             .diffuse(0.7)
@@ -154,5 +171,49 @@ mod tests {
         let c = color_at(&w, &r);
         let inner = &w.objects[1];
         assert_eq!(c, inner.material.color);
+    }
+
+    #[test]
+    fn no_shadow_when_nothing_between_point_and_light() {
+        let w = World::default();
+        let p = point(0.0, 10.0, 0.0);
+        assert_eq!(is_shadowed(&w, &p), false);
+    }
+
+    #[test]
+    fn shadow_when_object_between_point_and_light() {
+        let w = World::default();
+        let p = point(10.0, -10.0, 10.0);
+        assert_eq!(is_shadowed(&w, &p), true);
+    }
+
+    #[test]
+    fn no_shadow_when_object_behind_light() {
+        let w = World::default();
+        let p = point(-20.0, 20.0, -20.0);
+        assert_eq!(is_shadowed(&w, &p), false);
+    }
+
+    #[test]
+    fn no_shadow_when_object_behind_point() {
+        let w = World::default();
+        let p = point(-2.0, 2.0, -2.0);
+        assert_eq!(is_shadowed(&w, &p), false);
+    }
+
+    #[test]
+    fn shade_hit_is_given_intersection_in_shadow() {
+        let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let s1 = sphere();
+        let s2 = sphere().transform(translation(0.0, 0.0, 10.0));
+        let w = World {
+            light,
+            objects: vec![s1, s2],
+        };
+        let r = ray(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
+        let i = intersection(4.0, &w.objects[1]);
+        let comps = prepare_computations(&i, &r);
+        let c = shade_hit(&w, &comps);
+        assert_eq!(c, Color::new(0.1, 0.1, 0.1));
     }
 }

@@ -39,12 +39,14 @@ pub struct Computations<'a> {
     t: f32,
     pub object: &'a Sphere,
     pub point: Tuple,
+    pub over_point: Tuple,
     pub eyev: Tuple,
     pub normalv: Tuple,
     pub inside: bool,
 }
 
 pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) -> Computations<'a> {
+    let epsilon = 0.00001;
     let point = position(&ray, intersection.t);
     let eyev = -ray.direction.clone();
     let mut normalv = normal_at(intersection.object, &point);
@@ -55,10 +57,14 @@ pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) ->
         false
     };
 
+    let point = position(&ray, intersection.t);
+    let over_point = &point + &(&normalv * epsilon);
+
     Computations {
         t: intersection.t,
         object: intersection.object,
-        point: position(&ray, intersection.t),
+        point,
+        over_point,
         eyev,
         normalv,
         inside,
@@ -70,6 +76,7 @@ mod tests {
     use crate::{
         rays::ray,
         sphere::sphere,
+        transformations::translation,
         tuple::{point, vector},
     };
 
@@ -152,5 +159,16 @@ mod tests {
         assert_eq!(comps.eyev, vector(0.0, 0.0, -1.0));
         assert_eq!(comps.normalv, vector(0.0, 0.0, -1.0));
         assert_eq!(comps.inside, true);
+    }
+
+    #[test]
+    fn hit_should_offset_the_point() {
+        let epsilon = 0.00001;
+        let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let s = sphere().transform(translation(0.0, 0.0, 1.0));
+        let i = intersection(5.0, &s);
+        let comps = prepare_computations(&i, &r);
+        assert!(comps.over_point.z < -epsilon / 2.0);
+        assert!(comps.point.z > comps.over_point.z);
     }
 }

@@ -30,6 +30,18 @@ impl Add for Tuple {
     }
 }
 
+impl Add<&Tuple> for &Tuple {
+    type Output = Tuple;
+    fn add(self, rhs: &Tuple) -> Self::Output {
+        Tuple {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
+            w: self.w + rhs.w,
+        }
+    }
+}
+
 impl Add<f32> for Tuple {
     type Output = Tuple;
 
@@ -177,7 +189,7 @@ pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
     Tuple { x, y, z, w: 0.0 }
 }
 
-fn magnitude(tuple: &Tuple) -> f32 {
+pub fn magnitude(tuple: &Tuple) -> f32 {
     let pows = tuple.x.powf(2.0) + tuple.y.powf(2.0) + tuple.z.powf(2.0);
     pows.sqrt()
 }
