@@ -7,17 +7,17 @@ use crate::{
 };
 
 pub struct Camera {
-    pub hsize: u32,
-    pub vsize: u32,
-    pub field_of_view: f32,
+    pub hsize: u64,
+    pub vsize: u64,
+    pub field_of_view: f64,
     pub transform: Matrix,
-    pub half_width: f32,
-    pub half_height: f32,
-    pub pixel_size: f32,
+    pub half_width: f64,
+    pub half_height: f64,
+    pub pixel_size: f64,
 }
 
 impl Camera {
-    pub fn new(hsize: u32, vsize: u32, field_of_view: f32) -> Camera {
+    pub fn new(hsize: u64, vsize: u64, field_of_view: f64) -> Camera {
         let (half_width, half_height, pixel_size) =
             Camera::calculate_pixel_size(hsize, vsize, field_of_view);
         Camera {
@@ -31,23 +31,23 @@ impl Camera {
         }
     }
 
-    fn calculate_pixel_size(hsize: u32, vsize: u32, field_of_view: f32) -> (f32, f32, f32) {
+    fn calculate_pixel_size(hsize: u64, vsize: u64, field_of_view: f64) -> (f64, f64, f64) {
         let half_view = (field_of_view / 2.0).tan();
-        let aspect = hsize as f32 / vsize as f32;
+        let aspect = hsize as f64 / vsize as f64;
         let (half_width, half_height) = if aspect >= 1.0 {
             (half_view, half_view / aspect)
         } else {
             (half_view * aspect, half_view)
         };
-        let pixel_size = (half_width * 2.0) / hsize as f32;
+        let pixel_size = (half_width * 2.0) / hsize as f64;
         (half_width, half_height, pixel_size)
     }
 }
 
 // TODO: move onto Camera
-pub fn ray_for_pixel(camera: &Camera, px: u32, py: u32) -> Ray {
-    let xoffset = (px as f32 + 0.5) * camera.pixel_size;
-    let yoffset = (py as f32 + 0.5) * camera.pixel_size;
+pub fn ray_for_pixel(camera: &Camera, px: u64, py: u64) -> Ray {
+    let xoffset = (px as f64 + 0.5) * camera.pixel_size;
+    let yoffset = (py as f64 + 0.5) * camera.pixel_size;
     let world_x = camera.half_width - xoffset;
     let world_y = camera.half_height - yoffset;
     let pixel = inverse(&camera.transform) * point(world_x, world_y, -1.0);
@@ -71,7 +71,7 @@ pub fn render(camera: &Camera, world: &World) -> Canvas {
 
 #[cfg(test)]
 mod tests {
-    use std::f32::consts::PI;
+    use std::f64::consts::PI;
 
     use crate::{
         color::{self, Color},
@@ -81,6 +81,11 @@ mod tests {
     };
 
     use super::*;
+
+    fn assert_eq_with_delta(a: f64, b: f64, delta: f64) {
+        let diff = a - b;
+        assert!(diff.abs() < delta);
+    }
 
     #[test]
     fn constructing_a_camera() {
@@ -97,13 +102,13 @@ mod tests {
     #[test]
     fn pixel_size_for_horizontal_canvas() {
         let c = Camera::new(200, 125, PI / 2.0);
-        assert_eq!(c.pixel_size, 0.01);
+        assert_eq_with_delta(c.pixel_size, 0.01, 0.00001);
     }
 
     #[test]
     fn pixel_size_for_vertical_canvas() {
         let c = Camera::new(200, 125, PI / 2.0);
-        assert_eq!(c.pixel_size, 0.01);
+        assert_eq_with_delta(c.pixel_size, 0.01, 0.00001);
     }
 
     #[test]
@@ -130,7 +135,7 @@ mod tests {
         assert_eq!(r.origin, point(0.0, 2.0, -5.0));
         assert_eq!(
             r.direction,
-            vector(2.0_f32.sqrt() / 2.0, 0.0, -2.0_f32.sqrt() / 2.0)
+            vector(2.0_f64.sqrt() / 2.0, 0.0, -2.0_f64.sqrt() / 2.0)
         );
     }
 

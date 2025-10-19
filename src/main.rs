@@ -21,7 +21,7 @@ use light::{lighting, PointLight};
 use materials::Material;
 use rays::{intersect, position, ray};
 use sphere::{normal_at, sphere};
-use std::f32::consts::PI;
+use std::f64::consts::PI;
 use transformations::{
     rotation_x, rotation_y, rotation_z, scaling, shearing, translation, view_transform,
 };

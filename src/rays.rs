@@ -14,7 +14,7 @@ pub fn ray(origin: Tuple, direction: Tuple) -> Ray {
     Ray { origin, direction }
 }
 
-pub fn position(ray: &Ray, t: f32) -> Tuple {
+pub fn position(ray: &Ray, t: f64) -> Tuple {
     Tuple {
         x: ray.origin.x + ray.direction.x * t,
         y: ray.origin.y + ray.direction.y * t,
@@ -42,8 +42,8 @@ pub fn intersect<'a>(s: &'a Sphere, r: &'a Ray) -> Vec<Intersection<'a>> {
         return vec![];
     }
 
-    let t1 = (-b - f32::sqrt(discriminant)) / (2.0 * a);
-    let t2 = (-b + f32::sqrt(discriminant)) / (2.0 * a);
+    let t1 = (-b - f64::sqrt(discriminant)) / (2.0 * a);
+    let t2 = (-b + f64::sqrt(discriminant)) / (2.0 * a);
 
     vec![intersection(t1, &s), intersection(t2, &s)]
 }

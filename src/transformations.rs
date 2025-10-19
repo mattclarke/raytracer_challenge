@@ -1,8 +1,8 @@
 use crate::matrix::{inverse, Matrix};
 use crate::tuple::{cross, normalise, point, vector, Tuple};
-use std::f32::consts::PI;
+use std::f64::consts::PI;
 
-pub fn translation(x: f32, y: f32, z: f32) -> Matrix {
+pub fn translation(x: f64, y: f64, z: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -12,7 +12,7 @@ pub fn translation(x: f32, y: f32, z: f32) -> Matrix {
     )
 }
 
-pub fn scaling(x: f32, y: f32, z: f32) -> Matrix {
+pub fn scaling(x: f64, y: f64, z: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -22,7 +22,7 @@ pub fn scaling(x: f32, y: f32, z: f32) -> Matrix {
     )
 }
 
-pub fn rotation_x(r: f32) -> Matrix {
+pub fn rotation_x(r: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -47,7 +47,7 @@ pub fn rotation_x(r: f32) -> Matrix {
     )
 }
 
-pub fn rotation_y(r: f32) -> Matrix {
+pub fn rotation_y(r: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -72,7 +72,7 @@ pub fn rotation_y(r: f32) -> Matrix {
     )
 }
 
-pub fn rotation_z(r: f32) -> Matrix {
+pub fn rotation_z(r: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -97,7 +97,7 @@ pub fn rotation_z(r: f32) -> Matrix {
     )
 }
 
-pub fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+pub fn shearing(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix {
     Matrix::new(
         4,
         4,
@@ -184,7 +184,7 @@ mod tests {
         let full_quarter = rotation_x(PI / 2.0);
         assert_eq!(
             half_quarter * &p,
-            point(0.0, f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0)
+            point(0.0, f64::sqrt(2.0) / 2.0, f64::sqrt(2.0) / 2.0)
         );
         assert_eq!(full_quarter * p, point(0.0, 0.0, 1.0));
     }
@@ -196,7 +196,7 @@ mod tests {
         let full_quarter = rotation_y(PI / 2.0);
         assert_eq!(
             half_quarter * &p,
-            point(f32::sqrt(2.0) / 2.0, 0.0, f32::sqrt(2.0) / 2.0)
+            point(f64::sqrt(2.0) / 2.0, 0.0, f64::sqrt(2.0) / 2.0)
         );
         assert_eq!(full_quarter * p, point(1.0, 0.0, 0.0));
     }
@@ -208,7 +208,7 @@ mod tests {
         let full_quarter = rotation_z(PI / 2.0);
         assert_eq!(
             half_quarter * &p,
-            point(-f32::sqrt(2.0) / 2.0, f32::sqrt(2.0) / 2.0, 0.0)
+            point(-f64::sqrt(2.0) / 2.0, f64::sqrt(2.0) / 2.0, 0.0)
         );
         assert_eq!(full_quarter * p, point(-1.0, 0.0, 0.0));
     }

@@ -6,10 +6,10 @@ use std::ops::Mul;
 pub struct Matrix {
     width: usize,
     height: usize,
-    elements: Vec<f32>,
+    elements: Vec<f64>,
 }
 
-fn determinant(matrix: &Matrix) -> f32 {
+fn determinant(matrix: &Matrix) -> f64 {
     let mut result = 0.0;
     if matrix.width == 2 && matrix.height == 2 {
         result = matrix.elements[0] * matrix.elements[3] - matrix.elements[1] * matrix.elements[2];
@@ -63,11 +63,11 @@ fn submatrix(matrix: &Matrix, row: usize, column: usize) -> Matrix {
     result
 }
 
-fn minor(matrix: &Matrix, row: usize, column: usize) -> f32 {
+fn minor(matrix: &Matrix, row: usize, column: usize) -> f64 {
     determinant(&submatrix(&matrix, row, column))
 }
 
-fn cofactor(matrix: &Matrix, row: usize, column: usize) -> f32 {
+fn cofactor(matrix: &Matrix, row: usize, column: usize) -> f64 {
     let mnr = minor(&matrix, row, column);
     if (row + column) % 2 == 1 {
         return -mnr;
@@ -76,7 +76,7 @@ fn cofactor(matrix: &Matrix, row: usize, column: usize) -> f32 {
 }
 
 impl Matrix {
-    pub fn new(width: usize, height: usize, values: Vec<f32>) -> Matrix {
+    pub fn new(width: usize, height: usize, values: Vec<f64>) -> Matrix {
         assert!(
             values.len() == width * height,
             "number of values does not match dimensions"
@@ -88,7 +88,7 @@ impl Matrix {
         }
     }
 
-    pub fn at(&self, y: usize, x: usize) -> f32 {
+    pub fn at(&self, y: usize, x: usize) -> f64 {
         self.elements[y * self.width + x]
     }
 

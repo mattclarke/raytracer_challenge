@@ -2,10 +2,10 @@ use std::ops::{Add, Div, Mul, Neg, Sub};
 
 #[derive(Clone, Debug)]
 pub struct Tuple {
-    pub x: f32,
-    pub y: f32,
-    pub z: f32,
-    pub w: f32,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
+    pub w: f64,
 }
 
 impl Tuple {
@@ -42,10 +42,10 @@ impl Add<&Tuple> for &Tuple {
     }
 }
 
-impl Add<f32> for Tuple {
+impl Add<f64> for Tuple {
     type Output = Tuple;
 
-    fn add(self, rhs: f32) -> Self::Output {
+    fn add(self, rhs: f64) -> Self::Output {
         Tuple {
             x: self.x + rhs,
             y: self.y + rhs,
@@ -87,10 +87,10 @@ impl Sub<Tuple> for &Tuple {
     }
 }
 
-impl Sub<f32> for Tuple {
+impl Sub<f64> for Tuple {
     type Output = Self;
 
-    fn sub(self, rhs: f32) -> Self::Output {
+    fn sub(self, rhs: f64) -> Self::Output {
         Tuple {
             x: self.x - rhs,
             y: self.y - rhs,
@@ -112,9 +112,9 @@ impl Neg for Tuple {
     }
 }
 
-impl Mul<f32> for Tuple {
+impl Mul<f64> for Tuple {
     type Output = Self;
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         Self {
             x: self.x * rhs,
             y: self.y * rhs,
@@ -124,9 +124,9 @@ impl Mul<f32> for Tuple {
     }
 }
 
-impl Mul<f32> for &Tuple {
+impl Mul<f64> for &Tuple {
     type Output = Tuple;
-    fn mul(self, rhs: f32) -> Self::Output {
+    fn mul(self, rhs: f64) -> Self::Output {
         Tuple {
             x: self.x * rhs,
             y: self.y * rhs,
@@ -136,7 +136,7 @@ impl Mul<f32> for &Tuple {
     }
 }
 
-impl Mul<Tuple> for f32 {
+impl Mul<Tuple> for f64 {
     type Output = Tuple;
     fn mul(self, rhs: Tuple) -> Self::Output {
         Tuple {
@@ -148,9 +148,9 @@ impl Mul<Tuple> for f32 {
     }
 }
 
-impl Div<f32> for Tuple {
+impl Div<f64> for Tuple {
     type Output = Self;
-    fn div(self, rhs: f32) -> Self::Output {
+    fn div(self, rhs: f64) -> Self::Output {
         Self {
             x: self.x / rhs,
             y: self.y / rhs,
@@ -181,15 +181,15 @@ impl PartialEq for Tuple {
 
 impl Eq for Tuple {}
 
-pub fn point(x: f32, y: f32, z: f32) -> Tuple {
+pub fn point(x: f64, y: f64, z: f64) -> Tuple {
     Tuple { x, y, z, w: 1.0 }
 }
 
-pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
+pub fn vector(x: f64, y: f64, z: f64) -> Tuple {
     Tuple { x, y, z, w: 0.0 }
 }
 
-pub fn magnitude(tuple: &Tuple) -> f32 {
+pub fn magnitude(tuple: &Tuple) -> f64 {
     let pows = tuple.x.powf(2.0) + tuple.y.powf(2.0) + tuple.z.powf(2.0);
     pows.sqrt()
 }
@@ -204,7 +204,7 @@ pub fn normalise(tuple: &Tuple) -> Tuple {
     }
 }
 
-pub fn dot(a: &Tuple, b: &Tuple) -> f32 {
+pub fn dot(a: &Tuple, b: &Tuple) -> f64 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
@@ -433,13 +433,13 @@ mod tests {
     #[test]
     fn compute_the_magnitude_of_vector_1_2_3() {
         let v = vector(1.0, 2.0, 3.0);
-        assert_eq!(magnitude(&v), 14.0_f32.sqrt());
+        assert_eq!(magnitude(&v), 14.0_f64.sqrt());
     }
 
     #[test]
     fn compute_the_magnitude_of_vector_negative_1_2_3() {
         let v = vector(-1.0, -2.0, -3.0);
-        assert_eq!(magnitude(&v), 14.0_f32.sqrt());
+        assert_eq!(magnitude(&v), 14.0_f64.sqrt());
     }
 
     #[test]
@@ -490,7 +490,7 @@ mod tests {
     #[test]
     fn reflecting_vector_off_slanted_surface() {
         let v = vector(0.0, -1.0, 0.0);
-        let n = vector(2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
+        let n = vector(2.0_f64.sqrt() / 2.0, 2.0_f64.sqrt() / 2.0, 0.0);
         let r = reflect(&v, &n);
         assert_eq!(r, vector(1.0, 0.0, 0.0));
     }

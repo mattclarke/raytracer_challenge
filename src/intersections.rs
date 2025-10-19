@@ -6,11 +6,11 @@ use crate::{
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Intersection<'a> {
-    pub t: f32,
+    pub t: f64,
     pub object: &'a Sphere,
 }
 
-pub fn intersection<'a>(t: f32, object: &'a Sphere) -> Intersection<'a> {
+pub fn intersection<'a>(t: f64, object: &'a Sphere) -> Intersection<'a> {
     Intersection { t, object }
 }
 
@@ -36,7 +36,7 @@ pub fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
 }
 
 pub struct Computations<'a> {
-    t: f32,
+    t: f64,
     pub object: &'a Sphere,
     pub point: Tuple,
     pub over_point: Tuple,

@@ -3,10 +3,10 @@ use crate::color::Color;
 #[derive(Clone, Debug, PartialEq)]
 pub struct Material {
     pub color: Color,
-    pub ambient: f32,
-    pub diffuse: f32,
-    pub specular: f32,
-    pub shininess: f32,
+    pub ambient: f64,
+    pub diffuse: f64,
+    pub specular: f64,
+    pub shininess: f64,
 }
 
 impl Material {
@@ -25,22 +25,22 @@ impl Material {
         self
     }
 
-    pub fn ambient(mut self, a: f32) -> Material {
+    pub fn ambient(mut self, a: f64) -> Material {
         self.ambient = a;
         self
     }
 
-    pub fn diffuse(mut self, d: f32) -> Material {
+    pub fn diffuse(mut self, d: f64) -> Material {
         self.diffuse = d;
         self
     }
 
-    pub fn specular(mut self, s: f32) -> Material {
+    pub fn specular(mut self, s: f64) -> Material {
         self.specular = s;
         self
     }
 
-    pub fn shininess(mut self, s: f32) -> Material {
+    pub fn shininess(mut self, s: f64) -> Material {
         self.shininess = s;
         self
     }
@@ -83,7 +83,7 @@ mod tests {
     fn lighting_with_eye_between_light_and_surface_with_eye_offset_45() {
         let m = Material::default();
         let position = point(0.0, 0.0, 0.0);
-        let eye_vec = vector(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
+        let eye_vec = vector(0.0, 2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
@@ -101,7 +101,7 @@ mod tests {
         let light = PointLight::new(point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
         // Ambient + diffuse + specular
-        let expected = 0.1 + 0.9 * 2.0_f32.sqrt() / 2.0 + 0.0;
+        let expected = 0.1 + 0.9 * 2.0_f64.sqrt() / 2.0 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
     }
 
@@ -109,12 +109,12 @@ mod tests {
     fn lighting_with_eye_in_the_path_of_the_reflection() {
         let m = Material::default();
         let position = point(0.0, 0.0, 0.0);
-        let eye_vec = vector(0.0, -2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
+        let eye_vec = vector(0.0, -2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
         // Ambient + diffuse + specular
-        let expected = 0.1 + 0.9 * 2.0_f32.sqrt() / 2.0 + 0.9;
+        let expected = 0.1 + 0.9 * 2.0_f64.sqrt() / 2.0 + 0.9;
         assert_eq!(result, Color::new(expected, expected, expected));
     }
 
