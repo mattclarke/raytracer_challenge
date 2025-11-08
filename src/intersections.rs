@@ -1,24 +1,27 @@
 use crate::{
     rays::{position, Ray},
-    sphere::{normal_at, Sphere},
+    shape::Shape,
     tuple::{dot, Tuple},
 };
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Intersection<'a> {
+pub struct Intersection {
     pub t: f64,
-    pub object: &'a Sphere,
+    pub object: Shape,
 }
 
-pub fn intersection<'a>(t: f64, object: &'a Sphere) -> Intersection<'a> {
-    Intersection { t, object }
+pub fn intersection(t: f64, object: &Shape) -> Intersection {
+    Intersection {
+        t,
+        object: object.clone(),
+    }
 }
 
 fn intersections(is: Vec<Intersection>) -> Vec<Intersection> {
     is
 }
 
-pub fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
+pub fn hit(xs: &Vec<Intersection>) -> Option<&Intersection> {
     let mut result = None;
 
     for i in xs {
@@ -35,9 +38,9 @@ pub fn hit<'a>(xs: &'a Vec<Intersection>) -> Option<&'a Intersection<'a>> {
     result
 }
 
-pub struct Computations<'a> {
+pub struct Computations {
     t: f64,
-    pub object: &'a Sphere,
+    pub object: Shape,
     pub point: Tuple,
     pub over_point: Tuple,
     pub eyev: Tuple,
@@ -45,11 +48,11 @@ pub struct Computations<'a> {
     pub inside: bool,
 }
 
-pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) -> Computations<'a> {
+pub fn prepare_computations(intersection: &Intersection, ray: &Ray) -> Computations {
     let epsilon = 0.00001;
     let point = position(&ray, intersection.t);
     let eyev = -ray.direction.clone();
-    let mut normalv = normal_at(intersection.object, &point);
+    let mut normalv = Shape::normal_at(&intersection.object, &point);
     let inside = if dot(&normalv, &eyev) < 0.0 {
         normalv = -normalv;
         true
@@ -62,7 +65,7 @@ pub fn prepare_computations<'a>(intersection: &'a Intersection, ray: &'a Ray) ->
 
     Computations {
         t: intersection.t,
-        object: intersection.object,
+        object: intersection.object.clone(),
         point,
         over_point,
         eyev,
@@ -87,7 +90,7 @@ mod tests {
         let s = sphere();
         let i = intersection(3.5, &s);
         assert_eq!(i.t, 3.5);
-        assert_eq!(&s, i.object);
+        assert_eq!(s, i.object);
     }
 
     #[test]
@@ -165,7 +168,8 @@ mod tests {
     fn hit_should_offset_the_point() {
         let epsilon = 0.00001;
         let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-        let s = sphere().transform(translation(0.0, 0.0, 1.0));
+        let mut s = sphere();
+        s.set_transform(translation(0.0, 0.0, 1.0));
         let i = intersection(5.0, &s);
         let comps = prepare_computations(&i, &r);
         assert!(comps.over_point.z < -epsilon / 2.0);

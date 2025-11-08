@@ -1,6 +1,5 @@
-use crate::matrix::{inverse, Matrix};
-use crate::tuple::{cross, normalise, point, vector, Tuple};
-use std::f64::consts::PI;
+use crate::matrix::Matrix;
+use crate::tuple::{cross, normalise, Tuple};
 
 pub fn translation(x: f64, y: f64, z: f64) -> Matrix {
     Matrix::new(

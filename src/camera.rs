@@ -2,7 +2,7 @@ use crate::{
     canvas::Canvas,
     matrix::{inverse, Matrix},
     rays::{ray, Ray},
-    tuple::{normalise, point, Tuple},
+    tuple::{normalise, point},
     world::{color_at, World},
 };
 

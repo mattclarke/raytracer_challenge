@@ -6,6 +6,7 @@ mod light;
 mod materials;
 mod matrix;
 mod rays;
+mod shape;
 mod sphere;
 mod transformations;
 mod tuple;
@@ -14,66 +15,70 @@ mod world;
 use std::{fs::File, io::Write};
 
 use camera::{render, Camera};
-use canvas::Canvas;
 use color::Color;
-use intersections::hit;
-use light::{lighting, PointLight};
+use light::PointLight;
 use materials::Material;
-use rays::{intersect, position, ray};
-use sphere::{normal_at, sphere};
+use sphere::sphere;
 use std::f64::consts::PI;
-use transformations::{
-    rotation_x, rotation_y, rotation_z, scaling, shearing, translation, view_transform,
-};
-use tuple::{normalise, point, vector};
+use transformations::{rotation_x, rotation_y, scaling, translation, view_transform};
+use tuple::{point, vector};
 use world::World;
 
 fn main() {
     println!("Generating...");
     let mut floor = sphere();
-    floor.transform = scaling(10.0, 0.01, 10.0);
-    floor.material = Material::default();
-    floor.material.color = Color::new(1.0, 0.9, 0.9);
-    floor.material.specular = 0.0;
+    floor.set_transform(scaling(10.0, 0.01, 10.0));
+    let mut material = Material::default();
+    material.color = Color::new(1.0, 0.9, 0.9);
+    material.specular = 0.0;
+    floor.set_material(material);
 
     let mut left_wall = sphere();
-    left_wall.transform = translation(0.0, 0.0, 5.0)
-        * rotation_y(-PI / 4.0)
-        * rotation_x(PI / 2.0)
-        * scaling(10.0, 0.01, 10.0);
-    left_wall.material = Material::default();
-    left_wall.material.color = Color::new(1.0, 0.9, 0.9);
-    left_wall.material.specular = 0.0;
+    left_wall.set_transform(
+        translation(0.0, 0.0, 5.0)
+            * rotation_y(-PI / 4.0)
+            * rotation_x(PI / 2.0)
+            * scaling(10.0, 0.01, 10.0),
+    );
+    let mut material = Material::default();
+    material.specular = 0.0;
+    left_wall.set_material(material);
 
     let mut right_wall = sphere();
-    right_wall.transform = translation(0.0, 0.0, 5.0)
-        * rotation_y(PI / 4.0)
-        * rotation_x(PI / 2.0)
-        * scaling(10.0, 0.01, 10.0);
-    right_wall.material = Material::default();
-    right_wall.material.color = Color::new(1.0, 0.9, 0.9);
-    right_wall.material.specular = 0.0;
+    right_wall.set_transform(
+        translation(0.0, 0.0, 5.0)
+            * rotation_y(PI / 4.0)
+            * rotation_x(PI / 2.0)
+            * scaling(10.0, 0.01, 10.0),
+    );
+    let mut material = Material::default();
+    material.color = Color::new(1.0, 0.9, 0.9);
+    material.specular = 0.0;
+    right_wall.set_material(material);
 
     let mut middle = sphere();
-    middle.transform = translation(-0.5, 1.0, 0.5);
-    middle.material = Material::default();
-    middle.material.color = Color::new(0.1, 1.0, 0.5);
-    middle.material.diffuse = 0.7;
-    middle.material.specular = 0.3;
+    middle.set_transform(translation(-0.5, 1.0, 0.5));
+    let mut material = Material::default();
+    material.color = Color::new(0.1, 1.0, 0.5);
+    material.diffuse = 0.7;
+    material.specular = 0.3;
+    middle.set_material(material);
 
     let mut right = sphere();
-    right.transform = translation(1.5, 0.5, -0.5) * scaling(0.5, 0.5, 0.5);
-    right.material = Material::default();
-    right.material.color = Color::new(0.5, 1.0, 0.1);
-    right.material.diffuse = 0.7;
-    right.material.specular = 0.3;
+    right.set_transform(translation(1.5, 0.5, -0.5) * scaling(0.5, 0.5, 0.5));
+    let mut material = Material::default();
+    material.color = Color::new(0.5, 1.0, 0.1);
+    material.diffuse = 0.7;
+    material.specular = 0.3;
+    right.set_material(material);
 
     let mut left = sphere();
-    left.transform = translation(-1.5, 0.33, -0.75) * scaling(0.33, 0.33, 0.33);
-    left.material = Material::default();
-    left.material.color = Color::new(1.0, 0.8, 0.1);
-    left.material.diffuse = 0.7;
-    left.material.specular = 0.3;
+    left.set_transform(translation(-1.5, 0.33, -0.75) * scaling(0.33, 0.33, 0.33));
+    let mut material = Material::default();
+    material.color = Color::new(1.0, 0.8, 0.1);
+    material.diffuse = 0.7;
+    material.specular = 0.3;
+    left.set_material(material);
 
     let mut world = World::default();
     world.objects.clear();

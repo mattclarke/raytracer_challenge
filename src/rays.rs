@@ -1,7 +1,7 @@
 use crate::{
     intersections::{intersection, Intersection},
     matrix::{inverse, Matrix},
-    sphere::Sphere,
+    shape::Shape,
     tuple::{dot, point, Tuple},
 };
 
@@ -23,20 +23,20 @@ pub fn position(ray: &Ray, t: f64) -> Tuple {
     }
 }
 
-fn transform(ray: &Ray, m: &Matrix) -> Ray {
+pub fn transform(ray: &Ray, m: &Matrix) -> Ray {
     Ray {
         origin: m * &ray.origin,
         direction: m * &ray.direction,
     }
 }
 
-pub fn intersect<'a>(s: &'a Sphere, r: &'a Ray) -> Vec<Intersection<'a>> {
-    let r = transform(&r, &inverse(&s.transform));
+pub fn intersect(s: &Shape, r: &Ray) -> Vec<Intersection> {
+    let r = transform(&r, &inverse(&s.transform()));
 
-    let sphere_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
+    let shape_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
     let a = dot(&r.direction, &r.direction);
-    let b = 2.0 * dot(&r.direction, &sphere_to_ray);
-    let c = dot(&sphere_to_ray, &sphere_to_ray) - 1.0;
+    let b = 2.0 * dot(&r.direction, &shape_to_ray);
+    let c = dot(&shape_to_ray, &shape_to_ray) - 1.0;
     let discriminant = b * b - 4.0 * a * c;
     if discriminant < 0.0 {
         return vec![];
