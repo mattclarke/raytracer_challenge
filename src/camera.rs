@@ -74,7 +74,7 @@ mod tests {
     use std::f64::consts::PI;
 
     use crate::{
-        color::{self, Color},
+        color::Color,
         transformations::{rotation_y, translation, view_transform},
         tuple::{point, vector},
         world::World,

@@ -44,7 +44,7 @@ pub fn sphere() -> Shape {
 #[cfg(test)]
 mod tests {
     use crate::{
-        rays::{intersect, ray},
+        rays::ray,
         tuple::{normalise, point, vector},
     };
 
