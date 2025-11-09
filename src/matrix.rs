@@ -2,6 +2,8 @@ use crate::tuple::Tuple;
 use std::iter::zip;
 use std::ops::Mul;
 
+pub const EPSILON: f64 = 0.00001;
+
 #[derive(Clone, Debug)]
 pub struct Matrix {
     width: usize,
@@ -119,9 +121,8 @@ impl PartialEq for Matrix {
             return false;
         }
 
-        let epsilon = 0.00001;
         for (a, b) in zip(self.elements.iter(), other.elements.iter()) {
-            if (a - b).abs() > epsilon {
+            if (a - b).abs() > EPSILON {
                 return false;
             }
         }

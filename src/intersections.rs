@@ -1,4 +1,5 @@
 use crate::{
+    matrix::EPSILON,
     rays::{position, Ray},
     shape::Shape,
     tuple::{dot, Tuple},
@@ -53,7 +54,6 @@ pub struct Computations {
 }
 
 pub fn prepare_computations(intersection: &Intersection, ray: &Ray) -> Computations {
-    let epsilon = 0.00001;
     let point = position(ray, intersection.t);
     let eyev = -ray.direction.clone();
     let mut normalv = Shape::normal_at(&intersection.object, &point);
@@ -65,7 +65,7 @@ pub fn prepare_computations(intersection: &Intersection, ray: &Ray) -> Computati
     };
 
     let point = position(ray, intersection.t);
-    let over_point = &point + &(&normalv * epsilon);
+    let over_point = &point + &(&normalv * EPSILON);
 
     Computations {
         t: intersection.t,
@@ -170,13 +170,12 @@ mod tests {
 
     #[test]
     fn hit_should_offset_the_point() {
-        let epsilon = 0.00001;
         let r = ray(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
         let mut s = sphere();
         s.set_transform(translation(0.0, 0.0, 1.0));
         let i = intersection(5.0, &s);
         let comps = prepare_computations(&i, &r);
-        assert!(comps.over_point.z < -epsilon / 2.0);
+        assert!(comps.over_point.z < -EPSILON / 2.0);
         assert!(comps.point.z > comps.over_point.z);
     }
 }

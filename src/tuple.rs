@@ -1,5 +1,7 @@
 use std::ops::{Add, Div, Mul, Neg, Sub};
 
+use crate::matrix::EPSILON;
+
 #[derive(Clone, Debug)]
 pub struct Tuple {
     pub x: f64,
@@ -162,17 +164,16 @@ impl Div<f64> for Tuple {
 
 impl PartialEq for Tuple {
     fn eq(&self, other: &Self) -> bool {
-        let epsilon = 0.00001;
-        if (self.x - other.x).abs() > epsilon {
+        if (self.x - other.x).abs() > EPSILON {
             return false;
         }
-        if (self.y - other.y).abs() > epsilon {
+        if (self.y - other.y).abs() > EPSILON {
             return false;
         }
-        if (self.z - other.z).abs() > epsilon {
+        if (self.z - other.z).abs() > EPSILON {
             return false;
         }
-        if (self.w - other.w).abs() > epsilon {
+        if (self.w - other.w).abs() > EPSILON {
             return false;
         }
         true
