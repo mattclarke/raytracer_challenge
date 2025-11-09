@@ -19,6 +19,7 @@ use camera::{render, Camera};
 use color::Color;
 use light::PointLight;
 use materials::Material;
+use plane::plane;
 use sphere::sphere;
 use std::f64::consts::PI;
 use transformations::{rotation_x, rotation_y, scaling, translation, view_transform};
@@ -27,35 +28,22 @@ use world::World;
 
 fn main() {
     println!("Generating...");
-    let mut floor = sphere();
+    let mut floor = plane();
     floor.set_transform(scaling(10.0, 0.01, 10.0));
     let mut material = Material::default();
     material.color = Color::new(1.0, 0.9, 0.9);
     material.specular = 0.0;
     floor.set_material(material);
 
-    let mut left_wall = sphere();
-    left_wall.set_transform(
-        translation(0.0, 0.0, 5.0)
-            * rotation_y(-PI / 4.0)
-            * rotation_x(PI / 2.0)
-            * scaling(10.0, 0.01, 10.0),
+    let mut back_wall = plane();
+    back_wall.set_transform(
+        translation(0.0, 0.0, 3.0) * rotation_x(PI / 2.0) * scaling(10.0, 0.1, 10.0),
     );
     let mut material = Material::default();
-    material.specular = 0.0;
-    left_wall.set_material(material);
-
-    let mut right_wall = sphere();
-    right_wall.set_transform(
-        translation(0.0, 0.0, 5.0)
-            * rotation_y(PI / 4.0)
-            * rotation_x(PI / 2.0)
-            * scaling(10.0, 0.01, 10.0),
-    );
-    let mut material = Material::default();
-    material.color = Color::new(1.0, 0.9, 0.9);
-    material.specular = 0.0;
-    right_wall.set_material(material);
+    material.color = Color::new(1.0, 0.5, 0.5);
+    material.diffuse = 0.7;
+    material.specular = 0.3;
+    back_wall.set_material(material);
 
     let mut middle = sphere();
     middle.set_transform(translation(-0.5, 1.0, 0.5));
@@ -85,8 +73,7 @@ fn main() {
     world.objects.clear();
     world.light = PointLight::new(point(-10.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
     world.objects.push(floor);
-    world.objects.push(left_wall);
-    world.objects.push(right_wall);
+    world.objects.push(back_wall);
     world.objects.push(middle);
     world.objects.push(right);
     world.objects.push(left);

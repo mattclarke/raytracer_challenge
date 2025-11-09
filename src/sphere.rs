@@ -1,26 +1,15 @@
 use crate::{
     intersections::{intersection, Intersection},
-    matrix::inverse,
-    rays::{transform, Ray},
+    rays::Ray,
     shape::{Shape, ShapeType},
-    tuple::{dot, normalise, point, Tuple},
+    tuple::{dot, point, Tuple},
 };
 
 #[derive(Clone, Debug)]
 pub struct Sphere {}
 
 impl Sphere {
-    pub fn normal_at(s: &Shape, p: &Tuple) -> Tuple {
-        let obj_point = inverse(s.transform()) * p;
-        let obj_normal = obj_point - point(0.0, 0.0, 0.0);
-        let mut world_normal = inverse(s.transform()).transpose() * obj_normal;
-        world_normal.w = 0.0;
-        normalise(&world_normal)
-    }
-
-    pub fn intersect(s: &Shape, ray: &Ray) -> Vec<Intersection> {
-        let ray = transform(ray, &inverse(s.transform()));
-
+    pub fn local_intersect(s: &Shape, ray: &Ray) -> Vec<Intersection> {
         let sphere_to_ray = ray.origin.clone() - point(0.0, 0.0, 0.0);
         let a = dot(&ray.direction, &ray.direction);
         let b = 2.0 * dot(&ray.direction, &sphere_to_ray);
@@ -34,6 +23,10 @@ impl Sphere {
         let t2 = (-b + f64::sqrt(discriminant)) / (2.0 * a);
 
         vec![intersection(t1, s), intersection(t2, s)]
+    }
+
+    pub fn local_normal(_shape: &Shape, pt: &Tuple) -> Tuple {
+        pt - point(0.0, 0.0, 0.0)
     }
 }
 

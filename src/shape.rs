@@ -1,6 +1,11 @@
 use crate::{
-    intersections::Intersection, materials::Material, matrix::Matrix, plane::Plane, rays::Ray,
-    sphere::Sphere, tuple::Tuple,
+    intersections::Intersection,
+    materials::Material,
+    matrix::{inverse, Matrix},
+    plane::Plane,
+    rays::{transform, Ray},
+    sphere::Sphere,
+    tuple::{normalise, Tuple},
 };
 
 static mut ID_TRACKER: u64 = 0;
@@ -60,17 +65,30 @@ impl Shape {
     }
 
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
+        // Transform the ray by the inverse of the shape's transform.
+        // This puts the shape at the origin which makes the maths simpler.
+        let ray = transform(ray, &inverse(self.transform()));
+
         match self.shape_type {
-            ShapeType::Sphere => Sphere::intersect(self, ray),
-            ShapeType::Plane => Plane::intersect(self, ray),
+            ShapeType::Sphere => Sphere::local_intersect(self, &ray),
+            ShapeType::Plane => Plane::local_intersect(self, &ray),
         }
     }
 
     pub fn normal_at(&self, point: &Tuple) -> Tuple {
-        match self.shape_type {
-            ShapeType::Sphere => Sphere::normal_at(self, point),
-            ShapeType::Plane => Plane::normal_at(self, point),
-        }
+        // Convert the point to object space.
+        let obj_point = inverse(self.transform()) * point;
+
+        // Calculate the normal in object space.
+        let local_normal = match self.shape_type {
+            ShapeType::Sphere => Sphere::local_normal(self, &obj_point),
+            ShapeType::Plane => Plane::local_normal(self, &obj_point),
+        };
+
+        // Transform back to world space.
+        let mut world_normal = inverse(self.transform()).transpose() * local_normal;
+        world_normal.w = 0.0;
+        normalise(&world_normal)
     }
 }
 
