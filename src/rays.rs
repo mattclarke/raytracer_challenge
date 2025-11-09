@@ -31,7 +31,7 @@ pub fn transform(ray: &Ray, m: &Matrix) -> Ray {
 }
 
 pub fn intersect(s: &Shape, r: &Ray) -> Vec<Intersection> {
-    let r = transform(&r, &inverse(&s.transform()));
+    let r = transform(r, &inverse(s.transform()));
 
     let shape_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
     let a = dot(&r.direction, &r.direction);
@@ -45,7 +45,7 @@ pub fn intersect(s: &Shape, r: &Ray) -> Vec<Intersection> {
     let t1 = (-b - f64::sqrt(discriminant)) / (2.0 * a);
     let t2 = (-b + f64::sqrt(discriminant)) / (2.0 * a);
 
-    vec![intersection(t1, &s), intersection(t2, &s)]
+    vec![intersection(t1, s), intersection(t2, s)]
 }
 
 #[cfg(test)]

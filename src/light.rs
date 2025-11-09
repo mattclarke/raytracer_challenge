@@ -38,7 +38,7 @@ pub fn lighting(
 
     // Represents the cosine of the angle between the light vector and the normal vector.
     // Negative means the light is on the other side of the surface.
-    let light_dot_normal = dot(&light_vec, &normal_vec);
+    let light_dot_normal = dot(&light_vec, normal_vec);
 
     let mut diffuse = Color::black();
     let mut specular = Color::black();
@@ -49,8 +49,8 @@ pub fn lighting(
         // Represents the cosine of the angle between the reflection vector and the eye vector.
         // Negative means the light reflects away from the eye.
         let temp = -light_vec;
-        let reflect_vec = reflect(&temp, &normal_vec);
-        let reflect_dot_eye = dot(&reflect_vec, &eye_vec);
+        let reflect_vec = reflect(&temp, normal_vec);
+        let reflect_dot_eye = dot(&reflect_vec, eye_vec);
 
         if reflect_dot_eye > 0.0 {
             let factor = reflect_dot_eye.powf(material.shininess);

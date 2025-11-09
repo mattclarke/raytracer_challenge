@@ -11,15 +11,15 @@ pub struct Sphere {}
 
 impl Sphere {
     pub fn normal_at(s: &Shape, p: &Tuple) -> Tuple {
-        let obj_point = inverse(&s.transform()) * p;
+        let obj_point = inverse(s.transform()) * p;
         let obj_normal = obj_point - point(0.0, 0.0, 0.0);
-        let mut world_normal = inverse(&s.transform()).transpose() * obj_normal;
+        let mut world_normal = inverse(s.transform()).transpose() * obj_normal;
         world_normal.w = 0.0;
         normalise(&world_normal)
     }
 
     pub fn intersect(s: &Shape, ray: &Ray) -> Vec<Intersection> {
-        let r = transform(&ray, &inverse(&s.transform()));
+        let r = transform(ray, &inverse(s.transform()));
 
         let sphere_to_ray = r.origin.clone() - point(0.0, 0.0, 0.0);
         let a = dot(&r.direction, &r.direction);
@@ -33,7 +33,7 @@ impl Sphere {
         let t1 = (-b - f64::sqrt(discriminant)) / (2.0 * a);
         let t2 = (-b + f64::sqrt(discriminant)) / (2.0 * a);
 
-        vec![intersection(t1, &s), intersection(t2, &s)]
+        vec![intersection(t1, s), intersection(t2, s)]
     }
 }
 

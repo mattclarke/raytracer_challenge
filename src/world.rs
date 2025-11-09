@@ -36,7 +36,7 @@ impl World {
 pub fn intersect_world(w: &World, r: &Ray) -> Vec<Intersection> {
     let mut result = vec![];
     for o in &w.objects {
-        let temp = intersect(&o, &r);
+        let temp = intersect(o, r);
         result.extend_from_slice(&temp);
     }
     result.sort_by(|a, b| a.t.total_cmp(&b.t));
@@ -44,9 +44,9 @@ pub fn intersect_world(w: &World, r: &Ray) -> Vec<Intersection> {
 }
 
 pub fn shade_hit(w: &World, comps: &Computations) -> Color {
-    let shadowed = is_shadowed(&w, &comps.over_point);
+    let shadowed = is_shadowed(w, &comps.over_point);
     lighting(
-        &comps.object.material(),
+        comps.object.material(),
         &w.light,
         &comps.over_point,
         &comps.eyev,
@@ -56,12 +56,12 @@ pub fn shade_hit(w: &World, comps: &Computations) -> Color {
 }
 
 pub fn color_at(w: &World, r: &Ray) -> Color {
-    let xs = intersect_world(&w, &r);
+    let xs = intersect_world(w, r);
     let i = hit(&xs);
     match i {
         Some(i) => {
-            let comps = prepare_computations(&i, &r);
-            shade_hit(&w, &comps)
+            let comps = prepare_computations(i, r);
+            shade_hit(w, &comps)
         }
         None => Color::new(0.0, 0.0, 0.0),
     }
@@ -72,7 +72,7 @@ pub fn is_shadowed(world: &World, point: &Tuple) -> bool {
     let distance = magnitude(&v);
     let direction = normalise(&v);
     let r = ray(point.clone(), direction);
-    let intersections = intersect_world(&world, &r);
+    let intersections = intersect_world(world, &r);
     let h = hit(&intersections);
     let Some(h) = h else {
         return false;

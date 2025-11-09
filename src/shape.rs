@@ -60,7 +60,7 @@ impl Shape {
 
     pub fn intersect(&self, ray: &Ray) -> Vec<Intersection> {
         if self.shape_type == ShapeType::Sphere {
-            Sphere::intersect(&self, ray)
+            Sphere::intersect(self, ray)
         } else {
             todo!()
         }
@@ -68,7 +68,7 @@ impl Shape {
 
     pub fn normal_at(&self, point: &Tuple) -> Tuple {
         if self.shape_type == ShapeType::Sphere {
-            Sphere::normal_at(&self, point)
+            Sphere::normal_at(self, point)
         } else {
             todo!()
         }

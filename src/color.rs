@@ -95,7 +95,7 @@ impl PartialEq for Color {
         if (self.blue - other.blue).abs() > epsilon {
             return false;
         }
-        return true;
+        true
     }
 }
 

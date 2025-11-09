@@ -1,5 +1,3 @@
-use std::usize;
-
 use crate::color::Color;
 
 pub struct Canvas {
@@ -50,7 +48,7 @@ impl Canvas {
                 let pixel = &self.pixels[index];
                 let values = normalise_color_value(pixel);
 
-                if line.len() == 0 {
+                if line.is_empty() {
                     line.push_str(&format!("{} {} {}", values[0], values[1], values[2]));
                     continue;
                 }
@@ -65,14 +63,14 @@ impl Canvas {
                     let sv = format!(" {}", v);
                     if line.len() + sv.len() >= 69 {
                         result.push_str(&line);
-                        result.push_str("\n");
+                        result.push('\n');
                         line = String::with_capacity(70);
                     }
                     line.push_str(&sv);
                 }
             }
             result.push_str(&line);
-            result.push_str("\n");
+            result.push('\n');
         }
         result
     }

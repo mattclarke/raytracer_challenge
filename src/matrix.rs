@@ -15,19 +15,19 @@ fn determinant(matrix: &Matrix) -> f64 {
         result = matrix.elements[0] * matrix.elements[3] - matrix.elements[1] * matrix.elements[2];
     } else {
         for c in 0..matrix.width {
-            result += matrix.at(0, c) * cofactor(&matrix, 0, c);
+            result += matrix.at(0, c) * cofactor(matrix, 0, c);
         }
     }
     result
 }
 
 fn invertible(matrix: &Matrix) -> bool {
-    determinant(&matrix) != 0.0
+    determinant(matrix) != 0.0
 }
 
 pub fn inverse(matrix: &Matrix) -> Matrix {
-    assert!(invertible(&matrix), "Not invertible");
-    let det = determinant(&matrix);
+    assert!(invertible(matrix), "Not invertible");
+    let det = determinant(matrix);
     let mut result = Matrix::new(
         matrix.width,
         matrix.height,
@@ -35,7 +35,7 @@ pub fn inverse(matrix: &Matrix) -> Matrix {
     );
     for r in 0..matrix.height {
         for c in 0..matrix.width {
-            result.elements[c * result.width + r] = cofactor(&matrix, r, c) / det;
+            result.elements[c * result.width + r] = cofactor(matrix, r, c) / det;
         }
     }
     result
@@ -64,11 +64,11 @@ fn submatrix(matrix: &Matrix, row: usize, column: usize) -> Matrix {
 }
 
 fn minor(matrix: &Matrix, row: usize, column: usize) -> f64 {
-    determinant(&submatrix(&matrix, row, column))
+    determinant(&submatrix(matrix, row, column))
 }
 
 fn cofactor(matrix: &Matrix, row: usize, column: usize) -> f64 {
-    let mnr = minor(&matrix, row, column);
+    let mnr = minor(matrix, row, column);
     if (row + column) % 2 == 1 {
         return -mnr;
     }
@@ -125,7 +125,7 @@ impl PartialEq for Matrix {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 

@@ -108,7 +108,7 @@ pub fn shearing(xy: f64, xz: f64, yx: f64, yz: f64, zx: f64, zy: f64) -> Matrix 
 
 pub fn view_transform(from: &Tuple, to: &Tuple, up: &Tuple) -> Matrix {
     let forward = normalise(&(to - from));
-    let upn = normalise(&up);
+    let upn = normalise(up);
     let left = cross(&forward, &upn);
     let true_up = cross(&left, &forward);
     let orientation = Matrix::new(
@@ -124,6 +124,13 @@ pub fn view_transform(from: &Tuple, to: &Tuple, up: &Tuple) -> Matrix {
 
 #[cfg(test)]
 mod tests {
+    use std::f64::consts::PI;
+
+    use crate::{
+        matrix::inverse,
+        tuple::{point, vector},
+    };
+
     use super::*;
 
     #[test]

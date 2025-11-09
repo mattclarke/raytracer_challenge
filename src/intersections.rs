@@ -28,9 +28,13 @@ pub fn hit(xs: &Vec<Intersection>) -> Option<&Intersection> {
         if i.t <= 0.0 {
             continue;
         }
+
         if result.is_none() {
             result = Some(i);
-        } else if i.t < result.unwrap().t {
+            continue;
+        }
+
+        if i.t < result.unwrap().t {
             result = Some(i);
         }
     }
@@ -50,7 +54,7 @@ pub struct Computations {
 
 pub fn prepare_computations(intersection: &Intersection, ray: &Ray) -> Computations {
     let epsilon = 0.00001;
-    let point = position(&ray, intersection.t);
+    let point = position(ray, intersection.t);
     let eyev = -ray.direction.clone();
     let mut normalv = Shape::normal_at(&intersection.object, &point);
     let inside = if dot(&normalv, &eyev) < 0.0 {
@@ -60,7 +64,7 @@ pub fn prepare_computations(intersection: &Intersection, ray: &Ray) -> Computati
         false
     };
 
-    let point = position(&ray, intersection.t);
+    let point = position(ray, intersection.t);
     let over_point = &point + &(&normalv * epsilon);
 
     Computations {

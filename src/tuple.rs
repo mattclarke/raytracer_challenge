@@ -175,7 +175,7 @@ impl PartialEq for Tuple {
         if (self.w - other.w).abs() > epsilon {
             return false;
         }
-        return true;
+        true
     }
 }
 
@@ -195,7 +195,7 @@ pub fn magnitude(tuple: &Tuple) -> f64 {
 }
 
 pub fn normalise(tuple: &Tuple) -> Tuple {
-    let magn = magnitude(&tuple);
+    let magn = magnitude(tuple);
     Tuple {
         x: tuple.x / magn,
         y: tuple.y / magn,
@@ -218,7 +218,7 @@ pub fn cross(a: &Tuple, b: &Tuple) -> Tuple {
 }
 
 pub fn reflect(v: &Tuple, normal: &Tuple) -> Tuple {
-    let temp = normal * 2.0 * dot(&v, &normal);
+    let temp = normal * 2.0 * dot(v, normal);
     v - &temp
 }
 
