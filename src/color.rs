@@ -1,6 +1,6 @@
 use std::ops::{Add, Mul, Sub};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Color {
     pub red: f64,
     pub blue: f64,
@@ -17,6 +17,14 @@ impl Color {
             red: 0.0,
             green: 0.0,
             blue: 0.0,
+        }
+    }
+
+    pub fn white() -> Color {
+        Color {
+            red: 1.0,
+            green: 1.0,
+            blue: 1.0,
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::{color::Color, patterns::Stripe};
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Material {
@@ -7,6 +7,7 @@ pub struct Material {
     pub diffuse: f64,
     pub specular: f64,
     pub shininess: f64,
+    pub pattern: Option<Stripe>,
 }
 
 impl Material {
@@ -17,6 +18,7 @@ impl Material {
             diffuse: 0.9,
             specular: 0.9,
             shininess: 200.0,
+            pattern: None,
         }
     }
 
@@ -44,6 +46,11 @@ impl Material {
         self.shininess = s;
         self
     }
+
+    pub fn pattern(mut self, p: Stripe) -> Material {
+        self.pattern = Some(p);
+        self
+    }
 }
 
 #[cfg(test)]
@@ -51,6 +58,7 @@ mod tests {
     use crate::{
         color::Color,
         light::{lighting, PointLight},
+        patterns::Stripe,
         tuple::{point, vector},
     };
 
@@ -142,5 +150,35 @@ mod tests {
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.0 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
+    }
+
+    #[test]
+    fn lighting_with_pattern() {
+        let m = Material::default()
+            .ambient(1.0)
+            .diffuse(0.0)
+            .specular(0.0)
+            .pattern(Stripe::new(Color::white(), Color::black()));
+        let eye_vec = vector(0.0, 0.0, -1.0);
+        let normal_vec = vector(0.0, 0.0, -1.0);
+        let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
+        let c1 = lighting(
+            &m,
+            &light,
+            &point(0.9, 0.0, 0.0),
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
+        let c2 = lighting(
+            &m,
+            &light,
+            &point(1.1, 0.0, 0.0),
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
+        assert_eq!(c1, Color::white());
+        assert_eq!(c2, Color::black());
     }
 }

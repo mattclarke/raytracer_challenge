@@ -5,6 +5,7 @@ mod intersections;
 mod light;
 mod materials;
 mod matrix;
+mod patterns;
 mod plane;
 mod rays;
 mod shape;
@@ -19,6 +20,7 @@ use camera::{render, Camera};
 use color::Color;
 use light::PointLight;
 use materials::Material;
+use patterns::Stripe;
 use plane::plane;
 use sphere::sphere;
 use std::f64::consts::PI;
@@ -43,6 +45,7 @@ fn main() {
     material.color = Color::new(1.0, 0.5, 0.5);
     material.diffuse = 0.7;
     material.specular = 0.3;
+    material.pattern = Some(Stripe::new(Color::white(), Color::black()));
     back_wall.set_material(material);
 
     let mut middle = sphere();

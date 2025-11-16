@@ -27,8 +27,13 @@ pub fn lighting(
     normal_vec: &Tuple,
     in_shadow: bool,
 ) -> Color {
+    let color = match material.pattern {
+        Some(p) => p.at(&point),
+        None => material.color,
+    };
+
     // Combine surface color with the light's color/intensity.
-    let effective_color = &material.color * &light.intensity;
+    let effective_color = &color * &light.intensity;
 
     // Find the direction to the light source.
     let light_vec = normalise(&(&light.position - point));
