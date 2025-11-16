@@ -47,6 +47,7 @@ pub fn shade_hit(w: &World, comps: &Computations) -> Color {
     let shadowed = is_shadowed(w, &comps.over_point);
     lighting(
         comps.object.material(),
+        &comps.object,
         &w.light,
         &comps.over_point,
         &comps.eyev,

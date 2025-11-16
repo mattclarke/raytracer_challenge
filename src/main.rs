@@ -54,6 +54,9 @@ fn main() {
     material.color = Color::new(0.1, 1.0, 0.5);
     material.diffuse = 0.7;
     material.specular = 0.3;
+    let mut pattern = Stripe::new(Color::white(), Color::black());
+    pattern.transformation = scaling(0.25, 1.0, 1.0);
+    material.pattern = Some(pattern);
     middle.set_material(material);
 
     let mut right = sphere();

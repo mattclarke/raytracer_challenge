@@ -59,6 +59,7 @@ mod tests {
         color::Color,
         light::{lighting, PointLight},
         patterns::Stripe,
+        sphere::sphere,
         tuple::{point, vector},
     };
 
@@ -81,7 +82,15 @@ mod tests {
         let eye_vec = vector(0.0, 0.0, -1.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.9 + 0.9;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -94,7 +103,15 @@ mod tests {
         let eye_vec = vector(0.0, 2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.9 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -107,7 +124,15 @@ mod tests {
         let eye_vec = vector(0.0, 0.0, -1.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.9 * 2.0_f64.sqrt() / 2.0 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -120,7 +145,15 @@ mod tests {
         let eye_vec = vector(0.0, -2.0_f64.sqrt() / 2.0, -2.0_f64.sqrt() / 2.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 10.0, -10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.9 * 2.0_f64.sqrt() / 2.0 + 0.9;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -133,7 +166,15 @@ mod tests {
         let eye_vec = vector(0.0, 0.0, -1.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 0.0, 10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, false);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            false,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.0 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -146,7 +187,15 @@ mod tests {
         let eye_vec = vector(0.0, 0.0, -1.0);
         let normal_vec = vector(0.0, 0.0, -1.0);
         let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
-        let result = lighting(&m, &light, &position, &eye_vec, &normal_vec, true);
+        let result = lighting(
+            &m,
+            &sphere(), // Unused
+            &light,
+            &position,
+            &eye_vec,
+            &normal_vec,
+            true,
+        );
         // Ambient + diffuse + specular
         let expected = 0.1 + 0.0 + 0.0;
         assert_eq!(result, Color::new(expected, expected, expected));
@@ -164,6 +213,7 @@ mod tests {
         let light = PointLight::new(point(0.0, 0.0, -10.0), Color::new(1.0, 1.0, 1.0));
         let c1 = lighting(
             &m,
+            &sphere(), // Unused
             &light,
             &point(0.9, 0.0, 0.0),
             &eye_vec,
@@ -172,6 +222,7 @@ mod tests {
         );
         let c2 = lighting(
             &m,
+            &sphere(), // Unused
             &light,
             &point(1.1, 0.0, 0.0),
             &eye_vec,

@@ -1,6 +1,7 @@
 use crate::{
     color::Color,
     materials::Material,
+    shape::Shape,
     tuple::{dot, normalise, reflect, Tuple},
 };
 
@@ -21,14 +22,15 @@ impl PointLight {
 
 pub fn lighting(
     material: &Material,
+    object: &Shape,
     light: &PointLight,
     point: &Tuple,
     eye_vec: &Tuple,
     normal_vec: &Tuple,
     in_shadow: bool,
 ) -> Color {
-    let color = match material.pattern {
-        Some(p) => p.at(&point),
+    let color = match &material.pattern {
+        Some(p) => p.at(&object, &point),
         None => material.color,
     };
 
